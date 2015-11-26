@@ -1,0 +1,134 @@
+/* line 1, ../sass/_main.scss */
+.colorful {
+  color: #bb8833;
+}
+
+/* line 9, ../sass/_main.scss */
+.indexHeader {
+  color: #5555FF;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+/* line 14, ../sass/_main.scss */
+.myBulletin {
+  padding: 20px;
+  background-image: url(http://people.ucsc.edu/~jbernay/CMPS%20183/hw3/images/blank_bulletin_board.png);
+  width: 400px;
+  height: 354px;
+  margin: 28px;
+  border-radius: 20px;
+  position: relative;
+  vertical-align: top;
+  text-align: center;
+  font-family: Kristen ITC;
+  display: inline-block;
+}
+
+/* line 28, ../sass/_main.scss */
+.boardTitle {
+  text-align: top;
+  display: inline-block;
+  font-size: 150%;
+  font-weight: bold;
+  white-space: nowrap;
+  width: 15em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* line 39, ../sass/_main.scss */
+.boardDetails {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 500%;
+}
+
+/* line 45, ../sass/_main.scss */
+.bulletDate {
+  font-size: 100%;
+  position: absolute;
+  bottom: 30px;
+  left: 40px;
+  color: #000000;
+}
+
+/* line 53, ../sass/_main.scss */
+.boardNoResults {
+  text-align: center;
+  color: #5555FF;
+  font-size: 400%;
+  font-family: Kristen ITC;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+/* line 65, ../sass/_main.scss */
+.boardHeader {
+  padding: 10px;
+  color: #FFFFFF;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+/* line 71, ../sass/_main.scss */
+.myPosts {
+  padding: 20px;
+  background-image: url(http://people.ucsc.edu/~jbernay/CMPS%20183/hw3/images/Post-It-Note-with-Push-Pin.png);
+  width: 400px;
+  height: 354px;
+  margin: 28px;
+  border-radius: 20px;
+  position: relative;
+  vertical-align: top;
+  text-align: center;
+  font-family: Kristen ITC;
+  display: inline-block;
+}
+
+/* line 85, ../sass/_main.scss */
+.postOptions {
+  margin-right: 50px;
+  text-align: right;
+}
+
+/* line 90, ../sass/_main.scss */
+.postTitle {
+  margin-right: 30px;
+  margin-left: 30px;
+  display: inline-block;
+  font-size: 150%;
+  font-weight: bold;
+  white-space: nowrap;
+  width: 12em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* line 102, ../sass/_main.scss */
+.postDetails {
+  margin-left: 50px;
+  margin-right: 50px;
+  line-height: 1.5em;
+  height: 12em;
+  width: 18em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 100%;
+  text-align: left;
+}
+
+/* line 114, ../sass/_main.scss */
+.postedDate {
+  margin-left: 50px;
+  margin-right: 50px;
+  font-size: 100%;
+  position: absolute;
+  bottom: 30px;
+  left: 20px;
+}
+
+/* line 123, ../sass/_main.scss */
+.postNoResults {
+  text-align: center;
+  color: #FFFFFF;
+  font-family: Kristen ITC;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}

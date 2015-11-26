@@ -1,0 +1,24 @@
+{{extend 'layout.html'}}
+
+<!--display page header-->
+{{block header}}
+    <header class="container-fluid background">
+      <div class="jumbotron text-center">
+        {{if response.title:}}
+        <h1>{{=response.title}}
+          <small>{{=response.subtitle or ''}}</small></h1>
+        {{pass}}
+      </div>
+    </header>
+{{end}}
+
+<div>
+    <h3>Title:</h3>
+    <p>{{=post.title}}</p>
+    <br>
+    <h3>Description: </h3>
+    <p style="width: 500px;">{{=post.description}}</p>
+    <br>
+    <h3>Date & Time Created:</h3>
+    <p>{{=post.created_on}}</p>
+</div>

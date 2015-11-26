@@ -1,0 +1,200 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
+{{from datetime import datetime}}
+{{extend 'layout.html'}}
+
+
+<!--display page header-->
+{{block header}}
+    <header class="container-fluid background">
+        <div class="jumbotron text-center">
+            {{if response.title:}}
+                <h1>{{=response.title}}
+                    <small>{{=response.subtitle or ''}}</small>
+                </h1>
+            {{pass}}
+        </div>
+    </header>
+{{end}}
+
+<!--display background image-->
+<body style="background-image: url(http://people.ucsc.edu/~jbernay/CMPS%20183/hw3/images/ConcreteStucco.jpg);"></body>
+
+<!--maximum number of boards to be displayed on a single page-->
+{{max_boards_per_page = 8}}
+
+<div id="target"></div>
+
+<script id="template" type="text/ractive">
+    <div id="page">
+        <!--display header of "Bulletin Boards"-->
+        <h1 class="indexHeader">Bulletin Boards</h1>
+
+        <!--if the user is not logged in-->
+        {{if auth.user_id is None:}}
+            <!--display the Sign Up and Sign In buttons-->
+            <div id="main_login">
+                {{=A('Sign Up', _class='btn btn-warning', _href=URL('default', 'user', args=['register']))}}
+                {{=A('Sign In', _class='btn btn-success', _href=URL('default', 'user', args=['login']))}}
+            </div>
+        <!--if the user is logged in-->
+        {{else:}}
+            <!--display the Create Board button-->
+            <div id="new_bulletin">
+                <button class="btn btn-primary" on-click="new-board">{{=icon_plus}} Create Board</button>
+            </div>
+        {{pass}}
+        {% #if loading %}
+        <!--tell user still loading-->
+          <div id="load_spinner">
+            <i class="fa fa-spinner fa-pulse fa-4x"></i>
+          </div>
+        {% else %}
+            <div class="board_list">
+                {% #if naming_board === true %}
+                    <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
+                        <!--input for new board-->
+                        <div class="myBulletin">
+                            <textarea value="{% active_draft %}" class="boardTitle" cols="40" id="no_table_message" name="title" rows="1">
+                            </textarea>
+                        </div>
+                        <input class="btn btn-primary" type="submit" value="Submit" on-click="addboard"/>
+                    </form>
+                {% /if %}
+                {% #board_dict:board_id %}
+                    <!--display every board-->
+                    <div class="myBulletin">
+                        <span class="boardTitle">
+                            {{=icon_clipboard}}
+                            <span style="text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
+                                <a href={%uri%}>{%title%}</a>
+                            </span>
+                        </span>
+                    </div>
+                {% /board_dict %}
+            </div>
+        {% /if %}
+    </div>
+</script>
+
+
+<script>
+$(function() {
+
+    // Ractive object
+    var MAIN = new Ractive({
+        el: '#target',
+        template: '#template',
+        delimiters: ['{%', '%}'],
+        tripleDelimiters: ['{%%', '%%}'],
+        data: {
+            board_dict: {},
+            draft_id: "{{=draft_id}}",
+            active_draft: "",
+            loading: true,
+            naming_board: false
+        },
+    });
+
+    // Loads the initial list of boards.
+    $.ajax("{{=URL('default', 'load_boards', user_signature=True)}}",
+        {
+            method: 'POST',
+            success: function (data) {
+                MAIN.set('board_dict', data['board_dict']);
+                MAIN.set('loading', false);
+            }
+        }
+    );
+
+    //Called every 10s to grab information from the server
+    function periodic_load() {
+        $.ajax("{{=URL('default', 'load_boards', user_signature=True)}}",
+            {
+                method: 'POST',
+                success: function (data) {
+                    MAIN.set('board_dict', data['board_dict']);
+                    MAIN.set('loading', false);
+                }
+            }
+        );
+    }
+
+    //send new board information to the server
+    function send_board(board_title) {
+    var call_draft_id = MAIN.get('draft_id');
+        $.ajax("{{=URL('default', 'add_board', user_signature=True)}}",
+            {
+                data: {
+                    title: board_title, // request.vars.board
+                    board_id: call_draft_id // request.vars.board_id
+                },
+                method: 'POST',
+                success: function() {
+                    // Reflect in the list of drafts or messages the update sent to the server.
+                    var board_dict = MAIN.get('board_dict');
+                    if (call_draft_id in board_dict) {
+                        // We have sent to the server a message/draft we have already in the dict.
+                        board_dict[call_draft_id]['title'] = board_title;
+                        board_dict[call_draft_id]['board_id'] = call_draft_id;
+                    } else {
+                        // This is a new message or draft.  We have to create a new entry in the dict.
+                        board_dict[call_draft_id] = {
+                        title: board_title,
+                        board_id: call_draft_id
+                        }
+                    }
+                    MAIN.set('board_dict', board_dict);
+                    MAIN.set('naming_board', false);
+                    periodic_load();
+                },
+                error: function() {}
+            }
+        );
+    }
+
+    // This code is called when the submit button is pressed.
+    MAIN.on("addboard", function(e) {
+        MAIN.set('loading', true);
+        var board_title = MAIN.get('active_draft');
+        if ($.trim(board_title).length > 0) {
+            // Send content back to server.  false = message is not a draft.
+            send_board(board_title);
+            MAIN.set('active_draft', '');
+            // Invent new random draft_id.
+            MAIN.set('draft_id', generateUUID());
+        }
+        periodic_load();
+        return false;
+    });
+
+    // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+    function generateUUID(){
+        var d = new Date().getTime();
+        if(window.performance && typeof window.performance.now === "function"){
+            d += performance.now();; //use high-precision timer if available
+        }
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = (d + Math.random()*16)%16 | 0;
+            d = Math.floor(d/16);
+            return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+        });
+        return uuid;
+    }
+
+    // We want to create a new draft.
+    MAIN.on("new-board", function(e) {
+        // First, we send to the server the current draft, to avoid losing it.
+        MAIN.set('active_draft', '');
+        // Invent new random draft_id.
+        MAIN.set('draft_id', generateUUID());
+
+        MAIN.set('naming_board', true);
+    });
+
+    setInterval(periodic_load, 10000);
+
+});
+</script>
+
+
+

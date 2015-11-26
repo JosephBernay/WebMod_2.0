@@ -1,0 +1,477 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
+{{extend 'layout.html'}}
+
+<!--display page header-->
+{{block header}}
+<header class="container-fluid background">
+    <div class="jumbotron text-center">
+        {{if response.title:}}
+            <h1>{{=response.title}}
+                <small>
+                    {{=response.subtitle or ''}}
+                </small>
+            </h1>
+        {{pass}}
+    </div>
+</header>
+{{end}}
+
+<!--maximum number of posts to be displayed on a single page-->
+{{max_posts_per_page = 8}}
+
+<body style="background-image: url(http://people.ucsc.edu/~jbernay/CMPS%20183/hw3/images/BarkCloseup.jpg);"></body>
+
+<!--display name of board-->
+<h1 class="boardHeader">
+{{=board.title}}
+</h1>
+
+<div id="target"></div>
+
+<script id="template" type="text/ractive">
+    <div id="page">
+        <h1 class="boardHeader" text-align=">Sometimes the postid doesn't register for buttons. If so, just give it a few seconds.</h1>
+        <!--If the user is not logged in-->
+        {{if auth.user_id is None:}}
+            <!--display Sign Up and Sign In buttons-->
+            <div id="main_login">
+                {{=A(icon_arrow_left + ' Back', _class='btn btn-success', _href=URL('default', 'index'))}}
+                {{=A('Sign Up', _class='btn btn-warning', _href=URL('default', 'user', args=['register']))}}
+                {{=A('Sign In', _class='btn btn-success', _href=URL('default', 'user', args=['login']))}}
+            </div>
+            <!--If the user is logged in-->
+        {{else:}}
+            <div id="new_post">
+                <!--display Back and Create Post buttons-->
+                {{=A(icon_arrow_left + ' Back', _class='btn btn-success', _href=URL('default', 'index'))}}
+                <button class="btn btn-primary" on-click="new-draft">{{=icon_plus}} Create Post</button>
+                {% #if any_marked === true %}
+                    <button class="btn btn-danger" on-click="delete-marked">{{=icon_trash}} Delete Marked</button>
+                {% /if %}
+            </div>
+        {{pass}}
+        {% #if {{=auth.user_id}}  != {{=None}} === true %}
+            <h2 class="boardHeader">
+                Drafts:
+            </h2>
+            {% #if loading %}
+                <div id="load_spinner">
+                    <i class="fa fa-spinner fa-pulse fa-4x"></i>
+                </div>
+            {% else %}
+                <!--list of drafts-->
+                <div class="post_list">
+                    {% #if making_new_draft === true %}
+                        <!--input for a new draft-->
+                        <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
+                            <div class="myPosts">
+                                <h2>
+                                    <br>
+                                </h2>
+                                <textarea value="{% active_draft_title %}" class="postTitle" cols="40" id="no_table_message" name="title" rows="1"></textarea>
+                                <textarea value="{% active_draft_desc %}" class="postDetails" cols="40" id="no_table_message" name="description" rows="8"></textarea>
+                            </div>
+                            <input class="btn btn-primary" type="submit" value="Submit" on-click="addpost"/>
+                        </form>
+                    {% /if %}
+                    {% #post_dict:post_id %}
+                        <!--display every draft-->
+                        {% #if is_draft === true && user_id == {{=auth.user_id}} === true %}
+                            {% #if editing_post === true && draft_id == post_id %}
+                                <div class="myPosts">
+                                    <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
+                                        <h2>
+                                            <br>
+                                        </h2>
+                                        <textarea value="{% active_draft_title %}" class="postTitle" cols="40" id="no_table_message" name="title" rows="1"></textarea>
+                                        <textarea value="{% active_draft_desc %}" class="postDetails" cols="40" id="no_table_message" name="description" rows="8"></textarea>
+                                        <input class="btn btn-primary" type="submit" value="Submit" on-click="addpost"/>
+                                    </form>
+                                </div>
+                            {% else %}
+                                <div class="myPosts">
+                                    <h2 class="postOptions">
+                                        <!--if the user is logged in and the user created this post-->
+                                        {% #if {{=auth.user_id}}  != {{=None}} === true && user_id == {{=auth.user_id}} === true %}
+                                            <!--display edit (pencil) and delete (trash) buttons-->
+                                            <button class="btn btn-success" data-postid="{% post_id %}" on-click="edit-draft">{{=icon_pencil}}</button>
+                                            <!--if the user is not logged in or the user did not create this post-->
+                                        {%else%}
+                                            <!--add a line break-->
+                                            <br>
+                                        {% /if %}
+                                    </h2>
+                                    <span class="postTitle">
+                                        {{=icon_thumb_tack}}
+                                        {% title %}
+                                    </span>
+                                    <br>
+                                    <!--display the description of the post-->
+                                    <p class="postDetails" style="white-space: pre-line">
+                                        {% description %}
+                                    </p>
+                                </div>
+                            {% /if %}
+                        {% /if %}
+                    {% /post_dict %}
+                </div>
+            {% /if %}
+        {% /if %}
+        <h2 class="boardHeader">
+            Posts:
+        </h2>
+        <div class="post_list">
+            {% #post_dict:post_id %}
+            <!--display every post-->
+                {% #if is_draft === false %}
+                    {% #if editing_post === true && draft_id == post_id %}
+                        <div class="myPosts">
+                            <!--input for editing a post-->
+                            <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
+                                <h2>
+                                    <br>
+                                </h2>
+                                <textarea value="{% active_draft_title %}" class="postTitle" cols="40" id="no_table_message" name="title" rows="1">
+                                </textarea>
+                                <textarea value="{% active_draft_desc %}" class="postDetails" cols="40" id="no_table_message" name="description" rows="8">
+                                </textarea>
+                                <input class="btn btn-primary" type="submit" value="Update" on-click="addpost"/>
+                            </form>
+                        </div>
+                    {% else %}
+                        <div class="myPosts">
+                            <h2 class="postOptions">
+                                <!--if the user is logged in and the user created this post-->
+                                {% #if {{=auth.user_id}}  != {{=None}} === true && user_id == {{=auth.user_id}} === true %}
+                                    <!--display edit (pencil) and delete (trash) buttons-->
+                                    <button class="btn btn-success" data-postid="{% post_id %}" on-click="edit-draft">{{=icon_pencil}}</button>
+                                    {% #if marked_for_delete === {{=False}} || marked_for_delete === false %}
+                                        <button class="btn btn-danger" data-postid="{% post_id %}" on-click="mark-delete">{{=icon_times}}</button>
+                                    {% else %}
+                                        <button class="btn btn-primary" data-postid="{% post_id %}" on-click="unmark-delete">{{=icon_plus}}</button>
+                                    {% /if %}
+                                    <!--if the user is not logged in or the user did not create this post-->
+                                {%else%}
+                                    <!--add a line break-->
+                                    <br>
+                                {%/if%}
+                            </h2>
+                            <span class="postTitle">
+                                {{=icon_thumb_tack}}
+                                {% title %}
+                            </span>
+                            <br>
+                            <!--display the description of the post-->
+                            <p class="postDetails" style="white-space: pre-line">
+                                {% description %}
+                            </p>
+                        </div>
+                    {% /if %}
+                {% /if %}
+            {% /post_dict %}
+        </div>
+    </div>
+</script>
+
+
+<script>
+    $(function() {
+
+    // Ractive object
+    var MAIN = new Ractive({
+        el: '#target',
+        template: '#template',
+        delimiters: ['{%', '%}'],
+        tripleDelimiters: ['{%%', '%%}'],
+        data: {
+            post_dict: {},
+            draft_id: "{{=draft_id}}",
+            active_draft_title: "",
+            active_draft_desc: "",
+            loading: true,
+            making_new_draft: false,
+            editing_post: false,
+            delete_queue: {},
+            any_marked: false
+        },
+    });
+
+    // Loads the initial list of posts.
+    $.ajax("{{=URL('default', 'load_posts', user_signature=True)}}",
+        {
+            data: {
+                board_id: {{=board.id}}
+            },
+            method: 'POST',
+            success: function (data) {
+                MAIN.set('post_dict', data['post_dict']);
+                var post_dict = MAIN.get('post_dict');
+                var queue = MAIN.get('delete_queue');
+                for(post in post_dict) {
+                    if( post_dict[post]['marked_for_delete'] ){
+                        queue[post] = post;
+                        MAIN.set('any_marked', true);
+                    }
+                }
+                MAIN.set('delete_queue', queue);
+                MAIN.set('loading', false);
+            }
+        }
+    );
+
+    // Called every 10s, or upon switching drafts.
+    function periodic_send() {
+        var new_post_title = MAIN.get('active_draft_title');
+        var new_post_desc = MAIN.get('active_draft_desc');
+        var post_dict = MAIN.get('post_dict');
+        var draft_id = MAIN.get('draft_id');
+        if (draft_id in post_dict) {
+            // There is already a draft.  Check if it is modified.
+            var old_post_title = post_dict[draft_id]['title'];
+            var old_post_desc = post_dict[draft_id]['description'];
+
+            if (new_post_title !== old_post_title || new_post_desc !== old_post_desc) {
+                // Yes, it is modified.  Send it to the server.
+                post_message(new_post_title, new_post_desc, true); // true means: it's a draft
+            }
+        } else if ($.trim(new_post_title).length > 0 && $.trim(new_post_desc).length > 0) {
+            // This is a brand new draft, send it to the server.
+            post_message(new_post_title, new_post_desc, true);
+        }
+
+        periodic_load();
+
+    }
+
+    // Called every 10s, or upon deleting posts
+    function periodic_load() {
+        // Loads the initial list of messages.
+        $.ajax("{{=URL('default', 'load_posts', user_signature=True)}}",
+            {
+                data: {
+                    board_id: {{=board.id}}
+                },
+                method: 'POST',
+                success: function (data) {
+                    MAIN.set('post_dict', data['post_dict']);
+                    var post_dict = MAIN.get('post_dict');
+
+                    var queue = MAIN.get('delete_queue');
+                    for(post in post_dict) {
+                        if( post_dict[post]['marked_for_delete'] ){
+                            queue[post] = post;
+                            MAIN.set('any_marked', true);
+                        }
+                    }
+                    MAIN.set('delete_queue', queue);
+
+                    MAIN.set('loading', false);
+                }
+            }
+        );
+    }
+
+    //send a post update to the server
+    function post_message(post_title, post_desc, is_draft) {
+        var call_draft_id = MAIN.get('draft_id');
+        $.ajax("{{=URL('default', 'add_post', user_signature=True)}}",
+            {
+                data: {
+                    post_title: post_title, // request.vars.post_title
+                    post_desc: post_desc, // request.vars.post_desc
+                    is_draft: is_draft, // request.vars.is_draft
+                    post_id: call_draft_id, // request.vars.post_id
+                    user_id: {{=auth.user_id}}, // request.vars.user_id
+                    bulletin_board: {{=board.id}}, // request.vars.bulletin_board
+                    loading_post: false // request.vars.loading_post
+                },
+                method: 'POST',
+                success: function() {
+                    // Reflect in the list of drafts or messages the update sent to the server.
+                    var post_dict = MAIN.get('post_dict');
+                    if (call_draft_id in post_dict) {
+                        // We have sent to the server a message/draft we have already in the dict.
+                        console.log("In here");
+                        post_dict[call_draft_id]['title'] = post_title;
+                        post_dict[call_draft_id]['description'] = post_desc;
+                        post_dict[call_draft_id]['is_draft'] = is_draft;
+                        post_dict[call_draft_id]['user_id'] = {{=auth.user_id}};
+                        post_dict[call_draft_id]['post_id'] = call_draft_id;
+                        post_dict[call_draft_id]['bulletin_board'] = {{=board.id}};
+                        post_dict[call_draft_id]['loading_post'] = false;
+                    } else {
+                        // This is a new message or draft.  We have to create a new entry in the dict.
+                        console.log("In there");
+                        post_dict[call_draft_id] = {
+                            post_title: post_title,
+                            post_desc: post_desc,
+                            is_draft: is_draft,
+                            user_id: {{=auth.user_id}},
+                            post_id: call_draft_id,
+                            bulletin_board: {{=board.id}},
+                            loading_post: false
+                        }
+                    }
+                    MAIN.set('post_dict', post_dict);
+                    if (!is_draft)
+                        MAIN.set('making_new_draft', false);
+                },
+                error: function() {}
+            }
+        );
+    }
+
+    // This code is called when the submit button is pressed.
+    MAIN.on("addpost", function(e) {
+        var post_title = MAIN.get('active_draft_title');
+        var post_desc = MAIN.get('active_draft_desc');
+        if ($.trim(post_title).length > 0 || $.trim(post_desc).length > 0) {
+            // Send content back to server.  false = message is not a draft.
+            post_message(post_title, post_desc, false);
+
+            MAIN.set('active_draft_title', '');
+            MAIN.set('active_draft_desc', '');
+            MAIN.set('editing_post', false);
+
+            // Invent new random draft_id.
+            MAIN.set('draft_id', generateUUID());
+
+            periodic_load();
+        }
+        return false;
+    });
+
+    // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+    function generateUUID(){
+        var d = new Date().getTime();
+            if(window.performance && typeof window.performance.now === "function"){
+            d += performance.now();; //use high-precision timer if available
+        }
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = (d + Math.random()*16)%16 | 0;
+            d = Math.floor(d/16);
+            return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+        });
+        return uuid;
+    }
+
+    // Listens to click on Edit buttons for drafts.
+    MAIN.on("edit-draft", function(e) {
+        // First, we send to the server the current draft, to avoid losing it.
+        periodic_send();
+
+        var t = $(e.original.target); // This is the button on which we clicked.
+        var clicked_id = t.data('postid');  // To set it, you could do .data('postid', 'my id');
+        var post_dict = MAIN.get('post_dict');
+
+        // First, display the draft text in the editing area.
+        MAIN.set('editing_post', true);
+        MAIN.set('active_draft_title', post_dict[clicked_id]['title']);
+        MAIN.set('active_draft_desc', post_dict[clicked_id]['description']);
+
+        // Sets the id of the draft being edited.
+        MAIN.set('draft_id', clicked_id);
+    });
+
+    // We want to create a new draft.
+    MAIN.on("new-draft", function(e) {
+        // First, we send to the server the current draft, to avoid losing it.
+        periodic_send();
+
+        MAIN.set('active_draft_title', '');
+        MAIN.set('active_draft_desc', '');
+        MAIN.set('making_new_draft', true);
+
+        // Invent new random draft_id.
+        MAIN.set('draft_id', generateUUID());
+    });
+
+    //We want to mark a draft post for deletion.
+    MAIN.on("mark-delete", function(e) {
+        var t = $(e.original.target); // This is the button on which we clicked.
+        var clicked_id = t.data('postid');  // To set it, you could do .data('postid', 'my id');
+        $.ajax("{{=URL('default', 'mark_delete', user_signature=True)}}",
+            {
+                data: {
+                    post_id: clicked_id // request.vars.post_id
+                },
+                method: 'POST',
+                success: function() {
+                    var post_dict = MAIN.get('post_dict');
+                    post_dict[clicked_id]['marked_for_delete'] = true;
+                    MAIN.set('post_dict', post_dict);
+
+                    MAIN.set('any_marked', true);
+
+                    var queue = MAIN.get('delete_queue');
+                    queue[clicked_id] = clicked_id;
+                    MAIN.set('delete_queue', queue);
+
+                    periodic_load();
+                },
+                error: function() {}
+            }
+        );
+    });
+
+    MAIN.on("unmark-delete", function(e) {
+        var t = $(e.original.target); // This is the button on which we clicked.
+        var clicked_id = t.data('postid');  // To set it, you could do .data('postid', 'my id');
+        $.ajax("{{=URL('default', 'unmark_delete', user_signature=True)}}",
+            {
+                data: {
+                    post_id: clicked_id // request.vars.post_id
+                },
+                method: 'POST',
+                success: function() {
+                    var post_dict = MAIN.get('post_dict');
+                    post_dict[clicked_id]['marked_for_delete'] = false;
+                    MAIN.set('post_dict', post_dict);
+
+                    queue = MAIN.get('delete_queue');
+                    delete queue[clicked_id];
+                    MAIN.set('delete_queue', queue);
+                    if(Object.keys(MAIN.get('delete_queue')).length === 0)
+                        MAIN.set('any_marked', false);
+
+                    periodic_load();
+                },
+                error: function() {}
+            }
+        );
+    });
+
+    //We want to delete all marked drafts and posts
+    MAIN.on("delete-marked", function(e) {
+        var call_draft_id = MAIN.get('draft_id');
+        $.ajax("{{=URL('default', 'delete_marked', user_signature=True)}}",
+            {
+                method: 'POST',
+                success: function() {
+                    var post_dict = MAIN.get('post_dict');
+
+                    queue = MAIN.get('delete_queue');
+                    for(item in queue)
+                        delete queue[item];
+
+                    MAIN.set('delete_queue', queue);
+                    MAIN.set('any_marked', false);
+                    MAIN.set('post_dict', post_dict);
+
+                    periodic_load();
+                },
+                error: function() {}
+            }
+        );
+    });
+
+    function find_target_id(e) {
+        var t = $(e.original.target); // This is the button on which we clicked.
+        return t.data('postid');  // To set it, you could do .data('postid', 'my id');
+    }
+
+    //setInterval(periodic_load, 10000);
+    setInterval(periodic_send, 10000);
+
+    });
+</script>

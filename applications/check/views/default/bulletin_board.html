@@ -1,0 +1,102 @@
+{{extend 'layout.html'}}
+
+<!--display page header-->
+{{block header}}
+    <header class="container-fluid background">
+      <div class="jumbotron text-center">
+        {{if response.title:}}
+        <h1>{{=response.title}}
+          <small>{{=response.subtitle or ''}}</small></h1>
+        {{pass}}
+      </div>
+    </header>
+{{end}}
+
+<!--maximum number of posts to be displayed on a single page-->
+{{max_posts_per_page = 8}}
+
+<body style="background-image: url(http://people.ucsc.edu/~jbernay/CMPS%20183/hw3/images/BarkCloseup.jpg);"></body>
+
+<!--display name of board-->
+<h1 class="boardHeader">
+    {{=board.title}}
+</h1>
+
+<!--If the user is not logged in-->
+{{if auth.user_id is None:}}
+    <!--display Sign Up and Sign In buttons-->
+    <div id="main_login">
+        {{=A('Sign Up', _class='btn btn-warning', _href=URL('default', 'user', args=['register']))}}
+        {{=A('Sign In', _class='btn btn-success', _href=URL('default', 'user', args=['login']))}}
+        {{=A('Back', _class='btn btn-success', _href=URL('default', 'index', args=[1]))}}
+    </div>
+<!--If the user is logged in-->
+{{else:}}
+    <div id="new_post">
+        <!--display Add Post and Back buttons-->
+        {{=A('Add Post', _class='btn btn-success', _href=URL('default', 'add_post', args=[board.id]))}}
+        {{=A('Back', _class='btn btn-success', _href=URL('default', 'index', args=[1]))}}
+    </div>
+{{pass}}
+
+<!--if this board contains any posts-->
+{{if len(post_list) > 0:}}
+    <!--start count of posts displayed-->
+    {{num_displayed = 0}}
+    <!--for every post on this board-->
+    {{for post in post_list:}}
+        <!--increment count of posts displayed-->
+        {{num_displayed += 1}}
+        <!--format display of single post-->
+        <div class="myPosts">
+            <h2 class="postOptions">
+                <span style="display: inline-block; position: absolute; left: 75px;">
+                    {{=A('View', _class='btn btn-warning', _href=URL('default', 'view_single_post', args=[post.id]))}}
+                </span>
+                <!--if the user is logged in and the user created this post-->
+                {{if auth.user_id is not None and post.user_id == auth.user_id:}}
+                    <!--display edit (pencil) and delete (trash) buttons-->
+                    {{=A(icon_pencil, _href=URL('default', 'edit_post', args=[post.id, board.id], user_signature=True) )}}
+                    {{=A(icon_trash, _href=URL('default', 'delete_post', args=[post.id, board.id], user_signature=True) )}}
+                <!--if the user is not logged in or the user did not create this post-->
+                {{else:}}
+                    <!--add a line break-->
+                    <br>
+                {{pass}}
+            </h2>
+            <!--display the title of the post-->
+            <span class="postTitle">
+                {{=icon_thumb_tack}}
+                {{=post.title}}
+            </span>
+            <br>
+            <!--display the description of the post-->
+            <p class="postDetails">
+                {{=post.description}}
+            </p>
+            <!--display the date and time at which this post was last edited-->
+            <h3 class="postedDate">
+                Last Edited:
+                {{=post.last_edited}}
+            </h3>
+        </div>
+        <!--if the number of displayed posts is equal to the maximum number of posts on a page times the number of pages to be displayed, stop displaying additional posts-->
+        {{if num_displayed == max_posts_per_page*int(times): break}}
+    {{pass}}
+    <br><br><br>
+    <!--conditionally display Show Less and/or Show More buttons-->
+    <h3 style="position: absolute; bottom: 10px; right: 10px;">
+        <!--if the number of displayed posts is more than the maximum number of posts on a single page, display the Show Less button-->
+        {{if num_displayed > max_posts_per_page:}}
+            {{=A('Show Less', _class='btn btn-success', _href=URL('default', 'bulletin_board', args=[board.id, int(times) - 1]))}}
+        {{pass}}
+        <!--if the number of displayed posts is less than the total number of posts on this board, display the Show More button-->
+        {{if num_displayed < len(post_list):}}
+            {{=A('Show More', _class='btn btn-success', _href=URL('default', 'bulletin_board', args=[board.id, int(times) + 1]))}}
+        {{pass}}
+    </h3>
+<!--if this board contains no posts-->
+{{else:}}
+    <!--inform the user of this-->
+    <h1 class="postNoResults">There are currently no posts on this board.</h1>
+{{pass}}

@@ -1,0 +1,111 @@
+{{from datetime import datetime}}
+{{extend 'layout.html'}}
+
+<!--display page header-->
+{{block header}}
+    <header class="container-fluid background">
+      <div class="jumbotron text-center">
+        {{if response.title:}}
+        <h1>{{=response.title}}
+          <small>{{=response.subtitle or ''}}</small></h1>
+        {{pass}}
+      </div>
+    </header>
+{{end}}
+
+<!--display background image-->
+<body style="background-image: url(http://people.ucsc.edu/~jbernay/CMPS%20183/hw3/images/ConcreteStucco.jpg);"></body>
+
+<!--maximum number of boards to be displayed on a single page-->
+{{max_boards_per_page = 8}}
+
+<!--display header of "Bulletin Boards"-->
+<h1 class="indexHeader">Bulletin Boards</h1>
+
+<!--if the user is not logged in-->
+{{if auth.user_id is None:}}
+    <!--display the Sign Up and Sign In buttons-->
+    <div id="main_login">
+        {{=A('Sign Up', _class='btn btn-warning', _href=URL('default', 'user', args=['register']))}}
+        {{=A('Sign In', _class='btn btn-success', _href=URL('default', 'user', args=['login']))}}
+    </div>
+<!--if the user is logged in-->
+{{else:}}
+    <!--display the Create Board button-->
+    <div id="new_bulletin">
+        {{=A('Create Board', _class='btn btn-success', _href=URL('default', 'add_board'))}}
+    </div>
+{{pass}}
+
+<!--if there are any boards-->
+{{if len(bulletin_boards) > 0:}}
+    <!--start count of boards displayed-->
+    {{num_displayed = 0}}
+    <!--for every board that exists (from most recently to least recently edited)-->
+    {{edited_or_new_boards = None}}
+    {{for num in [1, 2]:}}
+        {{for board in bulletin_boards.sort(lambda board: board.last_edited, reverse=True):}}
+            <!--determine number of posts posted to this board today-->
+            {{num_new_posts_today = 0}}
+            {{str_new_posts_today = "New Posts Today"}}
+            {{for post in posts:}}
+                {{if int(post.bulletin_board) == int(board.id) and post.last_edited.now().date() == datetime.utcnow().now().date():}}
+                    {{num_new_posts_today += 1}}
+                {{pass}}
+            {{pass}}
+            {{if num == 1:}}
+                {{if num_new_posts_today == 0:}}
+                    {{continue}}
+            {{else:}}
+                {{if num_new_posts_today != 0:}}
+                    {{continue}}
+            {{pass}}
+            {{if num_new_posts_today == 1:}}
+                {{str_new_posts_today = "New Post Today"}}
+            {{pass}}
+            <!--increment count of boards displayed-->
+            {{num_displayed += 1}}
+            <!--format display of single board-->
+            <div class="myBulletin">
+                <!--display title of board-->
+                <span class="boardTitle">
+                    {{=icon_clipboard}}
+                    <span style="text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
+                        {{=A(board.title, _href=URL('default', 'bulletin_board', args=[board.id]) )}}
+                    </span>
+                </span>
+                <!--display number of posts added to this board today-->
+                <p class="boardDetails">
+                    {{=num_new_posts_today}}
+                    <br>
+                    <p style="text-align: center; font-size: 200%;">
+                        {{=str_new_posts_today}}
+                    </p>
+                </p>
+                <!--display the most recent date and time at which a post on this board was last edited-->
+                <h3 class="bulletDate">
+                    Last Edited:
+                    {{=board.last_edited}}
+                </h3>
+            </div>
+            <!--if the number of displayed boards is equal to the maximum number of boards on a page times the number of pages to be displayed, stop displaying additional boards-->
+            {{if num_displayed == max_boards_per_page*int(times): break}}
+        {{pass}}
+    {{pass}}
+    <br><br><br>
+    <!--conditionally display Show Less and/or Show More buttons-->
+    <h3 style="position: absolute; bottom: 10px; right: 10px;">
+        <!--if the number of displayed boards is more than the maximum number of boards on a single page, display the Show Less button-->
+        {{if num_displayed > max_boards_per_page:}}
+            {{=A('Show Less', _class='btn btn-success', _href=URL('default', 'index', args=[int(times) - 1]))}}
+        {{pass}}
+        <!--if the number of displayed boards is less than the total number of boards, display the Show More button-->
+        {{if num_displayed < len(bulletin_boards):}}
+            {{=A('Show More', _class='btn btn-success', _href=URL('default', 'index', args=[int(times) + 1]))}}
+        {{pass}}
+    </h3>
+<!--if there are no boards-->
+{{else:}}
+    <!--inform the user of this-->
+    <h1 class="boardNoResults">There are currently no bulletin boards.</h1>
+{{pass}}
