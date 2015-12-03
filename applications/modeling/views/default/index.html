@@ -11,7 +11,14 @@
       </div>
     </header>
 {{end}}
-
+<script>
+        function color1(x){
+            x.style.background='linear-gradient(#d98200, #ffe0b3)';
+        }
+        function color2(x){
+            x.style.background='linear-gradient(#d98200, #663d00)';
+        }
+    </script>
 <html>
     <head>
         <style>
@@ -103,16 +110,11 @@
         </div>
 
         <div id="right">
-            <div id="btn_signup">Sign Up</div>
-            <div id="btn_login">Sign In</div><br><br>
-            <div id="btn_model" onclick="$:location.href='modeling'">Model</div>
+            <div id="btn_signup" onmousedown="color1(this)" onmouseup="color2(this)">Sign Up</div>
+            <div id="btn_login" onmousedown="color1(this)" onmouseup="color2(this)">Sign In</div><br><br>
+            <div id="btn_model" onclick="$:location.href='modeling'" onmousedown="color1(this)" onmouseup="color2(this)">Model</div>
         </div>
     </body>
 
-    <script>
-        function gotoModel(){
 
-        }
-
-    </script>
 </html>
