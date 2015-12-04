@@ -3,6 +3,7 @@
 
 import json
 import urllib2
+from datetime import datetime
 
 def index():
     """
@@ -27,11 +28,15 @@ def index():
 
 @auth.requires_login()
 def modeling():
+    active_model_id = ""
 
-    return dict()
+    return dict(active_model_id=active_model_id)
 
 def save_model():
     db.model.update_or_insert((db.model.model_id == request.vars.model_id),
+        name=request.vars.name,
+        description=request.vars.description,
+        last_edited=datetime.utcnow(),
         mesh_list=json.loads(request.vars.mesh_list),
         model_id=request.vars.model_id)
 
