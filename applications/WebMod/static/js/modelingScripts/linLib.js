@@ -114,10 +114,10 @@ function Vector(x, y, z) {
 		rtn.x = this.x + vector.x;
 		rtn.y = this.y + vector.y;
 		rtn.z = this.z + vector.z;
-		
+
 		return rtn;
 	}
-	
+
 	this.sub = function(vector) {
 		var rtn = new Vector(0.0, 0.0, 0.0);
 		rtn.x = this.x - vector.x;
@@ -125,26 +125,26 @@ function Vector(x, y, z) {
 		rtn.z = this.z - vector.z;
 		return rtn;
 	}
-	
+
 	this.scale = function(scalar) {
 		this.x = this.x * scalar;
 		this.y = this.y * scalar;
 		this.z = this.z * scalar;
 	}
-	
+
 	this.scalarMult = function(scalar) {
 		var rtn = new Vector(this.x, this.y, this.z);
 		rtn.x = rtn.x * scalar;
 		rtn.y = rtn.y * scalar;
 		rtn.z = rtn.z * scalar;
-		
+
 		return rtn;
 	}
-	
+
 	this.dotProduct = function( vector ) {
 		return (this.x * vector.x + this.y * vector.y + this.z * vector.z);
 	}
-	
+
 	this.crossProduct = function(vector) {
 		//use sarrus rule
 		var rtn = new Vector();
@@ -153,30 +153,30 @@ function Vector(x, y, z) {
 		rtn.z = (this.x * vector.y - this.y * vector.x);
 		return rtn;
 	}
-	
+
 	this.magnitude = function() {
 		return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2));
 	}
-	
+
 	this.normalize = function () {
 		var rtn = new Vector(this.x, this.y, this.z);
-		
+
 		rtn = rtn.scalarMult(1/(this.magnitude()));
-		
+
 		return rtn;
 	}
-	
+
 	this.copy = function() {
 		var rtn = new Vector(this.x, this.y, this.z);
 		return rtn;
 	}
-	
+
 	this.equals = function(vector) {
 		return (this.x == vector.x &&
 				this.y == vector.y &&
 				this.z == vector.z);
 	}
-	
+
 	this.toFloat32Array = function() {
 		return new Float32Array([
 			this.x,
@@ -184,31 +184,31 @@ function Vector(x, y, z) {
 			this.z
 		]);
 	}
-	
+
 	//normalList is used for determine a vertex normal when treating this as a point
 	this.normalList = [];
-	
+
 	this.addNormal = function(normalVec) {
 		this.normalList.push(normalVec.copy());
 	}
-	
+
 	this.avgNorm = function() {
 		if (this.normalList.length == 0) {
 			console.log("Error : Vector.avgNorm called on empty normal list");
 			return undefined;
 		}
-		
+
 		var basis = this.normalList[0].copy();
-		
+
 		for ( var index = 1; index < this.normalList.length; ++index) {
 			basis = basis.add(this.normalList[index]);
 		}
-		
+
 		basis.scale(1/(this.normalList.length));
 		return basis;
-		
+
 	}
-	
+
 	this.toFloat32Array = function() {
 		return new Float32Array([
 			this.x,
@@ -220,15 +220,15 @@ function Vector(x, y, z) {
 
 /*
  * Vector4D, its like a vector3D but with a fourth dimension.
- * 
- * 
+ *
+ *
  */
 function Vector4D(x, y, z, w) {
 	this.x = x;
 	this.y = y;
 	this.z = z;
 	this.w = w;
-	
+
 	this.add = function(vector) {
 		var rtn = new Vector4D(0.0, 0.0, 0.0, 0.0);
 		rtn.x = this.x + vector.x;

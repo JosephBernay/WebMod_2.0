@@ -15,3 +15,13 @@
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################
 
+from datetime import datetime
+
+db.define_table('model',
+                Field('name', 'string'),
+                Field('user_id', db.auth_user, default=auth.user_id),
+                Field('last_edited', 'datetime', default=datetime.utcnow()),
+                Field('description', 'text'),
+                Field('mesh_list', 'json'),
+                Field('model_id')
+                )
