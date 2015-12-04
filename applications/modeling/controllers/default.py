@@ -64,4 +64,10 @@ def read_email():
     # Ok, great, now we have the email to display.
     return dict(email=email)
 
+def profile():
+   data = []
+   return dict(data=data)
+   
+def user():
+   return dict(form=auth())
 

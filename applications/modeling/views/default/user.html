@@ -1,19 +1,43 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
 
-<h2>
+<head>
+{{block header}}
+   <ul>
+      <li style="float:left"><a href=""><b>Webmod 2.0</b></a></li>
+      <li style="float:right">
+         {{if auth.user_id is None:}}
+            {{=A('Sign In', _href=URL('default', 'user', args=['login']))}}
+         {{else:}}
+            {{=A('My Profile', _href=URL('default', 'profile', args=['auth.user_id']))}}
+         {{pass}}
+      </li>
+      <li style="float:right">
+         {{if auth.user_id is None:}}
+            {{=A('Sign Up', _href=URL('default', 'user', args=['register']))}}
+         {{else:}}
+            Log Out
+         {{pass}}
+      </li>
+   </ul>
+{{end}}
+</head>
+
+<body style="background: linear-gradient(#212229, #000000);">
+<h2 style="color:#D98200;">
 {{=T('Sign Up') if request.args(0) == 'register' else T('Log In') if request.args(0) == 'login' else T(request.args(0).replace('_',' ').title())}}
 </h2>
 
 <div class="container">
     <div class="row">
-        <div id="web2py_user_form" class="col-lg-6">
+        <div id="web2py_user_form" class="col-lg-6" style="color:white;">
         {{
         if request.args(0)=='login':
             if not 'register' in auth.settings.actions_disabled:
-                form.add_button(T('Sign Up'),URL(args='register', vars={'_next': request.vars._next} if request.vars._next else None),_class='btn btn-default')
+                form.add_button(T('Sign Up'),URL(args='register', vars={'_next': request.vars._next} if request.vars._next else None),_class='btn btn-danger')
             pass
             if not 'request_reset_password' in auth.settings.actions_disabled:
-                form.add_button(T('Lost Password'),URL(args='request_reset_password'),_class='btn btn-default')
+                form.add_button(T('Lost Password'),URL(args='request_reset_password'),_class='btn btn-danger')
             pass
         pass
         =form
@@ -21,7 +45,15 @@
         </div>
     </div>
 </div>
+</body>
 
+{{block footer}}  
+  <footer class="footer" style="background-color:#0d0d0d;">
+      <div class="container-fluid" style="color:#d98200; text-align:center;">
+         Webmod 2.0
+      </div>
+   </footer>
+{{end}}
 
 {{block page_js}}
 <script>
@@ -33,3 +65,42 @@
 {{pass}}
 </script>
 {{end page_js}}
+
+<!-----------------------------STYLES----------------------------------------!-->
+<style>
+   ul {
+       list-style-type: none;
+       margin: 0;
+       padding: 0;
+       overflow: hidden;
+       background: linear-gradient(#d98200, #663d00);
+   }
+
+   li a {
+       display: block;
+       color: white;
+       text-align: center;
+       padding: 14px 16px;
+       text-decoration: none;
+   }
+
+   /* Change the link color to #111 (black) on hover */
+   li a:hover {
+       background-color: #111;
+       text-decoration: none;
+       color: #D98200
+   }
+   
+   h2 {
+      color: #D98200;
+   }
+   
+   h3 {
+      color:white;
+   }
+   
+   web2py_user_form:focus{
+      outline:none;
+   }
+
+</style>
