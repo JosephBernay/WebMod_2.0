@@ -102,7 +102,7 @@ Model Polygon File : <br>
 </textarea>
 <textarea value="{% active_model_desc %}" cols="40" id="no_table_message" name="description" rows="8">
 </textarea>
-<input class="btn btn-primary" type="submit" value="OK" on-click="save-model"/>
+<button type="button" on-click="save-model">OK</button>
 </form>
 {% else %}
 <button type="button" on-click="save-menu">Save</button>
@@ -169,16 +169,19 @@ Model Polygon File : <br>
 
             console.log(modJSON);
 
+            canvasPrtSc = canvas.toDataURL();
+
             $.ajax("{{=URL('default', 'save_model')}}",
                 {
                     data: {
                         name: MAIN.get('active_model_name'),
                         description: MAIN.get('active_model_desc'),
                         mesh_list: JSON.stringify(modJSON),
+                        thumbnail_image: canvasPrtSc,
                         model_id: curModelID
                     },
                     method: 'POST',
-                    success: function (data) {
+                    success: function () {
                         MAIN.set('isSaving', false);
                         console.log("Save Complete!");
                     }

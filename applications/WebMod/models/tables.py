@@ -23,5 +23,6 @@ db.define_table('model',
                 Field('last_edited', 'datetime', default=datetime.utcnow()),
                 Field('description', 'text'),
                 Field('mesh_list', 'json'),
+                Field('thumbnail_image', 'text'),
                 Field('model_id')
                 )
