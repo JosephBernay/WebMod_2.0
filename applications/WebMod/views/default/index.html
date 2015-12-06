@@ -3,12 +3,12 @@
 <!--display header-->
 {{block header}}
     <header class="container-fluid background">
-      <div class="jumbotron text-center">
-        {{if response.title:}}
-        <h1>{{=response.title}}
-          <small>{{=response.subtitle or ''}}</small></h1>
-        {{pass}}
-      </div>
+        <div class="jumbotron text-center">
+            <svg>
+                <rect x="0" y="0" width="0" height="0">
+                </rect>Sorry, your browser does not support inline SVG.
+            </svg>
+        </div>
     </header>
 {{end}}
 <script>
@@ -18,7 +18,7 @@
         function color2(x){
             x.style.background='linear-gradient(#d98200, #663d00)';
         }
-    </script>
+</script>
 <html>
     <head>
         <style>
@@ -61,7 +61,6 @@
                 color:white;
                 margin:10px;
                 padding:10px;
-                width:20%;
             }
             #btn_login {
                 float:right;
@@ -71,11 +70,8 @@
                 color:white;
                 margin:10px;
                 padding:10px;
-                width:20%;
             }
             #btn_model {
-                position:relative;
-                left:10%;
                 text-align:center;
                 line-height:300%;
                 background: linear-gradient(#d98200, #663d00);
@@ -83,7 +79,6 @@
                 color:white;
                 margin:10px;
                 padding:10px;
-                width:80%;
                 height:15%;
                 font-size:40px;
 
@@ -110,9 +105,14 @@
         </div>
 
         <div id="right">
-            <div id="btn_signup" onmousedown="color1(this)" onmouseup="color2(this)">Sign Up</div>
-            <div id="btn_login" onmousedown="color1(this)" onmouseup="color2(this)">Sign In</div><br><br>
-            <div id="btn_model" onclick="$:location.href='modeling'" onmousedown="color1(this)" onmouseup="color2(this)">Model</div>
+            {{if not auth.user_id:}}
+            <div id="btn_signup" onclick="$:location.href='user/register'" onmouseover="color1(this)" onmouseout="color2(this)">Sign Up</div>
+            <div id="btn_login" onclick="$:location.href='user/login'" onmouseover="color1(this)" onmouseout="color2(this)">Sign In</div><br><br>
+            {{else:}}
+            <div id="btn_model" onclick="$:location.href='profile'" onmouseover="color1(this)" onmouseout="color2(this)">Profile</div>
+            <div id="btn_model" onclick="$:location.href='user/logout'" onmouseover="color1(this)" onmouseout="color2(this)">Logout</div>
+            {{pass}}
+            <div id="btn_model" onclick="$:location.href='modeling'" onmouseover="color1(this)" onmouseout="color2(this)">Model</div>
         </div>
     </body>
 

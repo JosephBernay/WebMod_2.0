@@ -9,7 +9,7 @@
          {{if auth.user_id is None:}}
             {{=A('Sign In', _href=URL('default', 'user', args=['login']))}}
          {{else:}}
-            {{=A('My Profile', _href=URL('default', 'profile', args=['auth.user_id']))}}
+            {{=A('My Profile', _href=URL('default', 'profile', args=[auth.user_id]))}}
          {{pass}}
       </li>
       <li style="float:right">
@@ -28,9 +28,15 @@
    <div style="padding-left:20px; padding-top:20px;">
       <div style="width:30%; height:340px; float:left; background:#111; border-radius:5px;">
          <img src="http://s3.amazonaws.com/37assets/svn/765-default-avatar.png" style="padding-left:20px; padding-top:20px; float:left;" width="200px" height="200px"></img>
-         <div style="padding-left:20px; color:white; float:left;">
-            <h2>Username</h2>
-            More info.
+         {{if int(request.args(0)) == int(auth.user_id):}}
+            {{=A('Edit Profile', _class='orange_btn', _style='float:right;', _href=URL('default', 'user', args='profile'))}}<br>
+         {{pass}}
+         <div style="padding-left:20px; padding-right:20px; color:white; float:left;">
+            <h2>{{=user['username']}}</h2><br>
+            {{if int(request.args(0)) == int(auth.user_id):}}
+               name: {{=user['first_name']}} {{=user['last_name']}}<br><br>
+               email: {{=user['email']}}
+            {{pass}}
          </div>
       </div>
    </div>
@@ -67,7 +73,7 @@
 
 <div align="center" style="width:98%; color:black; border-radius:5px;">
    <div style="padding-left:20px; padding-top:20px;">
-      <h2 align="left" style="padding-left:20px; width:100%;">All Models</h2><br>
+      <h2 align="left" style="padding-left:20px; width:100%; padding-top:20px;">All Models</h2><br>
          <div class="row">
                <div class="col-sm-2" align="center">
                   <img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
@@ -96,7 +102,7 @@
          </div>
    </div>
 </div>
-</body>
+</body>   
 
 {{block footer}}  
   <footer class="footer" style="background-color:#0d0d0d;">
@@ -105,3 +111,21 @@
       </div>
    </footer>
 {{end}}
+
+<script>
+   $(function() {
+
+      // Ractive object
+      var MAIN = new Ractive({
+         el: '#target',
+         template: '#template',
+         delimiters: ['{%', '%}'],
+         tripleDelimiters: ['{%%', '%%}'],
+         data: {
+            fav: false,
+            model_dict: {},
+            fav_dict:{},
+         },
+      });
+   });
+</script>
