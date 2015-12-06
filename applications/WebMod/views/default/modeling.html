@@ -27,7 +27,7 @@
 <form>
 <fieldset>
 <legend>Color: </legend> <br>
-<button type="button" onclick="setPickColor()">Set Color</button>
+<button type="button" on-click="set-pick-color">Set Color</button>
 Red :
 <input id="red" type="range" value="0" min="0" max = 1 step="0.001"/>
 Green :
@@ -47,29 +47,29 @@ Blue :
 <fieldset>
 <legend>Primitive Mesh Creation:</legend>
  <br>
-<button type="button" onclick="cubePrim()">Cube</button>
-<button type="button" onclick="pyramidPrim()">Pyramid</button>
-<button type="button" onclick="spherePrim()">Sphere</button>
-<button type="button" onclick="cylinderPrim()">Cylinder</button>
-<button type="button" onclick="conePrim()">Cone</button>
-<button type="button" onclick="toroidPrim()">Toroid</button></fieldset>
+<button type="button" on-click="cube-prim">Cube</button>
+<button type="button" on-click="pyramid-prim">Pyramid</button>
+<button type="button" on-click="sphere-prim">Sphere</button>
+<button type="button" on-click="cylinder-prim">Cylinder</button>
+<button type="button" on-click="cone-prim">Cone</button>
+<button type="button" on-click="toroid-prim">Toroid</button></fieldset>
 </form>
 <form>
 <fieldset>
 <legend>Mesh Edit</legend>
-<button type="button" onclick="deleteMesh()">Delete Mesh</button>
-<button type="button" onclick="merge()">Merge</button>
-<button type="button" id="polyButton" onclick="togglePolyMode()">Poly Mode : ON</button>
-<button type="button" onclick="deletePoly()">Delete Polygon</button>
-<button type="button" onclick="extrudePoly()">Extrude Polygon</button>
+<button type="button" on-click="delete-mesh">Delete Mesh</button>
+<button type="button" on-click="merge">Merge</button>
+<button type="button" id="polyButton" on-click="toggle-poly-mode">Poly Mode : ON</button>
+<button type="button" on-click="delete-poly">Delete Polygon</button>
+<button type="button" on-click="extrude-poly">Extrude Polygon</button>
 </fieldset>
 <br>
 </form>
 <form>
 <fieldset>
 <legend>Shading</legend>
-<button type="button" onclick="toSmthShad()">Smooth</button>
-<button type="button" onclick="toFlatShad()">Flat</button>
+<button type="button" on-click="to-smooth-shade">Smooth</button>
+<button type="button" on-click="to-flat-shade">Flat</button>
 </fieldset>
 </form>
 
@@ -87,12 +87,6 @@ click and drag to translate <br>
 <form>
 <legend> Input/Output </legend>
 <fieldset>
-Model Coordinate File : <br>
-<textarea id="coord" rows="4" cols="50">
-</textarea> <br>
-Model Polygon File : <br>
-<textarea id="poly" rows="4" cols="50">
-</textarea>
 {% #if isSaving === true %}
 <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
 <h2>
@@ -109,7 +103,18 @@ Model Polygon File : <br>
 {% else %}
 <button type="button" on-click="save-menu">Save</button>
 {% /if %}
-<button type="button" onclick="importModel()">Import</button><br>
+{% #if isOpening === true %}
+<form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
+<h2>
+<br>
+</h2>
+<textarea value="{% openingName %}" cols="40" id="no_table_message" name="name" rows="1">
+</textarea>
+<button type="button" on-click="open-model">OK</button>
+</form>
+{% else %}
+<button type="button" on-click="open-menu">Open</button>
+{% /if %}
 </fieldset>
 </form><br><br>
 
@@ -156,6 +161,9 @@ Model Polygon File : <br>
                 var polyList = [];
                 for (var numPoly = 0; numPoly < meshTable[index].polyTable.length; ++numPoly) {
                     polyList.push(meshTable[index].polyTable[numPoly].vertList);
+                    console.log(polyList[polyList.length - 1]);
+                    polyList[polyList.length - 1].unshift("vertex");
+                    console.log(polyList[polyList.length - 1]);
                 }
                 var vertList = [];
                 vertList.push([]);
@@ -208,14 +216,47 @@ Model Polygon File : <br>
         });
 
         MAIN.on('open-model', function(e) {
-            $.ajax("{{=URL('default', 'save_model')}}",
+            $.ajax("{{=URL('default', 'open_model')}}",
                 {
                     data: {
                         name: MAIN.get('openingName')
                     },
                     method: 'POST',
                     success: function (data) {
-                        //finish this
+                        var model = data['model'];
+                        console.log(model['mesh_list']['objects'][0]['vertTable']);
+                        console.log(model['mesh_list']['objects'][0]['polyTable']);
+                        MAIN.set('active_model_name', model['name']);
+                        MAIN.set('active_model_description', model['description']);
+                        var tags = ""
+                        for(var numTag = 0; numTag < model['tag_list']['tags'].length; ++numTag) {
+                            tags += model['tag_list']['tags'][numTag];
+                            if(numTag < model['tag_list']['tags'].length - 1)
+                                tags += " ";
+                        }
+                        MAIN.set('tag_list', tags);
+                        MAIN.set('mesh_list', model['mesh_list']);
+                        MAIN.set('active_model_id', model['model_id']);
+
+                        meshTable = [];
+                        meshes = model['mesh_list']['objects']
+                        for(var numMesh in model['mesh_list']['objects']) {
+                            addMesh(meshes[numMesh]['vertTable'], meshes[numMesh]['polyTable']);
+                            meshTable[meshTable.length - 1].materialColor = new Vector4D(meshes[numMesh]['materialColor'][0],
+                                meshes[numMesh]['materialColor'][1],
+                                meshes[numMesh]['materialColor'][2],
+                                meshes[numMesh]['materialColor'][3]);
+                            meshTable[meshTable.length - 1].scaleMat.populateFromArray(meshes[numMesh]['scaleMat']);
+                            meshTable[meshTable.length - 1].rotMatX.populateFromArray(meshes[numMesh]['rotMatX']);
+                            meshTable[meshTable.length - 1].rotMatY.populateFromArray(meshes[numMesh]['rotMatY']);
+                            meshTable[meshTable.length - 1].rotMatZ.populateFromArray(meshes[numMesh]['rotMatZ']);
+                            meshTable[meshTable.length - 1].transMat.populateFromArray(meshes[numMesh]['transMat']);
+                            meshTable[meshTable.length - 1].meshID = meshes[numMesh]['meshID'];
+                        }
+
+                        MAIN.set('isOpening', false);
+                        renderAll();
+                        console.log("Load Complete!");
                     }
                 }
             );
@@ -775,7 +816,7 @@ Model Polygon File : <br>
             }
             this.center = this.center.scalarMult(1 / this.vertCount())
 
-            //Walk through each  vertex and use them to create tris, ignore the techicalities of what tesselation actually entails
+            //Walk through each  vertex and use them to create tris, ignore the technicalities of what tesselation actually entails
             this.tesselate = function() {
 
                 var triList = []
@@ -1488,7 +1529,7 @@ Model Polygon File : <br>
         };
 
         //cArray is an array of coordinates as defined similarly to SHARK_COORD
-        //pArray is an array of coordiantes as defined similarly to SHARK_POLY
+        //pArray is an array of coordinates as defined similarly to SHARK_POLY
         function addMesh(cArray, pArray) {
             //create mesh
             var idCol = gblColorID.copy();
@@ -1517,7 +1558,7 @@ Model Polygon File : <br>
             gblColorID.z += 1.0/255.0;
         }
 
-        function deleteMesh() {
+        MAIN.on("delete-mesh", function(e) {
             if (currentPick == undefined) {
                 return;
             }
@@ -1568,9 +1609,9 @@ Model Polygon File : <br>
             }
 
             renderAll();
-        }
+        });
 
-        function deletePoly() {
+        MAIN.on("delete-poly", function(e) {
             if(polyPick == undefined) {
                 return;
             }
@@ -1605,7 +1646,7 @@ Model Polygon File : <br>
             }
 
             renderAll();
-        }
+        });
 
         //transPolyonNorm -> interprets mouse input and appropriately translate poly polygon
         function transPolyOnNorm(mouseDelta) {
@@ -1642,7 +1683,7 @@ Model Polygon File : <br>
             renderAll();
         }
         //copies a poly and then allows you to translate that new poly axially.
-        function extrudePoly() {
+        MAIN.on("extrude-poly", function(e) {
 
             //create new poly,
             //connect it
@@ -1767,21 +1808,21 @@ Model Polygon File : <br>
 
             console.log("");
 
-        }
+        });
 
-        function toSmthShad() {
+        MAIN.on("to-smooth-shade", function(e) {
             currentPick.shading = ShaderTypes.SMOOTH;
             currentPick.pushBuffer();
             renderAll();
-        }
+        });
 
-        function toFlatShad() {
+        MAIN.on("to-flat-shade", function(e) {
             currentPick.shading = ShaderTypes.FLAT;
             currentPick.pushBuffer();
             renderAll();
-        }
+        });
 
-        function merge() {
+        MAIN.on("merge", function(e) {
             //get start stateState
             var operandA = lastPick;
             var operandB = currentPick;
@@ -2056,11 +2097,11 @@ Model Polygon File : <br>
             renderAll();
             return;
 
-        }
+        });
 
         //keyboard listening
         window.addEventListener("keydown", function(event) {
-            if(MAIN.get('isSaving') === false) {
+            if(MAIN.get('isSaving') === false && MAIN.get('isOpening') === false) {
                 if(event.keyCode == 90) {
                     zDown = true;
                 }
@@ -2119,7 +2160,7 @@ Model Polygon File : <br>
         }, false);
 
         window.addEventListener("keyup", function(event) {
-            if(MAIN.get('isSaving') === false) {
+            if(MAIN.get('isSaving') === false && MAIN.get('isOpening') === false) {
                 if(event.keyCode == 90) {
                     zDown = false;
                 }
@@ -2169,56 +2210,56 @@ Model Polygon File : <br>
         }
 
         //GUI Interaction Functions
-        function cubePrim() {
+        MAIN.on("cube-prim", function(e) {
             var thisIndex = meshTable.length;
             var cube = makeCube(1.0);
             addMesh(cube[0], cube[1]);
             meshTable[thisIndex].scale(0.3, 0.3, 0.3);
             renderAll();
-        }
+        });
 
-        function pyramidPrim() {
+        MAIN.on("pyramid-prim", function(e) {
             var thisIndex = meshTable.length;
             var pyramid = makePyramid(1.0, 1.0);
             addMesh(pyramid[0], pyramid[1]);
             meshTable[thisIndex].scale(0.3, 0.3, 0.3);
             renderAll();
-        }
+        });
 
-        function spherePrim() {
+        MAIN.on("sphere-prim", function(e) {
             var thisIndex = meshTable.length;
             var sphere = makeSphere(1.0);
             addMesh(sphere[0], sphere[1]);
             meshTable[thisIndex].scale(0.3, 0.3, 0.3);
             renderAll();
-        }
+        });
 
-        function cylinderPrim() {
+        MAIN.on("cylinder-prim", function(e) {
             var thisIndex = meshTable.length;
             var cylinder = makeCylinder(0.5, 1.0, 20);
             addMesh(cylinder[0], cylinder[1]);
             meshTable[thisIndex].scale(0.3, 0.3, 0.3);
             renderAll();
             return;
-        }
+        });
 
-        function conePrim() {
+        MAIN.on("cone-prim", function(e) {
             var thisIndex = meshTable.length;
             var cone = makeCone(0.5, 1.0, 20);
             addMesh(cone[0], cone[1]);
             meshTable[thisIndex].scale(0.3, 0.3, 0.3);
             renderAll();
-        }
+        });
 
-        function toroidPrim() {
+        MAIN.on("toroid-prim", function(e) {
             var thisIndex = meshTable.length;
             var toroid = makeToroid(1.0, 0.1, 20, 20);
             addMesh(toroid[0], toroid[1]);
             meshTable[thisIndex].scale(0.3, 0.3, 0.3);
             renderAll();
-        }
+        });
 
-        function setPickColor() {
+        MAIN.on("set-pick-color", function(e) {
             if (currentPick == undefined) {
                 return;
             }
@@ -2229,7 +2270,7 @@ Model Polygon File : <br>
             var blue   = document.getElementById("blue").value;
             currentPick.materialColor = new Vector4D(red, green, blue, 1.0);
             renderAll();
-        }
+        });
 
         function importModel() {
             var coord = document.getElementById("coord");

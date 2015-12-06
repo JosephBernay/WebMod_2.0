@@ -50,10 +50,15 @@ def save_model():
 
     return "ok"
 
-def load_model():
-    model = db((db.model.name == request.vars.name) & (db.model.user_id == auth.user_id)).select()
-
-    print model
+def open_model():
+    m = db((db.model.name == request.vars.name) & (db.model.user_id == auth.user_id)).select().__getitem__(0)
+    print m
+    model = {'name': m.name,
+            'description': m.description,
+            'tag_list': m.tag_list,
+            'mesh_list': m.mesh_list,
+            'model_id': m.model_id}
+    return response.json(dict(model=model))
 
 def resetDB():
     db(db.model.id > 0).delete()
