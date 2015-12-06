@@ -6,8 +6,26 @@ import urllib2
 from datetime import datetime
 
 def index():
-
-    return dict()
+    """
+    Displays list of all emails.
+    """
+    '''# Gets some fresh set of emails each time.
+    email_list = get_emails('http://luca-teaching.appspot.com/fake_emails/default/get_emails')
+    # We store the list of emails in the session.
+    session.email_list = email_list
+    # At this point, email_list is a list of dictionaries of this format:
+    #     {
+    #         'id': 'randomstringid',
+    #         'from': 'sender@email.com',
+    #         'date': 'somedateinISOformat',
+    #         'subject': 'Your homework.',
+    #         'text': 'Text of email, with \n\n used to separate paragraphs',
+    #         'starred': True, # or False!
+    #         'read': False, # Whether you have read it or not, can be True or False
+    #     }
+    # And you need to display the list of emails.'''
+    email_list = []
+    return dict(email_list=email_list)
 
 @auth.requires_login()
 def modeling():
@@ -25,12 +43,12 @@ def save_model():
         last_edited=datetime.utcnow(),
         model_id=request.vars.model_id)
 
-    # print request.vars.mesh_list
-    #
+    print request.vars.mesh_list
+
     model = db(db.model.model_id == request.vars.model_id).select()
     print model
-    #
-    # return "ok"
+
+    return "ok"
 
 def load_model():
     model = db((db.model.name == request.vars.name) & (db.model.user_id == auth.user_id)).select()
@@ -60,6 +78,10 @@ def user():
         @auth.requires_permission('read','table name',record_id)
     to decorate functions that need access control
     """
-    return dict(form=auth())
+    form = auth()
+    print('\n \n')
+    #print(form.element(_type='submit')['value'])
+ 
+    return dict(form=form)
 
 

@@ -9,14 +9,14 @@
          {{if auth.user_id is None:}}
             {{=A('Sign In', _href=URL('default', 'user', args=['login']))}}
          {{else:}}
-            {{=A('My Profile', _href=URL('default', 'profile', args=['auth.user_id']))}}
+            {{=A('My Profile', _href=URL('default', 'profile', args=[auth.user_id]))}}
          {{pass}}
       </li>
       <li style="float:right">
          {{if auth.user_id is None:}}
             {{=A('Sign Up', _href=URL('default', 'user', args=['register']))}}
          {{else:}}
-            Log Out
+            {{=A('Logout', _href=URL('default', 'user', args='logout'))}}
          {{pass}}
       </li>
    </ul>
@@ -28,16 +28,18 @@
 {{=T('Sign Up') if request.args(0) == 'register' else T('Log In') if request.args(0) == 'login' else T(request.args(0).replace('_',' ').title())}}
 </h2>
 
+<br>
+
 <div class="container">
     <div class="row">
         <div id="web2py_user_form" class="col-lg-6" style="color:white;">
         {{
         if request.args(0)=='login':
             if not 'register' in auth.settings.actions_disabled:
-                form.add_button(T('Sign Up'),URL(args='register', vars={'_next': request.vars._next} if request.vars._next else None),_class='btn btn-danger')
+                form.add_button(T('Sign Up'),URL(args='register', vars={'_next': request.vars._next} if request.vars._next else None),_class='orange_btn')
             pass
             if not 'request_reset_password' in auth.settings.actions_disabled:
-                form.add_button(T('Lost Password'),URL(args='request_reset_password'),_class='btn btn-danger')
+                form.add_button(T('Lost Password'),URL(args='request_reset_password'),_class='orange_btn')
             pass
         pass
         =form
@@ -63,44 +65,13 @@
 {{elif request.args(0)=='change_password':}}
     web2py_validate_entropy(jQuery('#no_table_new_password'),100);
 {{pass}}
+
+function color1(x){
+   x.style.background='linear-gradient(#d98200, #ffe0b3)';
+}
+function color2(x){
+   x.style.background='linear-gradient(#d98200, #663d00)';
+}
+
 </script>
 {{end page_js}}
-
-<!-----------------------------STYLES----------------------------------------!-->
-<style>
-   ul {
-       list-style-type: none;
-       margin: 0;
-       padding: 0;
-       overflow: hidden;
-       background: linear-gradient(#d98200, #663d00);
-   }
-
-   li a {
-       display: block;
-       color: white;
-       text-align: center;
-       padding: 14px 16px;
-       text-decoration: none;
-   }
-
-   /* Change the link color to #111 (black) on hover */
-   li a:hover {
-       background-color: #111;
-       text-decoration: none;
-       color: #D98200
-   }
-   
-   h2 {
-      color: #D98200;
-   }
-   
-   h3 {
-      color:white;
-   }
-   
-   web2py_user_form:focus{
-      outline:none;
-   }
-
-</style>
