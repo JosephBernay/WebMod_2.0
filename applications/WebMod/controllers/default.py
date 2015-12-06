@@ -19,9 +19,10 @@ def save_model():
     db.model.update_or_insert((db.model.model_id == request.vars.model_id),
         name=request.vars.name,
         description=request.vars.description,
-        last_edited=datetime.utcnow(),
+        tag_list=json.loads(request.vars.tag_list),
         mesh_list=json.loads(request.vars.mesh_list),
         thumbnail_image=request.vars.thumbnail_image,
+        last_edited=datetime.utcnow(),
         model_id=request.vars.model_id)
 
     # print request.vars.mesh_list
@@ -30,6 +31,11 @@ def save_model():
     print model
     #
     # return "ok"
+
+def load_model():
+    model = db((db.model.name == request.vars.name) & (db.model.user_id == auth.user_id)).select()
+
+    print model
 
 def resetDB():
     db(db.model.id > 0).delete()

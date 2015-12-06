@@ -102,6 +102,8 @@ Model Polygon File : <br>
 </textarea>
 <textarea value="{% active_model_desc %}" cols="40" id="no_table_message" name="description" rows="8">
 </textarea>
+<textarea value="{% active_model_tags %}" cols="40" id="no_table_message" name="tags" rows="1">
+</textarea>
 <button type="button" on-click="save-model">OK</button>
 </form>
 {% else %}
@@ -125,13 +127,22 @@ Model Polygon File : <br>
                 active_model_id: "{{=active_model_id}}",
                 active_model_name: "Untitled",
                 active_model_desc: "Enter Details",
-                isSaving: false
+                active_model_tags: "Tags (separate with spaces)",
+                isSaving: false,
+                isOpening: false,
+                openingName: ""
             },
         });
 
         // We want to display the save menu.
         MAIN.on("save-menu", function(e) {
             MAIN.set('isSaving', true);
+            MAIN.set('isOpening', false);
+        });
+
+        MAIN.on("open-menu", function(e) {
+            MAIN.set('isOpening', true);
+            MAIN.set('isSaving', false);
         });
 
         //We want to save the model
@@ -169,6 +180,12 @@ Model Polygon File : <br>
 
             console.log(modJSON);
 
+            tagsJSON = {
+                tags: []
+            };
+
+            tagsJSON.tags = MAIN.get('active_model_tags').split(" ");
+
             canvasPrtSc = canvas.toDataURL();
 
             $.ajax("{{=URL('default', 'save_model')}}",
@@ -176,6 +193,7 @@ Model Polygon File : <br>
                     data: {
                         name: MAIN.get('active_model_name'),
                         description: MAIN.get('active_model_desc'),
+                        tag_list: JSON.stringify(tagsJSON),
                         mesh_list: JSON.stringify(modJSON),
                         thumbnail_image: canvasPrtSc,
                         model_id: curModelID
@@ -187,6 +205,20 @@ Model Polygon File : <br>
                     }
                 }
              );
+        });
+
+        MAIN.on('open-model', function(e) {
+            $.ajax("{{=URL('default', 'save_model')}}",
+                {
+                    data: {
+                        name: MAIN.get('openingName')
+                    },
+                    method: 'POST',
+                    success: function (data) {
+                        //finish this
+                    }
+                }
+            );
         });
 
         /*
