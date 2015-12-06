@@ -16,7 +16,7 @@
          {{if auth.user_id is None:}}
             {{=A('Sign Up', _href=URL('default', 'user', args=['register']))}}
          {{else:}}
-            Log Out
+            {{=A('Logout', _href=URL('default', 'user', args='logout'))}}
          {{pass}}
       </li>
    </ul>
@@ -26,7 +26,7 @@
 <body style="background: linear-gradient(#212229, #000000);">
 <div>
    <div style="padding-left:20px; padding-top:20px;">
-      <div style="width:30%; height:340px; float:left; background:#111; border-radius:5px; border:solid; border-color:gray;">
+      <div style="width:30%; height:340px; float:left; background:#111; border-radius:5px;">
          <img src="http://s3.amazonaws.com/37assets/svn/765-default-avatar.png" style="padding-left:20px; padding-top:20px; float:left;" width="200px" height="200px"></img>
          <div style="padding-left:20px; color:white; float:left;">
             <h2>Username</h2>
@@ -37,10 +37,8 @@
 
    <div style="float:right; width:20px; height:200px;"></div>
 
-   <ul style="background:transparent; float:right; width:14%; border:solid; border-color:gray; border-radius:5px;">
-     <li style="float:right"><a href="">Favorited Models</a></li>
-     <li style="float:right; background-color:#111;"><a style="color:#D98200" href="">Models</a></li>
-   </ul>
+   <div class="orange_btn" style="float:right;">Models</div>
+   <div class="orange_btn" style="float:right;">Favorited Models</div>
    
    <div style="width:67%; float:right; color:black; border-radius:5px;">
       <div style="padding-left:20px;">
@@ -67,11 +65,9 @@
    </div>
 </div>
 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><hr style="border-color:gray;">
-
 <div align="center" style="width:98%; color:black; border-radius:5px;">
    <div style="padding-left:20px; padding-top:20px;">
-      <h2 align="left" style="padding-left:20px;">All Models</h2><br>
+      <h2 align="left" style="padding-left:20px; width:100%;">All Models</h2><br>
          <div class="row">
                <div class="col-sm-2" align="center">
                   <img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
@@ -109,38 +105,3 @@
       </div>
    </footer>
 {{end}}
-
-<!-----------------------------STYLES----------------------------------------!-->
-<style>
-   ul {
-       list-style-type: none;
-       margin: 0;
-       padding: 0;
-       overflow: hidden;
-       background: linear-gradient(#d98200, #663d00);
-   }
-
-   li a {
-       display: block;
-       color: white;
-       text-align: center;
-       padding: 14px 16px;
-       text-decoration: none;
-   }
-
-   /* Change the link color to #111 (black) on hover */
-   li a:hover {
-       background-color: #111;
-       text-decoration: none;
-       color: #D98200
-   }
-   
-   h2 {
-      color: #D98200;
-   }
-   
-   h3 {
-      color:white;
-   }
-
-</style>

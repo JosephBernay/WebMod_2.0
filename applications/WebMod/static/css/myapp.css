@@ -2,3 +2,65 @@
 .colorful {
   color: #bb8833;
 }
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: linear-gradient(#d98200, #663d00);
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background: linear-gradient(#d98200, #ffe0b3);
+    text-decoration: none;
+    color: #000000;
+}
+
+h2 {
+   color: #D98200;
+}
+
+h3 {
+   color:white;
+}
+
+.orange_btn {
+    float:left;
+    text-align:center;
+    background: linear-gradient(#d98200, #663d00);
+    border-radius:10%;
+    color:white;
+    margin:10px;
+    padding:10px;
+    border: none;
+}
+
+.orange_btn:hover {
+   color: black;
+   background: linear-gradient(#d98200, #ffe0b3);
+}
+
+.btn-primary {
+    float:left;
+    text-align:center;
+    background: linear-gradient(#d98200, #663d00);
+    border-radius:10%;
+    color:white;
+    margin:10px;
+    padding:10px;
+    border: none;
+}
+
+.btn-primary:hover {
+   color: black;
+   background: linear-gradient(#d98200, #ffe0b3);
+}
