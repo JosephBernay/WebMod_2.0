@@ -59,8 +59,12 @@ def resetDB():
     db(db.model.id > 0).delete()
 
 def profile():
-    data = []
-    return dict(data=data)
+   if ((request.args(0) == None) and (auth.user_id == None)):
+      redirect(URL('default', 'user', args=['login']))
+   if request.args(0) == None:
+      redirect(URL('default', 'profile', args=[auth.user_id]))   
+   user = db.auth_user(request.args(0))
+   return dict(user=user)
 
 def user():
     """
@@ -78,10 +82,11 @@ def user():
         @auth.requires_permission('read','table name',record_id)
     to decorate functions that need access control
     """
+    
+    #print(auth.user.first_name)
+    #print(db.auth_user[auth.user_id].first_name)
+    
     form = auth()
-    print('\n \n')
-    #print(form.element(_type='submit')['value'])
- 
     return dict(form=form)
 
 

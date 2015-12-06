@@ -47,6 +47,7 @@ h3 {
 .orange_btn:hover {
    color: black;
    background: linear-gradient(#d98200, #ffe0b3);
+   text-decoration: none;
 }
 
 .btn-primary {
@@ -63,4 +64,5 @@ h3 {
 .btn-primary:hover {
    color: black;
    background: linear-gradient(#d98200, #ffe0b3);
+   text-decoration: none;
 }

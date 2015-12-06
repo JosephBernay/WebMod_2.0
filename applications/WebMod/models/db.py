@@ -57,8 +57,14 @@ auth = Auth(db)
 service = Service()
 plugins = PluginManager()
 
+auth.settings.extra_fields['auth_user']=[
+   Field('username')]   
+   
 ## create all tables needed by auth if not custom tables
 auth.define_tables(username=False, signature=False)
+
+auth_table = auth.settings.table_user
+auth_table.username.requires = IS_NOT_IN_DB(db, auth_table.username)
 
 ## configure email
 mail = auth.settings.mailer
