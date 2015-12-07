@@ -23,6 +23,7 @@ db.define_table('model',
                 Field('tag_list', 'json'),
                 Field('mesh_list', 'json'),
                 Field('thumbnail_image', 'text'),
+                Field('num_favorites', 'integer', default=0),
                 Field('last_edited', 'datetime', default=datetime.utcnow()),
                 Field('user_id', db.auth_user, default=auth.user_id),
                 Field('model_id')
