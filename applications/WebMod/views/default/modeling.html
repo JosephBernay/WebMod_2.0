@@ -19,11 +19,16 @@
     </header>
 {{end}}
 
-<body></body>
+<body style="background: linear-gradient(#212229, #000000);">
+    <div id="target"></div>
+</body>
 
-<div id="target"></div>
+
 
 <script id="template" type="text/ractive">
+<img id="dynImg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA
+AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
+9TXL0Y4OHwAAAABJRU5ErkJggg==" />
 <form>
 <fieldset>
 <legend>Color: </legend> <br>
@@ -98,6 +103,8 @@ click and drag to translate <br>
 </textarea>
 <textarea value="{% active_model_tags %}" cols="40" id="no_table_message" name="tags" rows="1">
 </textarea>
+Public: <input type="checkbox" id="publicBox" on-click="toggle-public">
+Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
 <button type="button" on-click="save-model">OK</button>
 </form>
 {% else %}
@@ -133,6 +140,8 @@ click and drag to translate <br>
                 active_model_name: "Untitled",
                 active_model_desc: "Enter Details",
                 active_model_tags: "Tags (separate with spaces)",
+                active_public: false,
+                active_shareable: false,
                 isSaving: false,
                 isOpening: false,
                 openingName: ""
@@ -143,6 +152,10 @@ click and drag to translate <br>
         MAIN.on("save-menu", function(e) {
             MAIN.set('isSaving', true);
             MAIN.set('isOpening', false);
+            console.log(MAIN.get('active_public'));
+            console.log(MAIN.get('active_shareable'));
+            document.getElementById("publicBox").checked = MAIN.get('active_public');
+            document.getElementById("shareableBox").checked = MAIN.get('active_shareable');
         });
 
         MAIN.on("open-menu", function(e) {
@@ -203,6 +216,8 @@ click and drag to translate <br>
                         description: MAIN.get('active_model_desc'),
                         tag_list: JSON.stringify(tagsJSON),
                         mesh_list: JSON.stringify(modJSON),
+                        isPublic: MAIN.get('active_public'),
+                        isShareable: MAIN.get('active_shareable'),
                         thumbnail_image: canvasPrtSc,
                         model_id: curModelID
                     },
@@ -227,7 +242,7 @@ click and drag to translate <br>
                         console.log(model['mesh_list']['objects'][0]['vertTable']);
                         console.log(model['mesh_list']['objects'][0]['polyTable']);
                         MAIN.set('active_model_name', model['name']);
-                        MAIN.set('active_model_description', model['description']);
+                        MAIN.set('active_model_desc', model['description']);
                         var tags = ""
                         for(var numTag = 0; numTag < model['tag_list']['tags'].length; ++numTag) {
                             tags += model['tag_list']['tags'][numTag];
@@ -236,6 +251,8 @@ click and drag to translate <br>
                         }
                         MAIN.set('tag_list', tags);
                         MAIN.set('mesh_list', model['mesh_list']);
+                        MAIN.set('active_public', model['isPublic']);
+                        MAIN.set('active_shareable', model['isShareable']);
                         MAIN.set('active_model_id', model['model_id']);
 
                         meshTable = [];
@@ -260,6 +277,16 @@ click and drag to translate <br>
                     }
                 }
             );
+        });
+
+        MAIN.on("toggle-public", function(e) {
+            MAIN.set('active_public', !(MAIN.get('active_public')));
+            document.getElementById("publicBox").checked = MAIN.get('active_public');
+        });
+
+        MAIN.on("toggle-shareable", function(e) {
+            MAIN.set('active_shareable', !(MAIN.get('active_shareable')));
+            document.getElementById("shareableBox").checked = MAIN.get('active_shareable');
         });
 
         /*

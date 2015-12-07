@@ -39,6 +39,8 @@ def save_model():
         description=request.vars.description,
         tag_list=json.loads(request.vars.tag_list),
         mesh_list=json.loads(request.vars.mesh_list),
+        isPublic=request.vars.isPublic,
+        isShareable=request.vars.isShareable,
         thumbnail_image=request.vars.thumbnail_image,
         last_edited=datetime.utcnow(),
         model_id=request.vars.model_id)
@@ -57,6 +59,8 @@ def open_model():
             'description': m.description,
             'tag_list': m.tag_list,
             'mesh_list': m.mesh_list,
+            'isPublic': m.isPublic,
+            'isShareable': m.isShareable,
             'model_id': m.model_id}
     return response.json(dict(model=model))
 
