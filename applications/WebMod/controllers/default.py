@@ -64,6 +64,13 @@ def open_model():
             'model_id': m.model_id}
     return response.json(dict(model=model))
 
+def search():
+    models = db(db.model).select(db.model.ALL)
+    return dict(models=models)
+
+def search_stuff():
+
+
 def resetDB():
     db(db.model.id > 0).delete()
     
