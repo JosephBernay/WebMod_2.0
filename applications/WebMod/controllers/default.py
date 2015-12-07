@@ -62,6 +62,9 @@ def open_model():
 
 def resetDB():
     db(db.model.id > 0).delete()
+    
+def download():
+    return response.download(request, db)
 
 def profile():
    if ((request.args(0) == None) and (auth.user_id == None)):

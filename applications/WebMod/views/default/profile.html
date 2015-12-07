@@ -4,7 +4,7 @@
 <head>
 {{block header}}
    <ul>
-      <li style="float:left"><a href=""><b>Webmod 2.0</b></a></li>
+      <li style="float:left"><a href="/WebMod/default/index.html"><b>Webmod 2.0</b></a></li>
       <li style="float:right">
          {{if auth.user_id is None:}}
             {{=A('Sign In', _href=URL('default', 'user', args=['login']))}}
@@ -27,7 +27,11 @@
 <div>
    <div style="padding-left:20px; padding-top:20px;">
       <div style="width:30%; height:340px; float:left; background:#111; border-radius:5px;">
-         <img src="http://s3.amazonaws.com/37assets/svn/765-default-avatar.png" style="padding-left:20px; padding-top:20px; float:left;" width="200px" height="200px"></img>
+         {{if user['image'] == '':}}
+            <img src="{{=URL('static','images/default-avatar.png')}}" style="padding-left:20px; padding-top:20px; float:left;" width="200px" height="200px"/>
+         {{else:}}
+            <img src="{{=URL('default', 'download', args=user['image'])}}" style="padding-left:20px; padding-top:20px; float:left;" width="200px" height="200px"/>
+         {{pass}}
          {{if int(request.args(0)) == int(auth.user_id):}}
             {{=A('Edit Profile', _class='orange_btn', _style='float:right;', _href=URL('default', 'user', args='profile'))}}<br>
          {{pass}}
