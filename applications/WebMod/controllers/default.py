@@ -65,10 +65,23 @@ def open_model():
     return response.json(dict(model=model))
 
 def search():
-    models = db(db.model).select(db.model.ALL)
+    models = db(db.model).select()
     return dict(models=models)
 
 def search_stuff():
+    search_text = request.args[0]
+    search_type = request.args[1]
+    if search_type is "name":
+        models = db((db.model.name == search_text) & (db.model.isPublic)).select()
+    elif search_type is "user_id":
+        username = db(db.auth_user.username == search_text).select().__getitem__(0)
+        username = username.username
+        models = db((db.model.user_id == username) & (db.model.isPublic)).select()
+    elif search_type is "tag_list":
+        models = db((search_text in json.loads(db.model.tag_list)) & (db.model.isPublic)).select()
+    model = {m.name: {'thumbnail': m.thumbnail_img}
+             for m in models}
+    return response.json(dict(model=model))
 
 
 def resetDB():
