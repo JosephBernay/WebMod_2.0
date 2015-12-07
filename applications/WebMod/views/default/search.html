@@ -1,0 +1,74 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
+{{extend 'layout.html'}}
+
+<head>
+{{block header}}
+   <ul>
+      <li style="float:left"><a href=""><b>Webmod 2.0</b></a></li>
+      <li style="float:right">
+         {{if auth.user_id is None:}}
+            {{=A('Sign In', _href=URL('default', 'user', args=['login']))}}
+         {{else:}}
+            {{=A('My Profile', _href=URL('default', 'profile', args=[auth.user_id]))}}
+         {{pass}}
+      </li>
+      <li style="float:right">
+         {{if auth.user_id is None:}}
+            {{=A('Sign Up', _href=URL('default', 'user', args=['register']))}}
+         {{else:}}
+            {{=A('Logout', _href=URL('default', 'user', args='logout'))}}
+         {{pass}}
+      </li>
+   </ul>
+{{end}}
+</head>
+
+<html>
+    {{print(models)}}
+    <body style="background: linear-gradient(#212229, #000000);">
+                <input type="text" id="search" name="Search" value=""/>
+                <select id="search_type">
+                    <option value="Model">Model</option>
+                    <option value="User">User</option>
+                    <option value="Tag">Tag</option>
+                    <option value="Time">Newest</option>
+                </select>
+                <input type="submit" id="search-submit" value="search" onclick="Search()" />
+    </body>
+
+    <div id="target"></div>
+
+    <script id="template" type="text/ractive">
+
+    </script>
+    <script>
+        $(function() {
+
+            var MAIN = new Ractive({
+            el: '#target',
+            template: '#template',
+            delimiters: ['{%', '%}'],
+            tripleDelimiters: ['{%%', '%%}'],
+            data: {
+                model_dict:  {}
+            }
+            });
+
+            function Search(){
+                var search = $("search").value;
+                var search_type = $("search_type").value;
+                $.ajax("{{=URL('default', 'search_stuff')}}",
+                    {
+                        data:{
+                            search: search,
+                            search_type: search_type
+                        },
+                        method: 'POST',
+                        success: function (data) {
+                        }
+                    }
+                );
+            }
+        });
+    </script>
+</html>
