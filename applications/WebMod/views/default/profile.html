@@ -26,7 +26,7 @@
 <body style="background: linear-gradient(#212229, #000000);">
 <div>
    <div style="padding-left:20px; padding-top:20px;">
-      <div style="width:30%; height:340px; float:left; background:#111; border-radius:5px;">
+      <div style="width:30%; height:450px; float:left; background:#111; border-radius:5px;">
          {{if user['image'] == '':}}
             <img src="{{=URL('static','images/default-avatar.png')}}" style="padding-left:20px; padding-top:20px; float:left;" width="200px" height="200px"/>
          {{else:}}
@@ -38,9 +38,11 @@
          <div style="padding-left:20px; padding-right:20px; color:white; float:left;">
             <h2>{{=user['username']}}</h2><br>
             {{if int(request.args(0)) == int(auth.user_id):}}
-               name: {{=user['first_name']}} {{=user['last_name']}}<br><br>
-               email: {{=user['email']}}
+               Name: {{=user['first_name']}} {{=user['last_name']}}<br>
+               Email: {{=user['email']}}<br><br>
             {{pass}}
+            Has created {{=user['model_popularity']}} favorited models<br>
+            Has favorited {{=user['favorited_models']}} models<br>
          </div>
       </div>
    </div>
@@ -55,20 +57,28 @@
          <h2>Most Popular Models</h2><br>
             <div class="row">
                <div class="col-sm-3" align="center">
-                  <img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
-                  <h3>Title</h3>
+                  <div class="inner">
+                     <br><img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
+                     <h3>Title</h3>
+                  </div>
                </div>
               <div class="col-sm-3" align="center">
-                  <img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
-                  <h3>Title</h3>
+                  <div class="inner">
+                     <br><img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
+                     <h3>Title</h3>
+                  </div>
                </div>
                <div class="col-sm-3" align="center">
-                  <img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
-                  <h3>Title</h3>
+                  <div class="inner">
+                     <br><img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
+                     <h3>Title</h3>
+                  </div>
                </div>
                <div class="col-sm-3" align="center">
-                  <img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
-                  <h3>Title</h3>
+                  <div class="inner">
+                     <br><img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
+                     <h3>Title</h3>
+                  </div>
                </div>
             </div>
       </div>

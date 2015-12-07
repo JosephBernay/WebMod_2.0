@@ -59,7 +59,10 @@ plugins = PluginManager()
 
 auth.settings.extra_fields['auth_user']=[
    Field('username'),
-   Field('image', 'upload')]   
+   Field('image', 'upload'),
+   Field('favorited_models', 'text', writable=False, readable=False, default=''),      #list of this user's favorited models (made by other users)
+   Field('num_favorites', 'integer', writable=False, readable=False, default=0),       #number of models (made by other users) this user has favorited
+   Field('model_popularity', 'integer', writable=False, readable=False, default=0)]    #number of total favorites across all models that this user has created 
    
 ## create all tables needed by auth if not custom tables
 auth.define_tables(username=False, signature=False)
