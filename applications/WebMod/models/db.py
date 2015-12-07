@@ -58,7 +58,8 @@ service = Service()
 plugins = PluginManager()
 
 auth.settings.extra_fields['auth_user']=[
-   Field('username')]   
+   Field('username'),
+   Field('image', 'upload')]   
    
 ## create all tables needed by auth if not custom tables
 auth.define_tables(username=False, signature=False)

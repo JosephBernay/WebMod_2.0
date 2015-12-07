@@ -4,7 +4,7 @@
 <head>
 {{block header}}
    <ul>
-      <li style="float:left"><a href=""><b>Webmod 2.0</b></a></li>
+      <li style="float:left"><a href="/WebMod/default/index.html"><b>Webmod 2.0</b></a></li>
       <li style="float:right">
          {{if auth.user_id is None:}}
             {{=A('Sign In', _href=URL('default', 'user', args=['login']))}}
