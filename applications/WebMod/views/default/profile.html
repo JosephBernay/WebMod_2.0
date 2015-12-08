@@ -37,8 +37,8 @@
 
 <script id="template" type="text/ractive">
    
-   <div class="orange_btn" onclick="models()" style="float:right;">Models</div>
-   <div class="orange_btn" onclick="favs()" style="float:right;">Favorited Models</div>
+   <div class="orange_btn" onclick="models()" style="float:right;">{{=user['username']}}'s Models</div>
+   <div class="orange_btn" onclick="favs()" style="float:right;">{{=user['username']}}'s Favorites</div>
    
    <table style="width:100%;">
       <tr>
@@ -74,7 +74,24 @@
          {% #model_fav_dict:model_id %}
             <td colspan="1">
                <div class="inner">
-                  <h3>{% name %}</h3>
+                  <h3>{% name %}</h3><br>
+                  {% description %}<br><br>
+                  <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
+                  <div style="color:gray;">
+                     <i>created by: {{=user['username']}}</i><br>
+                     {% #if isPublic === true %}
+                        Public,
+                     {% /if %}
+                     {% #if isPublic === false %}
+                        Private,
+                     {% /if %}
+                     {% #if isShareable === true %}
+                        YAY Sharing<br>
+                     {% /if %}
+                     {% #if isShareable === false %}
+                        No Sharing<br>
+                     {% /if %}
+                  </div>
                   <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px"></img>
                <div>
             </td>
@@ -89,7 +106,24 @@
          {% #model_dict:thing %}
             <td colspan="1">
                <div class="inner">
-                  <h3>{% name %}</h3>
+                  <h3>{% name %}</h3><br>
+                  {% description %}<br><br>
+                  <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
+                  <div style="color:gray;">
+                     <i>created by: {{=user['username']}}</i><br>
+                     {% #if isPublic === true %}
+                        Public,
+                     {% /if %}
+                     {% #if isPublic === false %}
+                        Private,
+                     {% /if %}
+                     {% #if isShareable === true %}
+                        YAY Sharing<br>
+                     {% /if %}
+                     {% #if isShareable === false %}
+                        No Sharing<br>
+                     {% /if %}
+                  </div>
                   <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px"></img>
                <div>
             </td>
@@ -100,6 +134,14 @@
          <td colspan="5"><h2></h2></td>
       </tr>
    </table>
+   
+   {% #if !noMore %}
+      <div class="orange_btn" on-click="showMore" style="float:right;">Show Next 5 Models</div>
+   {% /if %}
+   {% #if !noPrev %}
+      <div class="orange_btn" on-click="showPrev" style="float:right;">Show Previous 5 Models</div>
+   {% /if %}
+   
 </script>   
 
 <script>
@@ -118,6 +160,8 @@
             fav_dict: {},
             showing_row: 0,
             profile_id:"{{=user['id']}}",
+            noMore: true,
+            noPrev: true,
          },
       });
    
@@ -129,8 +173,19 @@
          },
          method: 'POST',
          success: function(data){
-            MAIN.set('model_dict', data['model_dict'])
-         }
+            MAIN.set('model_dict', data['model_dict']);
+            var buffer = MAIN.get('model_dict');
+            var index = 0;
+            for (var m in buffer){
+                  index = index + 1;
+            }
+            if( index < 4){
+               MAIN.set('noMore', true);
+            }
+            else{
+               MAIN.set('noMore', false);
+            }
+               }
       });
       
       $.ajax("{{=URL('default', 'load_fav_models')}}",
@@ -144,8 +199,6 @@
          }
       });
       
-      getModels();
-      
       function models(){
          if(MAIN.get('fav') == true)
             MAIN.set('fav', false);
@@ -157,5 +210,62 @@
             MAIN.set('fav', true);
          return;
       }
+      
+      MAIN.on('showMore', function(e){
+         if (MAIN.get('noMore') == false){
+            MAIN.set('showing_row',(MAIN.get('showing_row') + 1));
+            $.ajax("{{=URL('default', 'load_models')}}",
+            {
+               data: {
+                  profile_id: MAIN.get('profile_id'),
+                  row: MAIN.get('showing_row')
+               },
+               method: 'POST',
+               success: function(data){
+                  MAIN.set('model_dict', data['model_dict']);
+                  var buffer = MAIN.get('model_dict');
+                  var index = 0;
+                  for (var m in buffer){
+                     index = index + 1;
+                  }
+                  if (index <= 5){
+                     MAIN.set('noMore', true);
+                  }
+                  MAIN.set('noPrev', false);
+               }
+            });
+         }
+      });
+      
+      MAIN.on("showPrev", function(e){
+         if (MAIN.get('noPrev') == false){
+            MAIN.set('showing_row',(MAIN.get('showing_row') - 1));
+            $.ajax("{{=URL('default', 'load_models')}}",
+            {
+               data: {
+                  profile_id: MAIN.get('profile_id'),
+                  row: MAIN.get('showing_row')
+               },
+               method: 'POST',
+               success: function(data){
+                  MAIN.set('model_dict', data['model_dict']);
+                  if(MAIN.get('showing_row') == '0'){
+                     MAIN.set('noPrev', true);
+                  }
+                  var buffer = MAIN.get('model_dict');
+                  var index = 0;
+                  for (var m in buffer){
+                        index = index + 1;
+                  }
+                  if( index < 4){
+                     MAIN.set('noMore', true);
+                  }
+                  else{
+                     MAIN.set('noMore', false);
+                  }
+               }
+            });
+         }
+      });
    });
 </script>

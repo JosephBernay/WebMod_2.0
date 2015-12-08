@@ -117,7 +117,8 @@ def load_fav_models():
                                     'isShareable': m.isShareable,
                                     'num_favorites': m.num_favorites,
                                     'last_edited': m.last_edited,
-                                    'user_id': m.user_id} 
+                                    'user_id': m.user_id,
+                                    'model_id': m.model_id} 
       index = index + 1
    return response.json(dict(model_fav_dict = model_fav_list))
    
@@ -142,7 +143,8 @@ def load_models():
                                        'isShareable': m.isShareable,
                                        'num_favorites': m.num_favorites,
                                        'last_edited': m.last_edited,
-                                       'user_id': m.user_id} 
+                                       'user_id': m.user_id,
+                                       'model_id': m.model_id} 
       index = index + 1
    return response.json(dict(model_dict=model_list))
 
