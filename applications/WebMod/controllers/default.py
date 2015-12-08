@@ -3,7 +3,6 @@
 
 import json
 import urllib2
-from pprint import pprint
 from datetime import datetime
 
 def index():
@@ -40,8 +39,6 @@ def save_model():
         description=request.vars.description,
         tag_list=json.loads(request.vars.tag_list),
         mesh_list=json.loads(request.vars.mesh_list),
-        isPublic=request.vars.isPublic,
-        isShareable=request.vars.isShareable,
         thumbnail_image=request.vars.thumbnail_image,
         last_edited=datetime.utcnow(),
         model_id=request.vars.model_id)
@@ -60,42 +57,35 @@ def open_model():
             'description': m.description,
             'tag_list': m.tag_list,
             'mesh_list': m.mesh_list,
-            'isPublic': m.isPublic,
-            'isShareable': m.isShareable,
             'model_id': m.model_id}
     return response.json(dict(model=model))
 
 def search():
-    models = db(db.model).select()
+    models = db(db.model).select(db.model.ALL)
     return dict(models=models)
 
 def search_stuff():
-<<<<<<< HEAD
-   return 0
-=======
-    search_text = request.vars.content
-    search_type = request.vars.search_type
-    if search_type == "name":
-        print search_text
-        models = db(db.model.name == search_text).select()
-    elif search_type == "user_id":
-        username = db(db.auth_user.username == search_text).select()[0]
-        models = db(db.model.user_id == username.id).select()
-    elif search_type == "tag_list":
-        stuff = db(db.model).select()
-        models = []
-        for m in stuff:
-            if search_text in m.tag_list['tags']:
-                models.append(m)
-    if models:
-        model = {m.name: {'thumbnail': m.thumbnail_image}
+   search_text = request.vars.content
+   search_type = request.vars.search_type
+   if search_type == "name":
+      print search_text
+      models = db(db.model.name == search_text).select()
+   elif search_type == "user_id":
+      username = db(db.auth_user.username == search_text).select()[0]
+      models = db(db.model.user_id == username.id).select()
+   elif search_type == "tag_list":
+      stuff = db(db.model).select()
+      models = []
+      for m in stuff:
+         if search_text in m.tag_list['tags']:
+            models.append(m)
+   if models:
+      model = {m.name: {'thumbnail': m.thumbnail_image}
                  for m in models}
-        return response.json(dict(model=model))
-    else:
-        print "damn"
-        
-
->>>>>>> origin/master
+      return response.json(dict(model=model))
+   else:
+      print "damn"
+      return respone.json(dict(model={}))
 
 def resetDB():
    db(db.model.id > 0).delete()
