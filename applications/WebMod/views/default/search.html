@@ -28,16 +28,26 @@
 <body style="background: linear-gradient(#212229, #000000);"></body>
     <div id="target" ></div>
     <script id="template" type="text/ractive">
-                <div><input type="text" id="search" name="Search" value=""/>
-                <select id="search_type">
-                    <option value="name">Model</option>
-                    <option value="user_id">User</option>
-                    <option value="tag_list">Tag</option>
-                </select>
-                <div class="orange_btn" on-click="beginSearch">Search</div></div>
-                {% #each models:m %}
-                    <div>{% m %} : <img src="{% thumbnail %}" width="200" height="200"></div>
-                {% /each %}
+        <div><input type="text" id="search" name="Search" value=""/>
+            <select id="search_type">
+                <option value="name">Model</option>
+                <option value="user_id">User</option>
+                <option value="tag_list">Tag</option>
+            </select>
+        <div class="orange_btn" on-click="beginSearch">Search</div></div>
+        <table style="width:100%;">
+            <tr>
+            {% #each models:m %}
+                {% #if public %}
+                    <td colspan="1">
+                        <div class="inner">
+                            <h3>{% m %}</h3>
+                            <img id="dynImg" src="{% thumbnail %}" width="200px" height="200px"><br><i class="fa fa-heart" style="color:#ff3333;"> {% favorites %}</i></img>
+                        <div>
+                    </td>
+            {% /each %}{% /if %}
+            </tr>
+        </table>
     </script>
     <script>
         $(function() {
