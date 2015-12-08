@@ -84,9 +84,15 @@ def search_stuff():
          if search_text in m.tag_list['tags']:
             models.append(m)
    if models:
-      model = {m.name: {'thumbnail': m.thumbnail_image}
+        for m in models:
+            print(m.isPublic, m.isShareable)
+        model = {m.name: {'thumbnail': m.thumbnail_image,
+                            'public': m.isPublic,
+                            'share': m.isShareable,
+                            'favorites': m.num_favorites,
+                            'model_id': m.model_id}
                  for m in models}
-      return response.json(dict(model=model))
+        return response.json(dict(model=model))
    else:
       print "damn"
       return respone.json(dict(model={}))
