@@ -29,7 +29,11 @@ def index():
 
 @auth.requires_login()
 def modeling():
-    active_model_id = ""
+    if request.args(0) == None:
+        active_model_id = ""
+    else:
+        active_model_id = request.args(0)
+    importing = False
 
     return dict(active_model_id=active_model_id)
 

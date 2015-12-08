@@ -8,124 +8,172 @@
 <script type="text/javascript" src="{{=URL('static', 'js/modelingScripts/linlib.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/modelingScripts/main.js')}}"></script>
 
+<head>
 {{block header}}
-    <header class="container-fluid background">
-      <div class="jumbotron text-center">
-        {{if response.title:}}
-        <h1>{{=response.title}}
-          <small>{{=response.subtitle or ''}}</small></h1>
-        {{pass}}
-      </div>
-    </header>
+   <ul>
+      <li style="float:left"><a href="/WebMod/default/index.html"><b>Webmod 2.0</b></a></li>
+      <li style="float:right">
+         {{if auth.user_id is None:}}
+            {{=A('Sign In', _href=URL('default', 'user', args=['login']))}}
+         {{else:}}
+            {{=A('My Profile', _href=URL('default', 'profile', args=[auth.user_id]))}}
+         {{pass}}
+      </li>
+      <li style="float:right">
+         {{if auth.user_id is None:}}
+            {{=A('Sign Up', _href=URL('default', 'user', args=['register']))}}
+         {{else:}}
+            {{=A('Logout', _href=URL('default', 'user', args='logout'))}}
+         {{pass}}
+      </li>
+   </ul>
 {{end}}
+</head>
 
-<body style="background: linear-gradient(#212229, #000000);">
+<body style="background: linear-gradient(#1B1D21, #000000); padding: 0;">
     <div id="target"></div>
 </body>
 
 
 
 <script id="template" type="text/ractive">
-<img id="dynImg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA
+<!--<img id="dynImg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA
 AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
-9TXL0Y4OHwAAAABJRU5ErkJggg==" />
-<form>
-<fieldset>
-<legend>Color: </legend> <br>
-<button type="button" on-click="set-pick-color">Set Color</button>
-Red :
-<input id="red" type="range" value="0" min="0" max = 1 step="0.001"/>
-Green :
-<input id="green" type="range" value="0" min="0" max = 1 step="0.001"/>
-Blue :
-<input id="blue" type="range" value="0" min="0" max = 1 step="0.001"/>
-</fieldset>
-</form> <br>
+9TXL0Y4OHwAAAABJRU5ErkJggg==" />-->
+<table style="">
+    <tr>
+        <td style="max-width:350px;">
+            <div class="container">
+                <form role="form">
+                    <div class="form-group">
+                        <legend class="UI-header" style="max-width:300px;">Import Mesh:</legend>
+                        <textarea class="form-control" rows="16" columns="10" id="comment" style="resize:none; max-width:300px; "></textarea>
+                    </div>
+                </form>
+                <br>
+                <form role="form">
+                    <div class="form-group">
+                        <legend class="UI-header" style="max-width:300px; margin-top:10px;">Export Mesh: </legend>
+                        <textarea class="form-control" rows="16" columns="10" id="comment" style="resize:none; max-width:300px;"></textarea>
+                    </div>
+                </form>
+            </div>
+        </td>
+        <td class="modeling-window" style="padding-right:10px;">
+            <canvas id="gl-canvas" width="800" height="800" style="border:1px solid #000000;">
+                Oops ... your browser doesn't support the HTML5 canvas element
+            </canvas>
+        </td>
+        <td class="modeling-UI" style="min-width:300px">
+            <form>
+            <fieldset>
+            <legend class="UI-header">Color: </legend> <br>
+            <button type="button" on-click="set-pick-color">Set Color</button>
+            Red :
+            <input id="red" type="range" value="0" min="0" max = 1 step="0.001"/>
+            Green :
+            <input id="green" type="range" value="0" min="0" max = 1 step="0.001"/>
+            Blue :
+            <input id="blue" type="range" value="0" min="0" max = 1 step="0.001"/>
+            </fieldset>
+            </form> <br>
 
-<h1>WebMod : Ryan Connors, Joseph Bernay</h1>
-<canvas id="gl-canvas" width="800" height="800">
-    Oops ... your browser doesn't support the HTML5 canvas element
-</canvas>
+            <form>
+            <fieldset>
+            <legend>Primitive Mesh Creation:</legend>
+            <br>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{=icon_cube}} Add Primitive
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#" on-click="cube-prim">Cube</a></li>
+                    <li><a href="#" on-click="pyramid-prim">Pyramid</a></li>
+                    <li><a href="#" on-click="sphere-prim">Sphere</a></li>
+                    <li><a href="#" on-click="cylinder-prim">Cylinder</a></li>
+                    <li><a href="#" on-click="cone-prim">Cone</a></li>
+                    <li><a href="#" on-click="toroid-prim">Toroid</a></li>
+                </ul>
+            </div>
+            </form>
+            <form>
+            <fieldset>
+            <legend>Mesh Edit</legend>
+            <button type="button" on-click="delete-mesh">Delete Mesh</button>
+            <button type="button" on-click="merge">Merge</button>
+            <button type="button" id="polyButton" on-click="toggle-poly-mode">Poly Mode : ON</button>
+            <button type="button" on-click="delete-poly">Delete Polygon</button>
+            <button type="button" on-click="extrude-poly">Extrude Polygon</button>
+            </fieldset>
+            <br>
+            </form>
+            <form>
+            <fieldset>
+            <legend>Shading</legend>
+            <button type="button" on-click="to-smooth-shade">Smooth</button>
+            <button type="button" on-click="to-flat-shade">Flat</button>
+            </fieldset>
+            </form>
 
+            Delete - Delete Selected Mesh <br>
+            B - Add Shark Primitive <br>
+            N - Add Cube Primitive <br>
+            M - Add Pyramid Primitive <br>
 
-<form>
-<fieldset>
-<legend>Primitive Mesh Creation:</legend>
- <br>
-<button type="button" on-click="cube-prim">Cube</button>
-<button type="button" on-click="pyramid-prim">Pyramid</button>
-<button type="button" on-click="sphere-prim">Sphere</button>
-<button type="button" on-click="cylinder-prim">Cylinder</button>
-<button type="button" on-click="cone-prim">Cone</button>
-<button type="button" on-click="toroid-prim">Toroid</button></fieldset>
-</form>
-<form>
-<fieldset>
-<legend>Mesh Edit</legend>
-<button type="button" on-click="delete-mesh">Delete Mesh</button>
-<button type="button" on-click="merge">Merge</button>
-<button type="button" id="polyButton" on-click="toggle-poly-mode">Poly Mode : ON</button>
-<button type="button" on-click="delete-poly">Delete Polygon</button>
-<button type="button" on-click="extrude-poly">Extrude Polygon</button>
-</fieldset>
-<br>
-</form>
-<form>
-<fieldset>
-<legend>Shading</legend>
-<button type="button" on-click="to-smooth-shade">Smooth</button>
-<button type="button" on-click="to-flat-shade">Flat</button>
-</fieldset>
-</form>
+            Q - Rotate on X <br>
+            W - Rotate on Y <br>
+            E - Rotate on Z <br>
+            R - Rotate whever your move your mouse<br>
+            Z - Translate along Z <br>
+            click and drag to translate <br>
+            <form>
+            <legend> Input/Output </legend>
+            <fieldset>
+            {% #if isSaving === true %}
+            <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
+            <h2>
+            <br>
+            </h2>
+            <textarea value="{% active_model_name %}" cols="40" id="no_table_message" name="name" rows="1">
+            </textarea>
+            <textarea value="{% active_model_desc %}" cols="40" id="no_table_message" name="description" rows="8">
+            </textarea>
+            <textarea value="{% active_model_tags %}" cols="40" id="no_table_message" name="tags" rows="1">
+            </textarea>
+            Public: <input type="checkbox" id="publicBox" on-click="toggle-public">
+            Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
+            <button type="button" on-click="save-model">OK</button>
+            </form>
+            {% else %}
+            <button type="button" on-click="save-menu">Save</button>
+            {% /if %}
+            {% #if isOpening === true %}
+            <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
+            <h2>
+            <br>
+            </h2>
+            <textarea value="{% openingName %}" cols="40" id="no_table_message" name="name" rows="1">
+            </textarea>
+            <button type="button" on-click="open-model">OK</button>
+            </form>
+            {% else %}
+            <button type="button" on-click="open-menu">Open</button>
+            {% /if %}
+            </fieldset>
+            </form><br><br>
+        </td>
 
-Delete - Delete Selected Mesh <br>
-B - Add Shark Primitive <br>
-N - Add Cube Primitive <br>
-M - Add Pyramid Primitive <br>
-
-Q - Rotate on X <br>
-W - Rotate on Y <br>
-E - Rotate on Z <br>
-R - Rotate whever your move your mouse<br>
-Z - Translate along Z <br>
-click and drag to translate <br>
-<form>
-<legend> Input/Output </legend>
-<fieldset>
-{% #if isSaving === true %}
-<form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
-<h2>
-<br>
-</h2>
-<textarea value="{% active_model_name %}" cols="40" id="no_table_message" name="name" rows="1">
-</textarea>
-<textarea value="{% active_model_desc %}" cols="40" id="no_table_message" name="description" rows="8">
-</textarea>
-<textarea value="{% active_model_tags %}" cols="40" id="no_table_message" name="tags" rows="1">
-</textarea>
-Public: <input type="checkbox" id="publicBox" on-click="toggle-public">
-Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
-<button type="button" on-click="save-model">OK</button>
-</form>
-{% else %}
-<button type="button" on-click="save-menu">Save</button>
-{% /if %}
-{% #if isOpening === true %}
-<form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
-<h2>
-<br>
-</h2>
-<textarea value="{% openingName %}" cols="40" id="no_table_message" name="name" rows="1">
-</textarea>
-<button type="button" on-click="open-model">OK</button>
-</form>
-{% else %}
-<button type="button" on-click="open-menu">Open</button>
-{% /if %}
-</fieldset>
-</form><br><br>
+    </tr>
+</table>
 
 </script>
+
+{{block footer}}
+  <footer class="footer" style="background-color:#0d0d0d;">
+      <div class="container-fluid" style="color:#d98200; text-align:center;">
+         Webmod 2.0
+      </div>
+   </footer>
+{{end}}
 
 <script>
     $(function() {
@@ -144,6 +192,7 @@ Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
                 active_shareable: false,
                 isSaving: false,
                 isOpening: false,
+                selectingPrim: false,
                 openingName: ""
             },
         });
@@ -162,20 +211,6 @@ Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
             MAIN.set('isOpening', true);
             MAIN.set('isSaving', false);
         });
-
-        var cumulativeOffset = function(element) {
-            var top = 0, left = 0;
-            do {
-                top += element.offsetTop  || 0;
-                left += element.offsetLeft || 0;
-                element = element.offsetParent;
-            } while(element);
-
-            return {
-                top: top,
-                left: left
-            };
-        };
 
         //We want to save the model
         MAIN.on("save-model", function(e) {
@@ -337,6 +372,10 @@ Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
         MAIN.on("toggle-shareable", function(e) {
             MAIN.set('active_shareable', !(MAIN.get('active_shareable')));
             document.getElementById("shareableBox").checked = MAIN.get('active_shareable');
+        });
+
+        MAIN.on("pick-prim", function(e) {
+            MAIN.set('selectingPrim', true);
         });
 
         /*
@@ -2288,6 +2327,7 @@ Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
 
         //GUI Interaction Functions
         MAIN.on("cube-prim", function(e) {
+            MAIN.set('selectingPrim', false);
             var thisIndex = meshTable.length;
             var cube = makeCube(1.0);
             addMesh(cube[0], cube[1]);
@@ -2296,6 +2336,7 @@ Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
         });
 
         MAIN.on("pyramid-prim", function(e) {
+            MAIN.set('selectingPrim', false);
             var thisIndex = meshTable.length;
             var pyramid = makePyramid(1.0, 1.0);
             addMesh(pyramid[0], pyramid[1]);
@@ -2304,6 +2345,7 @@ Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
         });
 
         MAIN.on("sphere-prim", function(e) {
+            MAIN.set('selectingPrim', false);
             var thisIndex = meshTable.length;
             var sphere = makeSphere(1.0);
             addMesh(sphere[0], sphere[1]);
@@ -2312,6 +2354,7 @@ Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
         });
 
         MAIN.on("cylinder-prim", function(e) {
+            MAIN.set('selectingPrim', false);
             var thisIndex = meshTable.length;
             var cylinder = makeCylinder(0.5, 1.0, 20);
             addMesh(cylinder[0], cylinder[1]);
@@ -2321,6 +2364,7 @@ Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
         });
 
         MAIN.on("cone-prim", function(e) {
+            MAIN.set('selectingPrim', false);
             var thisIndex = meshTable.length;
             var cone = makeCone(0.5, 1.0, 20);
             addMesh(cone[0], cone[1]);
@@ -2329,6 +2373,7 @@ Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
         });
 
         MAIN.on("toroid-prim", function(e) {
+            MAIN.set('selectingPrim', false);
             var thisIndex = meshTable.length;
             var toroid = makeToroid(1.0, 0.1, 20, 20);
             addMesh(toroid[0], toroid[1]);

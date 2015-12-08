@@ -33,6 +33,17 @@ h3 {
    color:white;
 }
 
+textarea {
+    background-color: #1B1D21 !important;
+    border-color: #000000 !important;
+}
+
+textarea:focus, input:focus, .uneditable-input:focus {
+    border-color: #000000 !important;
+    box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px #D98200 !important;
+    outline: 0 none !important;
+}
+
 .orange_btn {
     float:left;
     text-align:center;
@@ -71,4 +82,9 @@ h3 {
    border-radius:5px;
    background:#111;
    padding:5px;
+}
+
+/* line 5, ../sass/_main.scss */
+.UI-header {
+  color: #D98200;
 }
