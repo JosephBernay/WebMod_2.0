@@ -3,6 +3,7 @@
 
 import json
 import urllib2
+from pprint import pprint
 from datetime import datetime
 
 def index():
@@ -69,19 +70,28 @@ def search():
     return dict(models=models)
 
 def search_stuff():
-    search_text = request.args[0]
-    search_type = request.args[1]
-    if search_type is "name":
-        models = db((db.model.name == search_text) & (db.model.isPublic)).select()
-    elif search_type is "user_id":
-        username = db(db.auth_user.username == search_text).select().__getitem__(0)
-        username = username.username
-        models = db((db.model.user_id == username) & (db.model.isPublic)).select()
-    elif search_type is "tag_list":
-        models = db((search_text in json.loads(db.model.tag_list)) & (db.model.isPublic)).select()
-    model = {m.name: {'thumbnail': m.thumbnail_img}
-             for m in models}
-    return response.json(dict(model=model))
+    search_text = request.vars.content
+    search_type = request.vars.search_type
+    if search_type == "name":
+        print search_text
+        models = db(db.model.name == search_text).select()
+    elif search_type == "user_id":
+        username = db(db.auth_user.username == search_text).select()[0]
+        models = db(db.model.user_id == username.id).select()
+    elif search_type == "tag_list":
+        stuff = db(db.model).select()
+        models = []
+        for m in stuff:
+            if search_text in m.tag_list['tags']:
+                models.append(m)
+    if models:
+        model = {m.name: {'thumbnail': m.thumbnail_image}
+                 for m in models}
+        return response.json(dict(model=model))
+    else:
+        print "damn"
+        
+
 
 def resetDB():
     db(db.model.id > 0).delete()
