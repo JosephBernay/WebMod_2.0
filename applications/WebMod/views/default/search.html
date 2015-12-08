@@ -1,6 +1,6 @@
 {{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
-
+<meta charset="UTF-8">
 <head>
 {{block header}}
    <ul>
@@ -24,22 +24,23 @@
 </head>
 
 <html>
-    {{print(models)}}
-    <body style="background: linear-gradient(#212229, #000000);">
-                <input type="text" id="search" name="Search" value=""/>
-                <select id="search_type">
-                    <option value="Model">Model</option>
-                    <option value="User">User</option>
-                    <option value="Tag">Tag</option>
-                    <option value="Time">Newest</option>
-                </select>
-                <input type="submit" id="search-submit" value="search" onclick="Search()" />
-    </body>
 
-    <div id="target"></div>
+
+    <div id="target" style="background: linear-gradient(#212229, #000000);"></div>
 
     <script id="template" type="text/ractive">
-
+    <body style="background: linear-gradient(#212229, #000000);">
+                <div><input type="text" id="search" name="Search" value=""/>
+                <select id="search_type">
+                    <option value="name">Model</option>
+                    <option value="user_id">User</option>
+                    <option value="tag_list">Tag</option>
+                </select>
+                <div class="orange_btn" on-click="beginSearch">Search</div></div>
+    </body>
+        {% #model_dict:name %}
+        {% thumbnail %}
+        {% /model_dict %}
     </script>
     <script>
         $(function() {
@@ -50,25 +51,30 @@
             delimiters: ['{%', '%}'],
             tripleDelimiters: ['{%%', '%%}'],
             data: {
-                model_dict:  {}
+                models: {},
+                content: "",
+                search_type: ""
             }
             });
 
-            function Search(){
+            MAIN.on("beginSearch", function() {
                 var search = $("search").value;
                 var search_type = $("search_type").value;
-                $.ajax("{{=URL('default', 'search_stuff')}}",
-                    {
-                        data:{
-                            search: search,
-                            search_type: search_type
-                        },
-                        method: 'POST',
-                        success: function (data) {
+                if(search){
+                    $.ajax("{{=URL('default', 'search_stuff', args=['search','search_type'])}}",
+                        {
+                            data:{
+                                search: search,
+                                search_type: search_type
+                            },
+                            method: 'POST',
+                            success: function (data) {
+                                MAIN.set('model_dict', data['model']);
+                            }
                         }
-                    }
-                );
-            }
+                    );
+                }
+            });
         });
     </script>
 </html>
