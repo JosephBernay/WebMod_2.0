@@ -31,11 +31,12 @@ def index():
 def modeling():
     if request.args(0) == None:
         active_model_id = ""
+        active_model_name = "Username"
     else:
         active_model_id = request.args(0)
     importing = False
 
-    return dict(active_model_id=active_model_id)
+    return dict(active_model_id=active_model_id, active_model_name=active_model_name)
 
 def save_model():
     db.model.update_or_insert((db.model.model_id == request.vars.model_id),
@@ -44,13 +45,15 @@ def save_model():
         tag_list=json.loads(request.vars.tag_list),
         mesh_list=json.loads(request.vars.mesh_list),
         thumbnail_image=request.vars.thumbnail_image,
+        isPublic=request.vars.isPublic,
+        isShareable=request.vars.isShareable,
         last_edited=datetime.utcnow(),
         model_id=request.vars.model_id)
 
-    print request.vars.mesh_list
-
-    model = db(db.model.model_id == request.vars.model_id).select()
-    print model
+    # print request.vars.mesh_list
+    #
+    # model = db(db.model.model_id == request.vars.model_id).select()
+    # print model
 
     return "ok"
 
@@ -61,6 +64,8 @@ def open_model():
             'description': m.description,
             'tag_list': m.tag_list,
             'mesh_list': m.mesh_list,
+            'isPublic': m.isPublic,
+            'isShareable': m.isShareable,
             'model_id': m.model_id}
     return response.json(dict(model=model))
 

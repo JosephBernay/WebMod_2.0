@@ -290,9 +290,17 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
             context.putImageData(imageData, 0, 0);
             document.getElementById("dynImg").src = newCanvas.toDataURL();*/
 
-            console.log(cumulativeOffset(canvas));
+            var canvasPrtSc = canvas.toDataURL();
 
-            canvasPrtSc = canvas.toDataURL();
+            console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            console.log(MAIN.get('active_model_name'));
+            console.log(MAIN.get('active_model_desc'));
+            console.log(JSON.stringify(tagsJSON));
+            console.log(JSON.stringify(modJSON));
+            console.log(MAIN.get('active_public'));
+            console.log(MAIN.get('active_shareable'));
+            console.log(curModelID);
+            console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
             $.ajax("{{=URL('default', 'save_model')}}",
                 {
@@ -312,7 +320,7 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
                         console.log("Save Complete!");
                     }
                 }
-             );
+            );
         });
 
         MAIN.on('open-model', function(e) {

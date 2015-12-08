@@ -17,6 +17,9 @@
 
 from datetime import datetime
 
+print "Hey"
+print (db.auth_user(auth.user_id))['username']
+
 db.define_table('model',
                 Field('name', 'string'),
                 Field('description', 'text'),
@@ -28,7 +31,6 @@ db.define_table('model',
                 Field('num_favorites', 'integer', default=0),
                 Field('last_edited', 'datetime', default=datetime.utcnow()),
                 Field('user_id', db.auth_user, default=auth.user_id),
-                Field('user_name', db.auth_user, default=(db.auth_user(auth.user_id))['username']),
-                Field('model_id')
+                Field('model_id', 'text')
                 )
 
