@@ -25,9 +25,8 @@
 
 <html>
 
-<body style="background: linear-gradient(#212229, #000000);">
-    <div id="target" style="background: linear-gradient(#212229, #000000);"></div>
-</body>
+<body style="background: linear-gradient(#212229, #000000);"></body>
+    <div id="target" ></div>
     <script id="template" type="text/ractive">
                 <div><input type="text" id="search" name="Search" value=""/>
                 <select id="search_type">
@@ -36,6 +35,9 @@
                     <option value="tag_list">Tag</option>
                 </select>
                 <div class="orange_btn" on-click="beginSearch">Search</div></div>
+                {% #each models:m %}
+                    <div>{% m %} : <img src="{% thumbnail %}" width="200" height="200"></div>
+                {% /each %}
     </script>
     <script>
         $(function() {
@@ -66,8 +68,8 @@
                             },
                             method: 'POST',
                             success: function (data) {
-                                MAIN.set('model_dict', data['model']);
-                                console.log(MAIN.get('model_dict'));
+                                MAIN.set('models', data['model']);
+
                             }
                         }
                     );
@@ -75,4 +77,12 @@
             });
         });
     </script>
+
+{{block footer}}
+  <footer class="footer" style="background-color:#0d0d0d;">
+      <div class="container-fluid" style="color:#d98200; text-align:center;">
+         Webmod 2.0
+      </div>
+   </footer>
+{{end}}
 </html>
