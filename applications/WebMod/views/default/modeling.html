@@ -163,6 +163,20 @@ Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
             MAIN.set('isSaving', false);
         });
 
+        var cumulativeOffset = function(element) {
+            var top = 0, left = 0;
+            do {
+                top += element.offsetTop  || 0;
+                left += element.offsetLeft || 0;
+                element = element.offsetParent;
+            } while(element);
+
+            return {
+                top: top,
+                left: left
+            };
+        };
+
         //We want to save the model
         MAIN.on("save-model", function(e) {
             var modJSON = {
@@ -206,6 +220,42 @@ Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
             };
 
             tagsJSON.tags = MAIN.get('active_model_tags').split(" ");
+
+            /*var framebuffer = gl.createFramebuffer();
+            gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+
+            // Read the contents of the framebuffer
+            var data = new Uint8Array(width * height * 4);
+            gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, data);
+
+            gl.deleteFramebuffer(framebuffer);
+
+            // Create a 2D canvas to store the result
+            var canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            var context = canvas.getContext('2d');
+
+            // Copy the pixels to a 2D canvas
+            var imageData = context.createImageData(width, height);
+            imageData.data.set(data);
+            context.putImageData(imageData, 0, 0);*/
+
+            /*var viewportData = new Uint8Array(canvas.width * canvas.height * 4);
+            gl.readPixels(0, 0, canvas.width, canvas.height, gl.RGBA, gl.UNSIGNED_BYTE, viewportData);
+
+            var newCanvas = document.createElement('canvas');
+            newCanvas.width = canvas.width;
+            newCanvas.height = canvas.height;
+            var context = newCanvas.getContext("2d");
+
+            var imageData = context.createImageData(canvas.width, canvas.height);
+            imageData.data.set(viewportData);
+            context.putImageData(imageData, 0, 0);
+            document.getElementById("dynImg").src = newCanvas.toDataURL();*/
+
+            console.log(cumulativeOffset(canvas));
 
             canvasPrtSc = canvas.toDataURL();
 

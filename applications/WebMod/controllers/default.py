@@ -69,7 +69,7 @@ def search():
     return dict(models=models)
 
 def search_stuff():
-
+    return 0
 
 def resetDB():
     db(db.model.id > 0).delete()
