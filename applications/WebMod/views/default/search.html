@@ -1,6 +1,6 @@
 {{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
-
+<meta charset="UTF-8">
 <head>
 {{block header}}
    <ul>
@@ -24,22 +24,18 @@
 </head>
 
 <html>
-    {{print(models)}}
-    <body style="background: linear-gradient(#212229, #000000);">
-                <input type="text" id="search" name="Search" value=""/>
-                <select id="search_type">
-                    <option value="Model">Model</option>
-                    <option value="User">User</option>
-                    <option value="Tag">Tag</option>
-                    <option value="Time">Newest</option>
-                </select>
-                <input type="submit" id="search-submit" value="search" onclick="Search()" />
-    </body>
 
-    <div id="target"></div>
-
+<body style="background: linear-gradient(#212229, #000000);">
+    <div id="target" style="background: linear-gradient(#212229, #000000);"></div>
+</body>
     <script id="template" type="text/ractive">
-
+                <div><input type="text" id="search" name="Search" value=""/>
+                <select id="search_type">
+                    <option value="name">Model</option>
+                    <option value="user_id">User</option>
+                    <option value="tag_list">Tag</option>
+                </select>
+                <div class="orange_btn" on-click="beginSearch">Search</div></div>
     </script>
     <script>
         $(function() {
@@ -50,25 +46,33 @@
             delimiters: ['{%', '%}'],
             tripleDelimiters: ['{%%', '%%}'],
             data: {
-                model_dict:  {}
+                models: {},
+                content: "",
+                search_type: ""
             }
             });
 
-            function Search(){
-                var search = $("search").value;
-                var search_type = $("search_type").value;
-                $.ajax("{{=URL('default', 'search_stuff')}}",
-                    {
-                        data:{
-                            search: search,
-                            search_type: search_type
-                        },
-                        method: 'POST',
-                        success: function (data) {
+            MAIN.on("beginSearch", function() {
+                var search = document.getElementById("search").value;
+                var search_type = document.getElementById("search_type").value;
+                MAIN.set('content', search);
+                MAIN.set('search_type', search_type);
+                if(search){
+                    $.ajax("{{=URL('default', 'search_stuff', args=['content', 'search_type'])}}",
+                        {
+                            data:{
+                                content: MAIN.get('content'),
+                                search_type: MAIN.get('search_type')
+                            },
+                            method: 'POST',
+                            success: function (data) {
+                                MAIN.set('model_dict', data['model']);
+                                console.log(MAIN.get('model_dict'));
+                            }
                         }
-                    }
-                );
-            }
+                    );
+                }
+            });
         });
     </script>
 </html>
