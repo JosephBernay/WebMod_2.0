@@ -88,10 +88,12 @@
         <div id="right">
             {{if not auth.user_id:}}
                 <div class="orange_btn" style="float:left" onclick="$:location.href='user/register'" onmouseover="color1(this)" onmouseout="color2(this)">Sign Up</div>
-                <div class="orange_btn" style="float:right" onclick="$:location.href='user/login'" onmouseover="color1(this)" onmouseout="color2(this)">Sign In</div><br><br>
+                <div class="orange_btn" style="float:left" onclick="$:location.href='user/login'" onmouseover="color1(this)" onmouseout="color2(this)">Sign In</div>
+                <div class="orange_btn" style="float:left" onclick="$:location.href='search'" onmouseover="color1(this)" onmouseout="color2(this)">Search</div><br><br>
             {{else:}}
                 <div class="orange_btn" style="float:left" onclick="$:location.href='profile'" onmouseover="color1(this)" onmouseout="color2(this)">Profile</div>
-                <div class="orange_btn" style="float:right" onclick="$:location.href='user/logout'" onmouseover="color1(this)" onmouseout="color2(this)">Logout</div><br><br>
+                <div class="orange_btn" style="float:left" onclick="$:location.href='user/logout'" onmouseover="color1(this)" onmouseout="color2(this)">Logout</div>
+                <div class="orange_btn" style="float:left" onclick="$:location.href='search'" onmouseover="color1(this)" onmouseout="color2(this)">Search</div><br><br>
             {{pass}}
             <div id="btn_model" onclick="$:location.href='modeling'" onmouseover="color1(this)" onmouseout="color2(this)">Model</div>
         </div>

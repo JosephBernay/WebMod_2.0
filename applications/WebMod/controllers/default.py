@@ -43,8 +43,6 @@ def save_model():
         description=request.vars.description,
         tag_list=json.loads(request.vars.tag_list),
         mesh_list=json.loads(request.vars.mesh_list),
-        isPublic=request.vars.isPublic,
-        isShareable=request.vars.isShareable,
         thumbnail_image=request.vars.thumbnail_image,
         last_edited=datetime.utcnow(),
         model_id=request.vars.model_id)
@@ -63,32 +61,38 @@ def open_model():
             'description': m.description,
             'tag_list': m.tag_list,
             'mesh_list': m.mesh_list,
-            'isPublic': m.isPublic,
-            'isShareable': m.isShareable,
             'model_id': m.model_id}
     return response.json(dict(model=model))
 
 def search():
-    models = db(db.model).select()
+    models = db(db.model).select(db.model.ALL)
     return dict(models=models)
 
 def search_stuff():
-    search_text = request.args[0]
-    search_type = request.args[1]
-    if search_type is "name":
-        models = db((db.model.name == search_text) & (db.model.isPublic)).select()
-    elif search_type is "user_id":
-        username = db(db.auth_user.username == search_text).select().__getitem__(0)
-        username = username.username
-        models = db((db.model.user_id == username) & (db.model.isPublic)).select()
-    elif search_type is "tag_list":
-        models = db((search_text in json.loads(db.model.tag_list)) & (db.model.isPublic)).select()
-    model = {m.name: {'thumbnail': m.thumbnail_img}
-             for m in models}
-    return response.json(dict(model=model))
+   search_text = request.vars.content
+   search_type = request.vars.search_type
+   if search_type == "name":
+      print search_text
+      models = db(db.model.name == search_text).select()
+   elif search_type == "user_id":
+      username = db(db.auth_user.username == search_text).select()[0]
+      models = db(db.model.user_id == username.id).select()
+   elif search_type == "tag_list":
+      stuff = db(db.model).select()
+      models = []
+      for m in stuff:
+         if search_text in m.tag_list['tags']:
+            models.append(m)
+   if models:
+      model = {m.name: {'thumbnail': m.thumbnail_image}
+                 for m in models}
+      return response.json(dict(model=model))
+   else:
+      print "damn"
+      return respone.json(dict(model={}))
 
 def resetDB():
-    db(db.model.id > 0).delete()
+   db(db.model.id > 0).delete()
     
 def download():
     return response.download(request, db)
@@ -98,8 +102,55 @@ def profile():
       redirect(URL('default', 'user', args=['login']))
    if request.args(0) == None:
       redirect(URL('default', 'profile', args=[auth.user_id]))   
-   user = db.auth_user(request.args(0))
+   user = db.auth_user(request.args(0))                                   
    return dict(user=user)
+   
+def load_fav_models():
+   id = request.vars.profile_id
+   models = db().select(db.model.ALL)
+   model_fav_list = {}
+   index = 0
+   for m in models:
+      if ((int(m.user_id) == int(id)) and (index < 3)):
+         model_fav_list[m.id] = {'name': m.name,
+                                    'description': m.description,
+                                    'tag_list': m.tag_list,
+                                    'mesh_list': m.mesh_list,
+                                    'thumbnail_image': m.thumbnail_image,
+                                    'isPublic': m.isPublic,
+                                    'isShareable': m.isShareable,
+                                    'num_favorites': m.num_favorites,
+                                    'last_edited': m.last_edited,
+                                    'user_id': m.user_id,
+                                    'model_id': m.model_id} 
+      index = index + 1
+   return response.json(dict(model_fav_dict = model_fav_list))
+   
+def load_models():
+   id = request.vars.profile_id
+   row = int(request.vars.row)
+   models = db().select(db.model.ALL)
+   model_list = {}
+   index = 0
+   print('\n \n')
+   print(row)
+   print('\n \n')
+   for m in models:
+      if ((index >= (row * 5)) and (index < ((row*5)+5))):
+         if ((int(m.user_id) == int(id))):
+            model_list[m.id] = {'name': m.name,
+                                       'description': m.description,
+                                       'tag_list': m.tag_list,
+                                       'mesh_list': m.mesh_list,
+                                       'thumbnail_image': m.thumbnail_image,
+                                       'isPublic': m.isPublic,
+                                       'isShareable': m.isShareable,
+                                       'num_favorites': m.num_favorites,
+                                       'last_edited': m.last_edited,
+                                       'user_id': m.user_id,
+                                       'model_id': m.model_id} 
+      index = index + 1
+   return response.json(dict(model_dict=model_list))
 
 def user():
     """
