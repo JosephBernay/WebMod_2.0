@@ -24,99 +24,8 @@
 </head>
 
 <body style="background: linear-gradient(#212229, #000000);">
-<div>
-   <div style="padding-left:20px; padding-top:20px;">
-      <div style="width:30%; height:450px; float:left; background:#111; border-radius:5px;">
-         {{if user['image'] == '':}}
-            <img src="{{=URL('static','images/default-avatar.png')}}" style="padding-left:20px; padding-top:20px; float:left;" width="200px" height="200px"/>
-         {{else:}}
-            <img src="{{=URL('default', 'download', args=user['image'])}}" style="padding-left:20px; padding-top:20px; float:left;" width="200px" height="200px"/>
-         {{pass}}
-         {{if int(request.args(0)) == int(auth.user_id):}}
-            {{=A('Edit Profile', _class='orange_btn', _style='float:right;', _href=URL('default', 'user', args='profile'))}}<br>
-         {{pass}}
-         <div style="padding-left:20px; padding-right:20px; color:white; float:left;">
-            <h2>{{=user['username']}}</h2><br>
-            {{if int(request.args(0)) == int(auth.user_id):}}
-               Name: {{=user['first_name']}} {{=user['last_name']}}<br>
-               Email: {{=user['email']}}<br><br>
-            {{pass}}
-            Has created {{=user['model_popularity']}} favorited models<br>
-            Has favorited {{=user['favorited_models']}} models<br>
-         </div>
-      </div>
-   </div>
-
-   <div style="float:right; width:20px; height:200px;"></div>
-
-   <div class="orange_btn" style="float:right;">Models</div>
-   <div class="orange_btn" style="float:right;">Favorited Models</div>
-   
-   <div style="width:67%; float:right; color:black; border-radius:5px;">
-      <div style="padding-left:20px;">
-         <h2>Most Popular Models</h2><br>
-            <div class="row">
-               <div class="col-sm-3" align="center">
-                  <div class="inner">
-                     <br><img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
-                     <h3>Title</h3>
-                  </div>
-               </div>
-              <div class="col-sm-3" align="center">
-                  <div class="inner">
-                     <br><img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
-                     <h3>Title</h3>
-                  </div>
-               </div>
-               <div class="col-sm-3" align="center">
-                  <div class="inner">
-                     <br><img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
-                     <h3>Title</h3>
-                  </div>
-               </div>
-               <div class="col-sm-3" align="center">
-                  <div class="inner">
-                     <br><img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
-                     <h3>Title</h3>
-                  </div>
-               </div>
-            </div>
-      </div>
-   </div>
-</div>
-
-<div align="center" style="width:98%; color:black; border-radius:5px;">
-   <div style="padding-left:20px; padding-top:20px;">
-      <h2 align="left" style="padding-left:20px; width:100%; padding-top:20px;">All Models</h2><br>
-         <div class="row">
-               <div class="col-sm-2" align="center">
-                  <img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
-                  <h3>Title</h3>
-               </div>
-              <div class="col-sm-2" align="center">
-                  <img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
-                  <h3>Title</h3>
-               </div>
-               <div class="col-sm-2" align="center">
-                  <img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
-                  <h3>Title</h3>
-               </div>
-               <div class="col-sm-2" align="center">
-                  <img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
-                  <h3>Title</h3>
-               </div>
-               <div class="col-sm-2" align="center">
-                  <img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
-                  <h3>Title</h3>
-               </div>
-               <div class="col-sm-2" align="center">
-                  <img src="http://www.covingtoncreative.com/wp-content/uploads/2013/12/default_image_01.png" width="200px" height="200px"></img>
-                  <h3>Title</h3>
-               </div>
-         </div>
-   </div>
-</div>
-</body>   
+   <div id="target"></div>
+</body>
 
 {{block footer}}  
   <footer class="footer" style="background-color:#0d0d0d;">
@@ -125,6 +34,73 @@
       </div>
    </footer>
 {{end}}
+
+<script id="template" type="text/ractive">
+   
+   <div class="orange_btn" onclick="models()" style="float:right;">Models</div>
+   <div class="orange_btn" onclick="favs()" style="float:right;">Favorited Models</div>
+   
+   <table style="width:100%;">
+      <tr>
+         <td colspan="2">
+            <h2>Profile</h2>
+         </td>
+         <td colspan="3">
+            <h2>Most Popular Models</h2>
+         </td>
+      </tr>
+      <tr>
+         <td colspan="2">
+            <div style="height:450px; background:#111; border-radius:5px;-webkit-box-shadow:0 0 10px #d98200; -moz-box-shadow: 0 0 10px #d98200; box-shadow:0 0 10px #d98200;">
+               {{if user['image'] == '':}}
+                  <img src="{{=URL('static','images/default-avatar.png')}}" style="padding-left:20px; padding-top:20px; float:left;" width="200px" height="200px"/>
+               {{else:}}
+                  <img src="{{=URL('default', 'download', args=user['image'])}}" style="padding-left:20px; padding-top:20px; float:left;" width="200px" height="200px"/>
+               {{pass}}
+               {{if int(request.args(0)) == int(auth.user_id):}}
+                  {{=A('Edit Profile', _class='orange_btn', _style='float:right;', _href=URL('default', 'user', args='profile'))}}<br>
+               {{pass}}
+               <div style="padding-left:20px; padding-right:20px; color:white; float:left;">
+                  <h2>{{=user['username']}}</h2><br>
+                  {{if int(request.args(0)) == int(auth.user_id):}}
+                     Name: {{=user['first_name']}} {{=user['last_name']}}<br>
+                     Email: {{=user['email']}}<br><br>
+                  {{pass}}
+                  Has created {{=user['model_popularity']}} favorited models<br>
+                  Has favorited {{=user['num_favorites']}} models<br>
+               </div>
+            </div>
+         </td>
+         {% #model_fav_dict:model_id %}
+            <td colspan="1">
+               <div class="inner">
+                  <h3>{% name %}</h3>
+                  <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px"></img>
+               <div>
+            </td>
+         {% /model_fav_dict %}
+      </tr>
+      
+      <tr>
+         <td colspan="5"><h2>All Models</h2></td>
+      </tr> 
+      
+      <tr>
+         {% #model_dict:thing %}
+            <td colspan="1">
+               <div class="inner">
+                  <h3>{% name %}</h3>
+                  <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px"></img>
+               <div>
+            </td>
+         {% /model_dict %}
+      </tr>
+ 
+      <tr>
+         <td colspan="5"><h2></h2></td>
+      </tr>
+   </table>
+</script>   
 
 <script>
    $(function() {
@@ -136,10 +112,50 @@
          delimiters: ['{%', '%}'],
          tripleDelimiters: ['{%%', '%%}'],
          data: {
-            fav: false,
+            fav: false,  //is the user looking at that profiles models, or that profile's favorites
             model_dict: {},
-            fav_dict:{},
+            model_fav_dict: {},
+            fav_dict: {},
+            showing_row: 0,
+            profile_id:"{{=user['id']}}",
          },
       });
+   
+      $.ajax("{{=URL('default', 'load_models')}}",
+      {
+         data: {
+            profile_id: MAIN.get('profile_id'),
+            row: MAIN.get('showing_row')
+         },
+         method: 'POST',
+         success: function(data){
+            MAIN.set('model_dict', data['model_dict'])
+         }
+      });
+      
+      $.ajax("{{=URL('default', 'load_fav_models')}}",
+      {
+         data: {
+            profile_id: MAIN.get('profile_id')
+         },
+         method: 'POST',
+         success: function(data){
+            MAIN.set('model_fav_dict', data['model_fav_dict'])
+         }
+      });
+      
+      getModels();
+      
+      function models(){
+         if(MAIN.get('fav') == true)
+            MAIN.set('fav', false);
+         return;
+      }
+      
+      function favs(){
+         if(MAIN.get('fav') == false)
+            MAIN.set('fav', true);
+         return;
+      }
    });
 </script>

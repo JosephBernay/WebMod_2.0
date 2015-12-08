@@ -65,10 +65,10 @@ def search():
     return dict(models=models)
 
 def search_stuff():
-
+   return 0
 
 def resetDB():
-    db(db.model.id > 0).delete()
+   db(db.model.id > 0).delete()
     
 def download():
     return response.download(request, db)
@@ -78,8 +78,53 @@ def profile():
       redirect(URL('default', 'user', args=['login']))
    if request.args(0) == None:
       redirect(URL('default', 'profile', args=[auth.user_id]))   
-   user = db.auth_user(request.args(0))
+   user = db.auth_user(request.args(0))                                   
    return dict(user=user)
+   
+def load_fav_models():
+   id = request.vars.profile_id
+   models = db().select(db.model.ALL)
+   model_fav_list = {}
+   index = 0
+   for m in models:
+      if ((int(m.user_id) == int(id)) and (index < 3)):
+         model_fav_list[m.id] = {'name': m.name,
+                                    'description': m.description,
+                                    'tag_list': m.tag_list,
+                                    'mesh_list': m.mesh_list,
+                                    'thumbnail_image': m.thumbnail_image,
+                                    'isPublic': m.isPublic,
+                                    'isShareable': m.isShareable,
+                                    'num_favorites': m.num_favorites,
+                                    'last_edited': m.last_edited,
+                                    'user_id': m.user_id} 
+      index = index + 1
+   return response.json(dict(model_fav_dict = model_fav_list))
+   
+def load_models():
+   id = request.vars.profile_id
+   row = int(request.vars.row)
+   models = db().select(db.model.ALL)
+   model_list = {}
+   index = 0
+   print('\n \n')
+   print(row)
+   print('\n \n')
+   for m in models:
+      if ((index >= (row * 5)) and (index < ((row*5)+5))):
+         if ((int(m.user_id) == int(id))):
+            model_list[m.id] = {'name': m.name,
+                                       'description': m.description,
+                                       'tag_list': m.tag_list,
+                                       'mesh_list': m.mesh_list,
+                                       'thumbnail_image': m.thumbnail_image,
+                                       'isPublic': m.isPublic,
+                                       'isShareable': m.isShareable,
+                                       'num_favorites': m.num_favorites,
+                                       'last_edited': m.last_edited,
+                                       'user_id': m.user_id} 
+      index = index + 1
+   return response.json(dict(model_dict=model_list))
 
 def user():
     """

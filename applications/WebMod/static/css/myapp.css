@@ -27,6 +27,7 @@ li a:hover {
 
 h2 {
    color: #D98200;
+   padding-left: 20px;
 }
 
 h3 {
@@ -71,4 +72,19 @@ h3 {
    border-radius:5px;
    background:#111;
    padding:5px;
+   height:450px;
+   text-align:center;
+}
+
+.innerEmptry{
+   border-radius:5px;
+   border:solid;
+   border-color:#111;
+   padding:5px;
+   height:450px;
+   text-align:center;
+}
+
+td {
+   padding:10px;
 }
