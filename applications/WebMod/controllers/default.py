@@ -6,26 +6,8 @@ import urllib2
 from datetime import datetime
 
 def index():
-    """
-    Displays list of all emails.
-    """
-    '''# Gets some fresh set of emails each time.
-    email_list = get_emails('http://luca-teaching.appspot.com/fake_emails/default/get_emails')
-    # We store the list of emails in the session.
-    session.email_list = email_list
-    # At this point, email_list is a list of dictionaries of this format:
-    #     {
-    #         'id': 'randomstringid',
-    #         'from': 'sender@email.com',
-    #         'date': 'somedateinISOformat',
-    #         'subject': 'Your homework.',
-    #         'text': 'Text of email, with \n\n used to separate paragraphs',
-    #         'starred': True, # or False!
-    #         'read': False, # Whether you have read it or not, can be True or False
-    #     }
-    # And you need to display the list of emails.'''
-    email_list = []
-    return dict(email_list=email_list)
+    models = db().select(db.model.ALL, orderby=db.model.num_favorites)
+    return dict(models=models, x=0)
 
 @auth.requires_login()
 def modeling():
@@ -100,6 +82,7 @@ def search_stuff():
         return response.json(dict(model=model))
    else:
       print "damn"
+      response.flash = T("Hello World")
       return respone.json(dict(model={}))
 
 def resetDB():

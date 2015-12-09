@@ -17,8 +17,6 @@
 
 from datetime import datetime
 
-print "Hey"
-print (db.auth_user(auth.user_id))['username']
 
 db.define_table('model',
                 Field('name', 'string'),

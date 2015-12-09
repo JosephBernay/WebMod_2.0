@@ -26,6 +26,7 @@
                 background-color:#111;
                 height:100vh;
                 width:100vw;
+                padding:0;
             }
             #left {
                 float:left;
@@ -37,18 +38,18 @@
                 background:linear-gradient(#212229, black);
                 width:19.5%;
                 float:right;
-                height:100vh;
+                height:70vh;
                 border-radius:5%;
             }
             #welcome {
-                height:80vh;
+                height:40vh;
             }
             #favorites {
                 background:linear-gradient(#212229, black);
                 color:white;
                 clear:both;
                 text-align:center;
-                height:20vh;
+                height:30vh;
             }
             #title {
                 color:#d98200;
@@ -80,8 +81,14 @@
                     Stuff
                 </p>
             </div>
-            <div id="favorites">
-                Scrolly Area
+            <div id="favorites">Top Models<br>
+                {{for m in models:}}
+                    {{if m.isPublic and x<5:}}
+                        <div style="float:left; padding:5px">{{=m.name}}<br><img src="{{m.thumbnail_image}}" height="150" width="150"><br><i class="fa fa-heart" style="color:#ff3333;"> {{ =m.num_favorites }}</i></img></div>
+                        {{x+=1}}
+                    {{pass}}
+                {{pass}}
+
             </div>
         </div>
 
@@ -99,5 +106,11 @@
         </div>
     </body>
 
-
+{{block footer}}
+  <footer class="footer" style="background-color:#0d0d0d;">
+      <div class="container-fluid" style="color:#d98200; text-align:center;">
+         Webmod 2.0
+      </div>
+   </footer>
+{{end}}
 </html>
