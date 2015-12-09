@@ -112,19 +112,32 @@ def search_stuff():
     search_type = request.vars.search_type
     if search_type == "name":
         models = db(db.model.name == search_text).select()
+        first = models.first()
+        if not first:
+            response.flash = T("No  model by that name")
+            return response.json(dict(model={}))
     elif search_type == "user_id":
-        username = db(db.auth_user.username == search_text).select()[0]
-        models = db(db.model.user_id == username.id).select()
+        username = db(db.auth_user.username == search_text).select()
+        if username.first():
+            models = db(db.model.user_id == username.first().id).select()
+            first = models.first()
+            if not first:
+                response.flash = T("User has no models")
+                return response.json(dict(model={}))
+        else:
+            response.flash = T("No user by that name")
+            return response.json(dict(model={}))
     elif search_type == "tag_list":
         stuff = db(db.model).select()
         models = []
         for m in stuff:
             if search_text in m.tag_list['tags']:
                 models.append(m)
-    if models:
-        fav = False
-        if auth.user_id:
-            user = db.auth_user(auth.user_id)['favorited_models']
+        first = len(models)
+        if not first:
+            response.flash = T("No model with that tag")
+            return response.json(dict(model={}))
+    if auth.user_id:
         model = {m.name: {'thumbnail': m.thumbnail_image,
                         'public': m.isPublic,
                             'share': m.isShareable,
@@ -132,11 +145,15 @@ def search_stuff():
                             'model_id': m.model_id,
                             'favorited': m.model_id in db.auth_user(auth.user_id)['favorited_models'].split()}
                             for m in models}
-        return response.json(dict(model=model))
     else:
-        print "damn"
-        response.flash = T("Hello World")
-        return respone.json(dict(model={}))
+        model = {m.name: {'thumbnail': m.thumbnail_image,
+                        'public': m.isPublic,
+                            'share': m.isShareable,
+                            'favorites': m.num_favorites,
+                            'model_id': m.model_id,
+                            'favorited': False}
+                            for m in models}
+    return response.json(dict(model=model))
 
 def resetDB():
    db(db.model.id > 0).delete()
