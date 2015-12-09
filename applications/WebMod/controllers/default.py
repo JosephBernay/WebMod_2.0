@@ -29,16 +29,33 @@ def index():
 
 @auth.requires_login()
 def modeling():
-    if request.args(0) == None:
-        active_model_id = ""
-        active_model_name = "Username"
-    else:
+    active_model_id = ""
+    active_model_name = "Untitled"
+    if len(request.args) == 2:
         active_model_id = request.args(0)
-    importing = False
+        active_model_name = request.args(1)
 
     return dict(active_model_id=active_model_id, active_model_name=active_model_name)
 
+def viewing():
+    model_id = request.args(0)
+
+    print model_id
+
+    return dict(model_id=model_id)
+
+def view_model():
+    m_list = db(db.model.model_id == request.vars.model_id).select()
+    m = m_list.__getitem__(0)
+    model = {'name': m.name,
+             'description': m.description,
+             'tag_list': m.tag_list,
+             'mesh_list': m.mesh_list,
+             'model_id': m.model_id}
+    return response.json(dict(model=model))
+
 def save_model():
+    print request.vars.model_id
     db.model.update_or_insert((db.model.model_id == request.vars.model_id),
         name=request.vars.name,
         description=request.vars.description,
@@ -58,15 +75,20 @@ def save_model():
     return "ok"
 
 def open_model():
-    m = db((db.model.name == request.vars.name) & (db.model.user_id == auth.user_id)).select().__getitem__(0)
-    print m
-    model = {'name': m.name,
-            'description': m.description,
-            'tag_list': m.tag_list,
-            'mesh_list': m.mesh_list,
-            'isPublic': m.isPublic,
-            'isShareable': m.isShareable,
-            'model_id': m.model_id}
+    m_list = db((db.model.name == request.vars.name) & (db.model.user_id == auth.user_id)).select()
+    model = {'exists': "No"}
+    if len(m_list) != 0:
+        m = m_list.__getitem__(0)
+        model = {'exists': "Yes",
+                 'name': m.name,
+                 'description': m.description,
+                 'tag_list': m.tag_list,
+                 'mesh_list': m.mesh_list,
+                 'isPublic': m.isPublic,
+                 'isShareable': m.isShareable,
+                 'model_id': m.model_id}
+    else:
+        response.flash=T('You have no model named "' + request.vars.name + '"');
     return response.json(dict(model=model))
 
 def search():

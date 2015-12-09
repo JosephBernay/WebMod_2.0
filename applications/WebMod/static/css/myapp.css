@@ -30,7 +30,7 @@ h2 {
    padding-left: 20px;
 }
 
-h3 {
+h3,h5 {
    color:white;
 }
 
@@ -39,10 +39,89 @@ textarea {
     border-color: #000000 !important;
 }
 
-textarea:focus, input:focus, .uneditable-input:focus {
+textarea:focus, input.textarea:focus, .uneditable-input:focus {
     border-color: #000000 !important;
     box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px #D98200 !important;
     outline: 0 none !important;
+}
+
+input[type=range] {
+	-webkit-appearance: none;
+	border-radius: 0px;
+	vertical-align: middle;
+	padding: 0;
+	position: relative;
+	vertical-align: middle;
+	overflow-x: hidden;
+	overflow-y: visible;
+	width: 100%;
+	background: transparent;
+}
+input[type=range]::-webkit-slider-thumb {
+	-webkit-appearance: none !important;
+	position: relative;
+	pointer-events:none;
+	width: 8px;
+	height: 100%;
+}
+input[type=range]::-webkit-slider-runnable-track {
+	background: #757575;
+	height: 8px;
+	margin:5px 0;
+
+}
+input[type=range]::-webkit-slider-thumb:before {
+	content:"-";
+	font-style: 0;
+	line-height:0;
+	position: absolute;
+	left:-3000px;
+	right:0;
+	top:0;
+	bottom:0;
+	/*background: #cc181e;*/
+}
+input[id=slider-red]::-webkit-slider-thumb:before {
+    background: #cc181e;
+}
+input[id=slider-green]::-webkit-slider-thumb:before {
+    background: #18cc1e;
+}
+input[id=slider-blue]::-webkit-slider-thumb:before {
+    background: #181ecc;
+}
+input[type=range]::-webkit-slider-thumb:after {
+	content: "";
+	position: absolute;
+	left:-4px;
+	right:-4px;
+	top:-4px;
+	bottom:-4px;
+	background: #adadad;
+	border-radius: 50%;
+	border:5px solid #e8e8e8;
+	z-index: 10;
+}
+input[type=range]:focus {
+	outline:none;
+}
+input[id=slider-red]:hover::-webkit-slider-thumb:after,
+input[id=slider-red]:focus::-webkit-slider-thumb:after {
+    background: #cc181e;
+}
+input[id=slider-green]:hover::-webkit-slider-thumb:after,
+input[id=slider-green]:focus::-webkit-slider-thumb:after {
+    background: #18cc1e;
+}
+input[id=slider-blue]:hover::-webkit-slider-thumb:after,
+input[id=slider-blue]:focus::-webkit-slider-thumb:after {
+    background: #181ecc;
+}
+input[type=range]:disabled::-webkit-slider-thumb:before {
+	background-color: #a1151a;
+}
+input[type=range]:disabled::-webkit-slider-thumb:after {
+	background: #adadad !important;
 }
 
 .orange_btn {

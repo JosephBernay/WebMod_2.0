@@ -67,54 +67,68 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
         <td class="modeling-UI" style="min-width:300px">
             <form>
             <fieldset>
-            <legend class="UI-header">Color: </legend> <br>
-            <button type="button" on-click="set-pick-color">Set Color</button>
-            Red :
-            <input id="red" type="range" value="0" min="0" max = 1 step="0.001"/>
-            Green :
-            <input id="green" type="range" value="0" min="0" max = 1 step="0.001"/>
-            Blue :
-            <input id="blue" type="range" value="0" min="0" max = 1 step="0.001"/>
+            <legend class="UI-header">Color: </legend>
+            <h5>Red:</h5>
+            <input id="slider-red" type="range" value="0" min="0" max = 1 step="0.001"/>
+            <h5>Green:</h5>
+            <input id="slider-green" type="range" value="0" min="0" max = 1 step="0.001"/>
+            <h5>Blue:</h5>
+            <input id="slider-blue" type="range" value="0" min="0" max = 1 step="0.001"/>
+            <button class="btn btn-primary" type="button" on-click="set-pick-color">{{=icon_eyedropper}} Set Color</button>
             </fieldset>
             </form> <br>
 
             <form>
             <fieldset>
-            <legend>Primitive Mesh Creation:</legend>
-            <br>
+            <legend class="UI-header">Primitive Mesh Creation:</legend>
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{=icon_cube}} Add Primitive
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu">
-                    <li><a href="#" on-click="cube-prim">Cube</a></li>
-                    <li><a href="#" on-click="pyramid-prim">Pyramid</a></li>
-                    <li><a href="#" on-click="sphere-prim">Sphere</a></li>
-                    <li><a href="#" on-click="cylinder-prim">Cylinder</a></li>
-                    <li><a href="#" on-click="cone-prim">Cone</a></li>
-                    <li><a href="#" on-click="toroid-prim">Toroid</a></li>
+                    <li><a href="#" on-click="cube-prim" style="color:white; text-decoration: none;">Cube</a></li>
+                    <li><a href="#" on-click="pyramid-prim" style="color:white; text-decoration: none;">Pyramid</a></li>
+                    <li><a href="#" on-click="sphere-prim" style="color:white; text-decoration: none;">Sphere</a></li>
+                    <li><a href="#" on-click="cylinder-prim" style="color:white; text-decoration: none;">Cylinder</a></li>
+                    <li><a href="#" on-click="cone-prim" style="color:white; text-decoration: none;">Cone</a></li>
+                    <li><a href="#" on-click="toroid-prim" style="color:white; text-decoration: none;">Toroid</a></li>
                 </ul>
             </div>
             </form>
             <form>
             <fieldset>
-            <legend>Mesh Edit</legend>
-            <button type="button" on-click="delete-mesh">Delete Mesh</button>
-            <button type="button" on-click="merge">Merge</button>
-            <button type="button" id="polyButton" on-click="toggle-poly-mode">Poly Mode : ON</button>
-            <button type="button" on-click="delete-poly">Delete Polygon</button>
-            <button type="button" on-click="extrude-poly">Extrude Polygon</button>
+            <legend class="UI-header">Mesh Edit</legend>
+            <div class="btn-group">
+            <button class="btn btn-primary" type="button" id="polyButton" on-click="toggle-poly-mode"style="margin-right:0px">Poly Mode: ON</button>
+                {% #if polyMode === true %}
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="margin-left:0px">{{=icon_square_o}} Poly
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" on-click="delete-poly" style="color:white; text-decoration: none;">Delete Polygon</a></li>
+                        <li><a href="#" on-click="extrude-poly" style="color:white; text-decoration: none;">Extrude Polygon</a></li>
+                        <li><a href="#" on-click="merge" style="color:white; text-decoration: none;">Merge</a></li>
+                    </ul>
+                {% else %}
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="margin-left:0px">{{=icon_cubes}} Mesh
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a class="drop-item" href="#" on-click="delete-mesh" style="color:white; text-decoration: none;">Delete Mesh</a></li>
+                    </ul>
+                {% /if %}
+            </div>
             </fieldset>
             <br>
             </form>
             <form>
             <fieldset>
-            <legend>Shading</legend>
-            <button type="button" on-click="to-smooth-shade">Smooth</button>
-            <button type="button" on-click="to-flat-shade">Flat</button>
+            <legend class="UI-header">Shading</legend>
+            <div class="btn-group">
+                <button class="btn btn-primary" type="button" on-click="to-smooth-shade" style="margin-right:0px;">{{=icon_circle_thin}} Smooth</button>
+                <button class="btn btn-primary" type="button" on-click="to-flat-shade" style="margin-left:0px;">{{=icon_diamond}} Flat</button>
+            </div>
             </fieldset>
             </form>
 
-            Delete - Delete Selected Mesh <br>
+            <!--Delete - Delete Selected Mesh <br>
             B - Add Shark Primitive <br>
             N - Add Cube Primitive <br>
             M - Add Pyramid Primitive <br>
@@ -124,25 +138,25 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
             E - Rotate on Z <br>
             R - Rotate whever your move your mouse<br>
             Z - Translate along Z <br>
-            click and drag to translate <br>
+            click and drag to translate--> <br>
             <form>
-            <legend> Input/Output </legend>
+            <legend class="UI-header"> Input/Output </legend>
             <fieldset>
             {% #if isSaving === true %}
-            <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
-            <h2>
-            <br>
-            </h2>
-            <textarea value="{% active_model_name %}" cols="40" id="no_table_message" name="name" rows="1">
-            </textarea>
-            <textarea value="{% active_model_desc %}" cols="40" id="no_table_message" name="description" rows="8">
-            </textarea>
-            <textarea value="{% active_model_tags %}" cols="40" id="no_table_message" name="tags" rows="1">
-            </textarea>
-            Public: <input type="checkbox" id="publicBox" on-click="toggle-public">
-            Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
-            <button type="button" on-click="save-model">OK</button>
-            </form>
+                <form role="form">
+                    <div class="form-group">
+                        <textarea class="form-control" value="{% active_model_name %}" rows="1" columns="40" id="no_table_message" style="resize:none; max-width:300px;  white-space: nowrap; overflow: hidden;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" value="{% active_model_desc %}" rows="8" columns="40" id="no_table_message" style="resize:none; max-width:300px; "></textarea>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" value="{% active_model_tags %}" rows="1" columns="40" id="no_table_message" style="resize:none; max-width:300px;  white-space: nowrap; overflow: hidden;"></textarea>
+                    </div>
+                    Public: <input type="checkbox" id="publicBox" on-click="toggle-public">
+                    Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
+                    <button type="button" on-click="save-model">OK</button>
+                </form>
             {% else %}
             <button type="button" on-click="save-menu">Save</button>
             {% /if %}
@@ -151,8 +165,11 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
             <h2>
             <br>
             </h2>
-            <textarea value="{% openingName %}" cols="40" id="no_table_message" name="name" rows="1">
-            </textarea>
+            <form role="form">
+                <div class="form-group">
+                    <textarea class="form-control" value="{% openingName %}" rows="1" columns="40" id="no_table_message" style="resize:none; max-width:300px;  white-space: nowrap;"></textarea>
+                </div>
+            </form>
             <button type="button" on-click="open-model">OK</button>
             </form>
             {% else %}
@@ -163,6 +180,7 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
         </td>
 
     </tr>
+     <!--<a href="viewing/{% active_model_id %}">Test View</a>-->
 </table>
 
 </script>
@@ -193,6 +211,7 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
                 isSaving: false,
                 isOpening: false,
                 selectingPrim: false,
+                polyMode: true,
                 openingName: ""
             },
         });
@@ -332,41 +351,44 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
                     method: 'POST',
                     success: function (data) {
                         var model = data['model'];
-                        console.log(model['mesh_list']['objects'][0]['vertTable']);
-                        console.log(model['mesh_list']['objects'][0]['polyTable']);
-                        MAIN.set('active_model_name', model['name']);
-                        MAIN.set('active_model_desc', model['description']);
-                        var tags = ""
-                        for(var numTag = 0; numTag < model['tag_list']['tags'].length; ++numTag) {
-                            tags += model['tag_list']['tags'][numTag];
-                            if(numTag < model['tag_list']['tags'].length - 1)
-                                tags += " ";
-                        }
-                        MAIN.set('tag_list', tags);
-                        MAIN.set('mesh_list', model['mesh_list']);
-                        MAIN.set('active_public', model['isPublic']);
-                        MAIN.set('active_shareable', model['isShareable']);
-                        MAIN.set('active_model_id', model['model_id']);
+                        console.log("Here's fine");
+                        if(model['exists'] == "Yes") {
+                            console.log("But, here?");
+                            MAIN.set('active_model_name', model['name']);
+                            MAIN.set('active_model_desc', model['description']);
+                            var tags = ""
+                            for(var numTag = 0; numTag < model['tag_list']['tags'].length; ++numTag) {
+                                tags += model['tag_list']['tags'][numTag];
+                                if(numTag < model['tag_list']['tags'].length - 1)
+                                    tags += " ";
+                            }
+                            MAIN.set('tag_list', tags);
+                            MAIN.set('mesh_list', model['mesh_list']);
+                            MAIN.set('active_public', model['isPublic']);
+                            MAIN.set('active_shareable', model['isShareable']);
+                            MAIN.set('active_model_id', model['model_id']);
+                            curModelID = model['model_id'];
 
-                        meshTable = [];
-                        meshes = model['mesh_list']['objects']
-                        for(var numMesh in model['mesh_list']['objects']) {
-                            addMesh(meshes[numMesh]['vertTable'], meshes[numMesh]['polyTable']);
-                            meshTable[meshTable.length - 1].materialColor = new Vector4D(meshes[numMesh]['materialColor'][0],
-                                meshes[numMesh]['materialColor'][1],
-                                meshes[numMesh]['materialColor'][2],
-                                meshes[numMesh]['materialColor'][3]);
-                            meshTable[meshTable.length - 1].scaleMat.populateFromArray(meshes[numMesh]['scaleMat']);
-                            meshTable[meshTable.length - 1].rotMatX.populateFromArray(meshes[numMesh]['rotMatX']);
-                            meshTable[meshTable.length - 1].rotMatY.populateFromArray(meshes[numMesh]['rotMatY']);
-                            meshTable[meshTable.length - 1].rotMatZ.populateFromArray(meshes[numMesh]['rotMatZ']);
-                            meshTable[meshTable.length - 1].transMat.populateFromArray(meshes[numMesh]['transMat']);
-                            meshTable[meshTable.length - 1].meshID = meshes[numMesh]['meshID'];
-                        }
+                            meshTable = [];
+                            meshes = model['mesh_list']['objects']
+                            for(var numMesh in model['mesh_list']['objects']) {
+                                addMesh(meshes[numMesh]['vertTable'], meshes[numMesh]['polyTable']);
+                                meshTable[meshTable.length - 1].materialColor = new Vector4D(meshes[numMesh]['materialColor'][0],
+                                    meshes[numMesh]['materialColor'][1],
+                                    meshes[numMesh]['materialColor'][2],
+                                    meshes[numMesh]['materialColor'][3]);
+                                meshTable[meshTable.length - 1].scaleMat.populateFromArray(meshes[numMesh]['scaleMat']);
+                                meshTable[meshTable.length - 1].rotMatX.populateFromArray(meshes[numMesh]['rotMatX']);
+                                meshTable[meshTable.length - 1].rotMatY.populateFromArray(meshes[numMesh]['rotMatY']);
+                                meshTable[meshTable.length - 1].rotMatZ.populateFromArray(meshes[numMesh]['rotMatZ']);
+                                meshTable[meshTable.length - 1].transMat.populateFromArray(meshes[numMesh]['transMat']);
+                                meshTable[meshTable.length - 1].meshID = meshes[numMesh]['meshID'];
+                            }
 
-                        MAIN.set('isOpening', false);
-                        renderAll();
-                        console.log("Load Complete!");
+                            MAIN.set('isOpening', false);
+                            renderAll();
+                            console.log("Load Complete!");
+                        }
                     }
                 }
             );
@@ -439,8 +461,10 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
             curModelID = generateUUID();
             MAIN.set('active_model_id', curModelID);
         }
-        else
-            curModelID = MAIN.get('active_model_id');
+        else {
+            MAIN.set('openingName', {{=active_model_name}});
+            ractive.fire('open-model');
+        }
 
         MAIN.set('active_model_id', curModelID);
 
@@ -1925,7 +1949,7 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
 
             //lastely delete the original polygon. Poor guy just isn't useful anymore.
 
-            deletePoly();
+            ractive.fire("delete-poly");
 
             renderAll();
 
@@ -2395,9 +2419,9 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
             }
 
             //get color
-            var red    = document.getElementById("red").value;
-            var green = document.getElementById("green").value;
-            var blue   = document.getElementById("blue").value;
+            var red    = document.getElementById("slider-red").value;
+            var green = document.getElementById("slider-green").value;
+            var blue   = document.getElementById("slider-blue").value;
             currentPick.materialColor = new Vector4D(red, green, blue, 1.0);
             renderAll();
         });
@@ -2447,16 +2471,17 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
             renderAll();
         }
 
-        function togglePolyMode() {
+        MAIN.on("toggle-poly-mode", function() {
             var button = document.getElementById("polyButton");
             polyMode = !polyMode;
+            MAIN.set('polyMode', !MAIN.get('polyMode'));
 
             if(polyMode) {
-                button.innerHTML = "Poly Mode : ON";
+                button.innerHTML = "Poly Mode: ON";
             }
             else
-                button.innerHTML = "Poly Mode : OFF";
-        }
+                button.innerHTML = "Poly Mode: OFF";
+        });
 
         function saveModData() {
             var modJSON = {
