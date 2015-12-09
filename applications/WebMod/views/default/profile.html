@@ -88,7 +88,7 @@
                            </div>
                         {% /if %}
                         <br><h3>{% name %}</h3><br>
-                        <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px">
+                        <img id="dynImg" src="{% thumbnail_image %}" width="150px" height="150px">
                            <br>{% description %}<br><br>
                            <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
                            <div style="color:gray;">
@@ -105,7 +105,8 @@
                               {% #if isShareable === false %}
                                  Sharing Disabled,
                               {% /if %}
-                              <a href="{{=URL('default', 'modeling')}}/{% model_id %}/{% name %}" style="color:#D98200; text-decoration:none;">Edit<br></a>
+                              <a href="{{=URL('default', 'modeling')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">Edit</a>,
+                              <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
                            </div>
                         </img>
                      <div>
@@ -130,7 +131,7 @@
                            </div>
                         {% /if %}
                         <h3>{% name %}</h3><br>
-                        <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px">
+                        <img id="dynImg" src="{% thumbnail_image %}" width="150px" height="150px">
                            <br>{% description %}<br><br>
                            <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
                            <div style="color:gray;">
@@ -139,7 +140,7 @@
                                  Import this Model<br>
                               {% /if %}
                               {% #if isShareable === false %}
-                                 View this Model<br>
+                                 <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
                               {% /if %}
                            </div>
                         </img>
@@ -173,7 +174,7 @@
                            </div>
                         {% /if %}
                         <h3>{% name %}</h3><br>
-                        <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px">
+                        <img id="dynImg" src="{% thumbnail_image %}" width="150px" height="150px">
                            <br>{% description %}<br><br>
                            <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
                            <div style="color:gray;">
@@ -190,7 +191,8 @@
                               {% #if isShareable === false %}
                                  Sharing Disabled,
                               {% /if %}
-                              <a href="{{=URL('default', 'modeling')}}/{% model_id %}/{% name %}" style="color:#D98200; text-decoration:none;">Edit<br></a>
+                              <a href="{{=URL('default', 'modeling')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">Edit</a>,
+                              <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
                            </div>
                         </img>
                      <div>
@@ -215,7 +217,7 @@
                            </div>
                         {% /if %}
                         <h3>{% name %}</h3><br>
-                        <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px">
+                       <img id="dynImg" src="{% thumbnail_image %}" width="150px" height="150px">
                            <br>{% description %}<br><br>
                            <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
                            <div style="color:gray;">
@@ -224,7 +226,7 @@
                                  Import this Model<br>
                               {% /if %}
                               {% #if isShareable === false %}
-                                 View this Model<br>
+                                 <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
                               {% /if %}
                            </div>
                         </img>
@@ -275,7 +277,7 @@
                            </div>
                         {% /if %}
                         <h3>{% name %}</h3><br>
-                        <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px">
+                        <img id="dynImg" src="{% thumbnail_image %}" width="150px" height="150px">
                            <br>{% description %}<br><br>
                            <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
                            <div style="color:gray;">
@@ -292,7 +294,8 @@
                               {% #if isShareable === false %}
                                  Sharing Disabled,
                               {% /if %}
-                              <a href="{{=URL('default', 'modeling')}}/{% model_id %}/{% name %}" style="color:#D98200; text-decoration:none;">Edit<br></a>
+                              <a href="{{=URL('default', 'modeling')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">Edit</a>,
+                              <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
                            </div>
                         </img>
                      <div>
@@ -317,7 +320,7 @@
                            </div>
                         {% /if %}
                         <h3>{% name %}</h3><br>
-                        <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px">
+                        <img id="dynImg" src="{% thumbnail_image %}" width="150px" height="150px">
                            <br>{% description %}<br><br>
                            <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
                            <div style="color:gray;">
@@ -326,7 +329,7 @@
                                  Import this Model<br>
                               {% /if %}
                               {% #if isShareable === false %}
-                                 View this Model<br>
+                                 <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
                               {% /if %}
                            </div>
                         </img>
@@ -356,7 +359,7 @@
                            </div>
                         {% /if %}
                         <h3>{% name %}</h3><br>
-                        <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px">
+                        <img id="dynImg" src="{% thumbnail_image %}" width="150px" height="150px">
                            <br>{% description %}<br><br>
                            <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
                            <div style="color:gray;">
@@ -373,7 +376,8 @@
                               {% #if isShareable === false %}
                                  Sharing Disabled,
                               {% /if %}
-                              <a href="{{=URL('default', 'modeling')}}/{% model_id %}/{% name %}" style="color:#D98200; text-decoration:none;">Edit<br></a>
+                              <a href="{{=URL('default', 'modeling')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">Edit</a>,
+                              <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View,</a><br>
                            </div>
                         </img>
                      <div>
@@ -398,7 +402,7 @@
                            </div>
                         {% /if %}
                         <h3>{% name %}</h3><br>
-                        <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px">
+                        <img id="dynImg" src="{% thumbnail_image %}" width="150px" height="150px">
                            <br>{% description %}<br><br>
                            <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
                            <div style="color:gray;">
@@ -407,7 +411,7 @@
                                  Import this Model<br>
                               {% /if %}
                               {% #if isShareable === false %}
-                                 View this Model<br>
+                                 <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
                               {% /if %}
                            </div>
                         </img>
@@ -689,6 +693,31 @@
                      MAIN.set('model_fav_dict', data['model_fav_dict'])
                   }
                });
+               
+               $.ajax("{{=URL('default', 'load_favs')}}",
+               {
+                  data: {
+                     profile_id: MAIN.get('profile_id'),
+                     row: MAIN.get('showing_favs')
+                  },
+                  method: 'POST',
+                  success: function(data){
+                     MAIN.set('fav_dict', data['fav_dict']);
+                     MAIN.set('fav_dict2', data['fav_dict2']);
+                     var buffer2 = MAIN.get('fav_dict');
+                     var buffer = MAIN.get('fav_dict2');
+                     var index = 0;
+                     for (var m in buffer){
+                           index = index + 1;
+                     }
+                     if( index < 4){
+                        MAIN.set('noMoreFav', true);
+                     }
+                     else{
+                        MAIN.set('noMoreFav', false);
+                     }
+                  }
+               });
             }
          });
       });
@@ -734,6 +763,31 @@
                   method: 'POST',
                   success: function(data){
                      MAIN.set('model_fav_dict', data['model_fav_dict'])
+                  }
+               });
+               
+               $.ajax("{{=URL('default', 'load_favs')}}",
+               {
+                  data: {
+                     profile_id: MAIN.get('profile_id'),
+                     row: MAIN.get('showing_favs')
+                  },
+                  method: 'POST',
+                  success: function(data){
+                     MAIN.set('fav_dict', data['fav_dict']);
+                     MAIN.set('fav_dict2', data['fav_dict2']);
+                     var buffer2 = MAIN.get('fav_dict');
+                     var buffer = MAIN.get('fav_dict2');
+                     var index = 0;
+                     for (var m in buffer){
+                           index = index + 1;
+                     }
+                     if( index < 4){
+                        MAIN.set('noMoreFav', true);
+                     }
+                     else{
+                        MAIN.set('noMoreFav', false);
+                     }
                   }
                });
             }
