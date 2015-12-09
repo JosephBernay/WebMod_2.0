@@ -37,9 +37,22 @@
 
 
 <script id="template" type="text/ractive">
-    <canvas id="gl-canvas" width="800" height="800" style="border:1px solid #000000;">
-        Oops ... your browser doesn't support the HTML5 canvas element
-    </canvas>
+    <table align="center" >
+        <tr>
+            <td style="min-width:350px;">
+            </td>
+            <td>
+            <canvas id="gl-canvas" width="800" height="800" style="border:1px solid #000000;">
+                Oops ... your browser doesn't support the HTML5 canvas element
+            </canvas>
+            </td>
+            <td style="min-width:350px;">
+                <legend class="UI-header">Name: </legend>
+                <h5>{% active_model_name %}</h5>
+            </td>
+        </tr>
+    </table>
+
 </script>
 
 {{block footer}}

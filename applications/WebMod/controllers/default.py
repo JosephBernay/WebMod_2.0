@@ -40,6 +40,7 @@ def viewing():
 def view_model():
     m_list = db(db.model.model_id == request.vars.model_id).select()
     m = m_list.__getitem__(0)
+
     model = {'name': m.name,
              'description': m.description,
              'tag_list': m.tag_list,

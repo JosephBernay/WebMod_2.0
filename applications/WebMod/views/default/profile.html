@@ -138,7 +138,7 @@
                               {% #if isShareable === true %}
                                  <a href="{{=URL('default', 'modeling')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">Import this Model</a><br>
                               {% /if %}
-                              {% #if isShareable === false %}
+                              {% #if isPublic === true %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View this Model</a><br>
                               {% /if %}
                            </div>
@@ -223,7 +223,7 @@
                               {% #if isShareable === true %}
                                  <a href="{{=URL('default', 'modeling')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">Import this Model</a><br>
                               {% /if %}
-                              {% #if isShareable === false %}
+                              {% #if isPublic === true %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View this Model</a><br>
                               {% /if %}
                            </div>
