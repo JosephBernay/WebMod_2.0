@@ -66,36 +66,86 @@
                      Name: {{=user['first_name']}} {{=user['last_name']}}<br>
                      Email: {{=user['email']}}<br><br>
                   {{pass}}
-                  Has created {{=user['model_popularity']}} favorited models<br>
-                  Has favorited {{=user['num_favorites']}} models<br>
                </div>
             </div>
          </td>
-         {% #model_fav_dict:model_id %}
-            <td colspan="1">
-               <div class="inner">
-                  <h3>{% name %}</h3><br>
-                  {% description %}<br><br>
-                  <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
-                  <div style="color:gray;">
-                     <i>created by: {{=user['username']}}</i><br>
-                     {% #if isPublic === true %}
-                        Public,
+         {{if int(request.args(0)) == int(auth.user_id):}}
+            {% #model_fav_dict:mid %}
+               <td>
+                  <div class="inner">
+                     {% #if favorited === true %}
+                        <div align="right">
+                           <button class="favButton_active" data-modelid="{% model_id %}" on-click="unfavoriteModel">
+                              <i class="fa fa-heart" style="color:#ff3333; font-size:200%; padding:5px;"></i>
+                           </button>
+                        </div>
                      {% /if %}
-                     {% #if isPublic === false %}
-                        Private,
+                     {% #if favorited === false %}
+                        <div align="right">
+                           <button class="favButton_inactive" data-modelid="{% model_id %}" on-click="favoriteModel">
+                              <i class="fa fa-heart-o" style="color:gray; font-size:200%; padding:5px;"></i>
+                           </button>
+                        </div>
                      {% /if %}
-                     {% #if isShareable === true %}
-                        YAY Sharing<br>
+                     <br><h3>{% name %}</h3><br>
+                     <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px">
+                        <br>{% description %}<br><br>
+                        <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
+                        <div style="color:gray;">
+                           <i>created by: {% username %}</i><br>
+                           {% #if isPublic === true %}
+                              Public,
+                           {% /if %}
+                           {% #if isPublic === false %}
+                              Private,
+                           {% /if %}
+                           {% #if isShareable === true %}
+                              Sharing Enabled<br>
+                           {% /if %}
+                           {% #if isShareable === false %}
+                              Sharing Disabled<br>
+                           {% /if %}
+                        </div>
+                     </img>
+                  <div>
+               </td>
+            {% /model_fav_dict %}
+         {{else:}}
+            {% #model_fav_dict:mid %}
+               <td>
+                  <div class="inner">
+                     {% #if favorited === true %}
+                        <div align="right">
+                           <button class="favButton_active" data-modelid="{% model_id %}" on-click="unfavoriteModel">
+                              <i class="fa fa-heart" style="color:#ff3333; font-size:200%; padding:5px;"></i>
+                           </button>
+                        </div>
                      {% /if %}
-                     {% #if isShareable === false %}
-                        No Sharing<br>
+                     {% #if favorited === false %}
+                        <div align="right">
+                           <button class="favButton_inactive" data-modelid="{% model_id %}" on-click="favoriteModel">
+                              <i class="fa fa-heart-o" style="color:gray; font-size:200%; padding:5px;"></i>
+                           </button>
+                        </div>
                      {% /if %}
-                  </div>
-                  <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px"></img>
-               <div>
-            </td>
-         {% /model_fav_dict %}
+                     <h3>{% name %}</h3><br>
+                     <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px">
+                        <br>{% description %}<br><br>
+                        <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
+                        <div style="color:gray;">
+                           <i>created by: {% username %}</i><br>
+                           {% #if isShareable === true %}
+                              Import this Model<br>
+                           {% /if %}
+                           {% #if isShareable === false %}
+                              View this Model<br>
+                           {% /if %}
+                        </div>
+                     </img>
+                  <div>
+               </td>
+            {% /model_fav_dict %}
+         {{pass}}
       </tr>
       
       <tr>
@@ -103,31 +153,83 @@
       </tr> 
       
       <tr>
-         {% #model_dict:thing %}
-            <td colspan="1">
-               <div class="inner">
-                  <h3>{% name %}</h3><br>
-                  {% description %}<br><br>
-                  <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
-                  <div style="color:gray;">
-                     <i>created by: {{=user['username']}}</i><br>
-                     {% #if isPublic === true %}
-                        Public,
+         {{if int(request.args(0)) == int(auth.user_id):}}
+            {% #model_dict:mid %}
+               <td>
+                  <div class="inner">
+                     {% #if favorited === true %}
+                        <div align="right">
+                           <button class="favButton_active" data-modelid="{% model_id %}" on-click="unfavoriteModel">
+                              <i class="fa fa-heart" style="color:#ff3333; font-size:200%; padding:5px;"></i>
+                           </button>
+                        </div>
                      {% /if %}
-                     {% #if isPublic === false %}
-                        Private,
+                     {% #if favorited === false %}
+                        <div align="right">
+                           <button class="favButton_inactive" data-modelid="{% model_id %}" on-click="favoriteModel">
+                              <i class="fa fa-heart-o" style="color:gray; font-size:200%; padding:5px;"></i>
+                           </button>
+                        </div>
                      {% /if %}
-                     {% #if isShareable === true %}
-                        YAY Sharing<br>
+                     <h3>{% name %}</h3><br>
+                     <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px">
+                        <br>{% description %}<br><br>
+                        <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
+                        <div style="color:gray;">
+                           <i>created by: {% username %}</i><br>
+                           {% #if isPublic === true %}
+                              Public,
+                           {% /if %}
+                           {% #if isPublic === false %}
+                              Private,
+                           {% /if %}
+                           {% #if isShareable === true %}
+                              Sharing Enabled<br>
+                           {% /if %}
+                           {% #if isShareable === false %}
+                              Sharing Disabled<br>
+                           {% /if %}
+                        </div>
+                     </img>
+                  <div>
+               </td>
+            {% /model_dict %}
+         {{else:}}
+            {% #model_dict:mid %}
+               <td>
+                  <div class="inner">
+                     {% #if favorited === true %}
+                        <div align="right">
+                           <button class="favButton_active" data-modelid="{% model_id %}" on-click="unfavoriteModel">
+                              <i class="fa fa-heart" style="color:#ff3333; font-size:200%; padding:5px;"></i>
+                           </button>
+                        </div>
                      {% /if %}
-                     {% #if isShareable === false %}
-                        No Sharing<br>
+                     {% #if favorited === false %}
+                        <div align="right">
+                           <button class="favButton_inactive" data-modelid="{% model_id %}" on-click="favoriteModel">
+                              <i class="fa fa-heart-o" style="color:gray; font-size:200%; padding:5px;"></i>
+                           </button>
+                        </div>
                      {% /if %}
-                  </div>
-                  <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px"></img>
-               <div>
-            </td>
-         {% /model_dict %}
+                     <h3>{% name %}</h3><br>
+                     <img id="dynImg" src="{% thumbnail_image %}" width="200px" height="200px">
+                        <br>{% description %}<br><br>
+                        <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
+                        <div style="color:gray;">
+                           <i>created by: {% username %}</i><br>
+                           {% #if isShareable === true %}
+                              Import this Model<br>
+                           {% /if %}
+                           {% #if isShareable === false %}
+                              View this Model<br>
+                           {% /if %}
+                        </div>
+                     </img>
+                  <div>
+               </td>
+            {% /model_dict %}
+         {{pass}}
       </tr>
  
       <tr>
@@ -158,10 +260,16 @@
             model_dict: {},
             model_fav_dict: {},
             fav_dict: {},
+            fav_dict2: {},
+            user_fav_dict: {},
             showing_row: 0,
+            showing_favs: 0,
+            showing_favs: 1,
             profile_id:"{{=user['id']}}",
             noMore: true,
             noPrev: true,
+            noMoreFav: true,
+            noPrevFav: true,
          },
       });
    
@@ -196,6 +304,16 @@
          method: 'POST',
          success: function(data){
             MAIN.set('model_fav_dict', data['model_fav_dict'])
+         }
+      });
+      
+      $.ajax("{{=URL('default', 'load_favs')}}",
+      {
+         data: {
+            profile_id: MAIN.get('profile_id')
+         },
+         method: 'POST',
+         success: function(data){
          }
       });
       
@@ -266,6 +384,100 @@
                }
             });
          }
+      });
+      
+      MAIN.on("favoriteModel", function(e){
+         var t = $(e.original.target);
+         var clicked_id = t.data('modelid');
+         $.ajax("{{=URL('default', 'favorite_model')}}",
+         {
+            data: {
+               model_id: clicked_id
+            },
+            method: 'POST',
+            success: function(data){
+               $.ajax("{{=URL('default', 'load_models')}}",
+               {
+                  data: {
+                     profile_id: MAIN.get('profile_id'),
+                     row: MAIN.get('showing_row')
+                  },
+                  method: 'POST',
+                  success: function(data){
+                     MAIN.set('model_dict', data['model_dict']);
+                     var buffer = MAIN.get('model_dict');
+                     var index = 0;
+                     for (var m in buffer){
+                           index = index + 1;
+                     }
+                     if( index < 4){
+                        MAIN.set('noMore', true);
+                     }
+                     else{
+                        MAIN.set('noMore', false);
+                     }
+                        }
+               });
+               
+               $.ajax("{{=URL('default', 'load_fav_models')}}",
+               {
+                  data: {
+                     profile_id: MAIN.get('profile_id')
+                  },
+                  method: 'POST',
+                  success: function(data){
+                     MAIN.set('model_fav_dict', data['model_fav_dict'])
+                  }
+               });
+            }
+         });
+      });
+      
+      MAIN.on("unfavoriteModel", function(e){
+         var t = $(e.original.target);
+         var clicked_id = t.data('modelid');
+         $.ajax("{{=URL('default', 'unfavorite_model')}}",
+         {
+            data: {
+               model_id: clicked_id
+            },
+            method: 'POST',
+            success: function(data){
+               $.ajax("{{=URL('default', 'load_models')}}",
+               {
+                  data: {
+                     profile_id: MAIN.get('profile_id'),
+                     row: MAIN.get('showing_row')
+                  },
+                  method: 'POST',
+                  success: function(data){
+                     MAIN.set('model_dict', data['model_dict']);
+                     var buffer = MAIN.get('model_dict');
+                     var index = 0;
+                     for (var m in buffer){
+                           index = index + 1;
+                     }
+                     if( index < 4){
+                        MAIN.set('noMore', true);
+                     }
+                     else{
+                        MAIN.set('noMore', false);
+                     }
+                        }
+               });
+               
+               $.ajax("{{=URL('default', 'load_fav_models')}}",
+               {
+                  data: {
+                     profile_id: MAIN.get('profile_id')
+                  },
+                  method: 'POST',
+                  success: function(data){
+                     MAIN.set('model_fav_dict', data['model_fav_dict'])
+                  }
+               });
+            }
+         });
       });
    });
 </script>

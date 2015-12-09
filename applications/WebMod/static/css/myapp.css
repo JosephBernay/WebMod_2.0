@@ -108,3 +108,16 @@ textarea:focus, input:focus, .uneditable-input:focus {
 td {
    padding:10px;
 }
+
+.favButton_active{
+   border-radius: 5px;
+   background: transparent;
+   border-color: transparent;
+}
+
+.favButton_inactive{
+   border-radius: 5px;
+   background: transparent;
+   border-color: transparent;
+   color: gray;
+}
