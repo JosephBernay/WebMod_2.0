@@ -52,6 +52,11 @@
                                         <i class="fa fa-heart-o" style="color:gray; font-size:200%; padding:5px;"></i></button></div>
                                 {% /if %}
                             {{pass}}
+                            {% #if share === true %}
+                                 <a href="{{=URL('default', 'modeling')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">Import this Model</a><br>
+                              {% else %}
+                                 <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View this Model</a><br>
+                              {% /if %}
                             <img id="dynImg" src="{% thumbnail %}" width="200px" height="200px"><br><i class="fa fa-heart" style="color:#ff3333;"> {% favorites %}</i></img>
                         <div>
                     </td>
