@@ -6,7 +6,7 @@ import urllib2
 from datetime import datetime
 
 def index():
-    models = db().select(db.model.ALL, orderby=db.model.num_favorites)
+    models = db().select(db.model.ALL, orderby=~db.model.num_favorites)
     return dict(models=models, x=0)
 
 @auth.requires_login()
@@ -53,37 +53,41 @@ def open_model():
 
 def search():
     models = db(db.model).select(db.model.ALL)
-    return dict(models=models)
+    userid = 0
+    if auth.user_id:
+        userid=auth.user_id
+    return dict(models=models, userid=userid)
 
 def search_stuff():
-   search_text = request.vars.content
-   search_type = request.vars.search_type
-   if search_type == "name":
-      print search_text
-      models = db(db.model.name == search_text).select()
-   elif search_type == "user_id":
-      username = db(db.auth_user.username == search_text).select()[0]
-      models = db(db.model.user_id == username.id).select()
-   elif search_type == "tag_list":
-      stuff = db(db.model).select()
-      models = []
-      for m in stuff:
-         if search_text in m.tag_list['tags']:
-            models.append(m)
-   if models:
-        for m in models:
-            print(m.isPublic, m.isShareable)
+    search_text = request.vars.content
+    search_type = request.vars.search_type
+    if search_type == "name":
+        models = db(db.model.name == search_text).select()
+    elif search_type == "user_id":
+        username = db(db.auth_user.username == search_text).select()[0]
+        models = db(db.model.user_id == username.id).select()
+    elif search_type == "tag_list":
+        stuff = db(db.model).select()
+        models = []
+        for m in stuff:
+            if search_text in m.tag_list['tags']:
+                models.append(m)
+    if models:
+        fav = False
+        if auth.user_id:
+            user = db.auth_user(auth.user_id)['favorited_models']
         model = {m.name: {'thumbnail': m.thumbnail_image,
-                            'public': m.isPublic,
+                        'public': m.isPublic,
                             'share': m.isShareable,
                             'favorites': m.num_favorites,
-                            'model_id': m.model_id}
-                 for m in models}
+                            'model_id': m.model_id,
+                            'favorited': m.model_id in db.auth_user(auth.user_id)['favorited_models'].split()}
+                            for m in models}
         return response.json(dict(model=model))
-   else:
-      print "damn"
-      response.flash = T("Hello World")
-      return respone.json(dict(model={}))
+    else:
+        print "damn"
+        response.flash = T("Hello World")
+        return respone.json(dict(model={}))
 
 def resetDB():
    db(db.model.id > 0).delete()
