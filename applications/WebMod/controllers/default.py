@@ -115,7 +115,7 @@ def load_fav_models():
             fav = False;
             if((user.find((" "+m.model_id+" "))) != -1):
                fav = True;
-            model_fav_list[m.num_favorites] = {'name': m.name,
+            model_fav_list[m.id] = {'name': m.name,
                                        'description': m.description,
                                        'tag_list': m.tag_list,
                                        'mesh_list': m.mesh_list,
@@ -135,7 +135,7 @@ def load_fav_models():
             fav = False;
             if((user.find((" "+m.model_id+" "))) != -1):
                fav = True;
-            model_fav_list[m.num_favorites] = {'name': m.name,
+            model_fav_list[m.id] = {'name': m.name,
                                        'description': m.description,
                                        'tag_list': m.tag_list,
                                        'mesh_list': m.mesh_list,
@@ -149,7 +149,13 @@ def load_fav_models():
                                        'model_id': m.model_id,
                                        'favorited': fav}
          index = index + 1
-   return response.json(dict(model_fav_dict = model_fav_list))
+   limit = 0
+   sorted_models = []
+   for s in sorted(model_fav_list.iteritems(), key=lambda (x, y): y['num_favorites'], reverse=True):
+      if limit < 3:
+         sorted_models.append(s[1])
+      limit = limit + 1
+   return response.json(dict(model_fav_dict = sorted_models))
    
 def load_models():
    id = request.vars.profile_id
@@ -240,9 +246,96 @@ def unfavorite_model():
    
 def load_favs():
    id = request.vars.profile_id
+   row = int(request.vars.row)
    user = db.auth_user(auth.user_id)['favorited_models']
-   favs = user.split()
-   return
+   profile = db.auth_user(id)['favorited_models']
+   favs = profile.split()
+   favs_dict = {}
+   favs_dict2 = {}
+   index = 0;
+   if int(id) != int(auth.user_id):
+      for f in favs:
+         if ((index >= (row * 5)) and (index < ((row*5)+5)) and (m.isPublic == True)):
+            model = db(db.model.model_id == f).select();
+            for m in model:
+               fav = False;
+               if((user.find((" "+m.model_id+" "))) != -1):
+                  fav = True;
+               favs_dict[m.id] = {'name': m.name,
+                                          'description': m.description,
+                                          'tag_list': m.tag_list,
+                                          'mesh_list': m.mesh_list,
+                                          'thumbnail_image': m.thumbnail_image,
+                                          'isPublic': m.isPublic,
+                                          'isShareable': m.isShareable,
+                                          'num_favorites': m.num_favorites,
+                                          'last_edited': m.last_edited,
+                                          'user_id': m.user_id,
+                                          'username': db.auth_user(m.user_id)['username'],
+                                          'model_id': m.model_id,
+                                          'favorited': fav} 
+         elif ((index >= (row * 5+5)) and (index < ((row*5)+10)) and (m.isPublic == True)):
+            model = db(db.model.model_id == f).select();
+            for m in model:
+               fav = False;
+               if((user.find((" "+m.model_id+" "))) != -1):
+                  fav = True;
+               favs_dict2[m.id] = {'name': m.name,
+                                          'description': m.description,
+                                          'tag_list': m.tag_list,
+                                          'mesh_list': m.mesh_list,
+                                          'thumbnail_image': m.thumbnail_image,
+                                          'isPublic': m.isPublic,
+                                          'isShareable': m.isShareable,
+                                          'num_favorites': m.num_favorites,
+                                          'last_edited': m.last_edited,
+                                          'user_id': m.user_id,
+                                          'username': db.auth_user(m.user_id)['username'],
+                                          'model_id': m.model_id,
+                                          'favorited': fav} 
+         index = index + 1
+   else:
+      for f in favs:
+         if ((index >= (row * 5)) and (index < ((row*5)+5))):
+            model = db(db.model.model_id == f).select();
+            for m in model:
+               fav = False;
+               if((user.find((" "+m.model_id+" "))) != -1):
+                  fav = True;
+               favs_dict[m.id] = {'name': m.name,
+                                          'description': m.description,
+                                          'tag_list': m.tag_list,
+                                          'mesh_list': m.mesh_list,
+                                          'thumbnail_image': m.thumbnail_image,
+                                          'isPublic': m.isPublic,
+                                          'isShareable': m.isShareable,
+                                          'num_favorites': m.num_favorites,
+                                          'last_edited': m.last_edited,
+                                          'user_id': m.user_id,
+                                          'username': db.auth_user(m.user_id)['username'],
+                                          'model_id': m.model_id,
+                                          'favorited': fav} 
+         elif ((index >= (row * 5+5)) and (index < ((row*5)+10))):
+            model = db(db.model.model_id == f).select();
+            for m in model:
+               fav = False;
+               if((user.find((" "+m.model_id+" "))) != -1):
+                  fav = True;
+               favs_dict2[m.id] = {'name': m.name,
+                                          'description': m.description,
+                                          'tag_list': m.tag_list,
+                                          'mesh_list': m.mesh_list,
+                                          'thumbnail_image': m.thumbnail_image,
+                                          'isPublic': m.isPublic,
+                                          'isShareable': m.isShareable,
+                                          'num_favorites': m.num_favorites,
+                                          'last_edited': m.last_edited,
+                                          'user_id': m.user_id,
+                                          'username': db.auth_user(m.user_id)['username'],
+                                          'model_id': m.model_id,
+                                          'favorited': fav} 
+         index = index + 1
+   return response.json(dict(fav_dict=favs_dict, fav_dict2=favs_dict2))
 
 def user():
     """
