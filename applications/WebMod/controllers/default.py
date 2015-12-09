@@ -14,9 +14,8 @@ def index():
 def modeling():
     active_model_id = ""
     active_model_name = "Untitled"
-    if len(request.args) == 2:
+    if len(request.args) == 1:
         active_model_id = request.args(0)
-        active_model_name = request.args(1)
         m_list = db(db.model.model_id == active_model_id).select()
         if len(m_list) != 0:
             m = m_list.__getitem__(0)
@@ -24,6 +23,8 @@ def modeling():
                 response.flash=T("You cannot open this model.");
                 active_model_id = ""
                 active_model_name = "Untitled"
+            else:
+                active_model_name = m.name
         else:
             response.flash=T("This model does not exist.");
 
