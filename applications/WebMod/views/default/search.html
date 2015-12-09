@@ -42,6 +42,16 @@
                     <td colspan="1">
                         <div class="inner">
                             <h3>{% m %}</h3>
+                            {{if auth.user_id:}}
+                                {% #if favorited %}
+                                        <div><button class="favButton_active" data-modelid="{% model_id %}" on-click="unfavoriteModel">
+                                        <i class="fa fa-heart" style="color:#ff3333; font-size:200%; padding:5px;"></i>
+                                        </button></div>
+                                {% else %}
+                                        <div><button class="favButton_inactive" data-modelid="{% model_id %}" on-click="favoriteModel">
+                                        <i class="fa fa-heart-o" style="color:gray; font-size:200%; padding:5px;"></i></button></div>
+                                {% /if %}
+                            {{pass}}
                             <img id="dynImg" src="{% thumbnail %}" width="200px" height="200px"><br><i class="fa fa-heart" style="color:#ff3333;"> {% favorites %}</i></img>
                         <div>
                     </td>
@@ -59,6 +69,8 @@
             tripleDelimiters: ['{%%', '%%}'],
             data: {
                 models: {},
+                model_fav_dict: {},
+                profile_id: 0,
                 content: "",
                 search_type: ""
             }
@@ -79,11 +91,95 @@
                             method: 'POST',
                             success: function (data) {
                                 MAIN.set('models', data['model']);
-
+                                MAIN.set('profile_id', data['userid']);
                             }
                         }
                     );
+                    if(MAIN.get('profile_id')){
+                        $.ajax("{{=URL('default', 'load_fav_models')}}",
+                        {
+                            data: {
+                                profile_id: MAIN.get('profile_id')
+                            },
+                            method: 'POST',
+                            success: function(data){
+                                MAIN.set('model_fav_dict', data['model_fav_dict'])
+                            }
+                        });
+                    }
                 }
+            });
+
+            MAIN.on("favoriteModel", function(e){
+                var t = $(e.original.target);
+                var clicked_id = t.data('modelid');
+                $.ajax("{{=URL('default', 'favorite_model')}}",
+                {
+                    data: {
+                        model_id: clicked_id
+                    },
+                    method: 'POST',
+                    success: function(data){
+                        $.ajax("{{=URL('default', 'load_models')}}",
+                        {
+                            data: {
+                                profile_id: MAIN.get('profile_id'),
+                                row: MAIN.get('showing_row')
+                            },
+                            method: 'POST',
+                            success: function(data){
+                                MAIN.set('model_dict', data['model_dict']);
+                                var buffer = MAIN.get('model_dict');
+                                var index = 0;
+                                for (var m in buffer){
+                                    index = index + 1;
+                                }
+                                if( index < 4){
+                                    MAIN.set('noMore', true);
+                                }
+                                else{
+                                    MAIN.set('noMore', false);
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            MAIN.on("unfavoriteModel", function(e){
+                var t = $(e.original.target);
+                var clicked_id = t.data('modelid');
+                $.ajax("{{=URL('default', 'unfavorite_model')}}",
+                {
+                    data: {
+                        model_id: clicked_id
+                    },
+                    method: 'POST',
+                    success: function(data){
+                        $.ajax("{{=URL('default', 'load_models')}}",
+                        {
+                            data: {
+                                profile_id: MAIN.get('profile_id'),
+                                row: MAIN.get('showing_row')
+                            },
+                            method: 'POST',
+                            success: function(data){
+                                MAIN.set('model_dict', data['model_dict']);
+                                var buffer = MAIN.get('model_dict');
+                                var index = 0;
+                                for (var m in buffer){
+                                    index = index + 1;
+                                }
+                                if( index < 4){
+                                    MAIN.set('noMore', true);
+                                }
+                                else{
+                                    MAIN.set('noMore', false);
+                                }
+                            }
+                        });
+                    }
+                });
             });
         });
     </script>

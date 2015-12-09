@@ -187,3 +187,16 @@ input[type=range]:disabled::-webkit-slider-thumb:after {
 td {
    padding:10px;
 }
+
+.favButton_active{
+   border-radius: 5px;
+   background: transparent;
+   border-color: transparent;
+}
+
+.favButton_inactive{
+   border-radius: 5px;
+   background: transparent;
+   border-color: transparent;
+   color: gray;
+}
