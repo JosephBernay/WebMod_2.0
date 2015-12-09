@@ -362,7 +362,7 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
                                 if(numTag < model['tag_list']['tags'].length - 1)
                                     tags += " ";
                             }
-                            MAIN.set('tag_list', tags);
+                            MAIN.set('active_model_tags', tags);
                             MAIN.set('mesh_list', model['mesh_list']);
                             MAIN.set('active_public', model['isPublic']);
                             MAIN.set('active_shareable', model['isShareable']);
@@ -456,6 +456,16 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
         *
         */
         var curModelID;
+        var isNewModel = (MAIN.get('active_model_id') == "{{=""}}");
+        if (isNewModel) {
+            curModelID = generateUUID();
+            MAIN.set('active_model_id', curModelID);
+        }
+        else {
+            console.log("{{=active_model_name}}");
+            MAIN.set('openingName', "{{=active_model_name}}");
+            MAIN.fire('open-model');
+        }
 
         MAIN.set('active_model_id', curModelID);
 
@@ -2742,15 +2752,19 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
             var cylinder = makeCylinder(0.5, 1.0, 20);
             var cone = makeCone(0.5, 1.0, 20);
 
-            addMesh(cube[0], cube[1]);
-            meshTable[0].scale(0.3, 0.3, 0.3);
-            meshTable[0].translate(-0.3, 0.3, 0.0);
-            meshTable[0].setStartState();
+            if(isNewModel) {
+                console.log("Why the balls?");
+                addMesh(cube[0], cube[1]);
+                meshTable[0].scale(0.3, 0.3, 0.3);
+                meshTable[0].translate(-0.3, 0.3, 0.0);
+                meshTable[0].setStartState();
 
-            addMesh(cube[0], cube[1]);
-            meshTable[1].scale(0.3, 0.3, 0.3);
-            meshTable[1].translate(0.3, 0.3, 0.0);
-            meshTable[1].setStartState();
+                addMesh(cube[0], cube[1]);
+                meshTable[1].scale(0.3, 0.3, 0.3);
+                meshTable[1].translate(0.3, 0.3, 0.0);
+                meshTable[1].setStartState();
+            }
+
 
             //disable camera
             var camFlag = new Float32Array([0.0]);
@@ -2865,16 +2879,6 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
 
 
 
-        }
-
-        var isNewModel = (MAIN.get('active_model_id') == "{{=""}}");
-        if (isNewModel) {
-            curModelID = generateUUID();
-            MAIN.set('active_model_id', curModelID);
-        }
-        else {
-            MAIN.set('openingName', {{=active_model_name}});
-            ractive.fire('open-model');
         }
     });
 

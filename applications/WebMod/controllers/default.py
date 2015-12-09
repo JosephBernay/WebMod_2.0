@@ -20,13 +20,13 @@ def modeling():
         if len(m_list) != 0:
             m = m_list.__getitem__(0)
             if m.user_id != auth.user_id:
-                response.flash=T("You cannot open this model.");
+                response.flash=T("You cannot open this model.")
                 active_model_id = ""
                 active_model_name = "Untitled"
             else:
                 active_model_name = m.name
         else:
-            response.flash=T("This model does not exist.");
+            response.flash=T("This model does not exist.")
 
     return dict(active_model_id=active_model_id, active_model_name=active_model_name)
 
@@ -60,7 +60,7 @@ def copy_model():
                     last_edited=datetime.utcnow(),
                     model_id=gluon_utils.web2py_uuid())
 
-    response.flash=T(m.user_id + "'s model " + '"m.name" has been saved to your profile.');
+    response.flash=T(m.user_id + "'s model " + '"m.name" has been saved to your profile.')
 
 
 def save_model():
