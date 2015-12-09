@@ -4,6 +4,7 @@
 import json
 import urllib2
 from datetime import datetime
+from gluon import utils as gluon_utils
 
 def index():
     models = db().select(db.model.ALL, orderby=~db.model.num_favorites)
@@ -16,6 +17,15 @@ def modeling():
     if len(request.args) == 2:
         active_model_id = request.args(0)
         active_model_name = request.args(1)
+        m_list = db(db.model.model_id == active_model_id).select()
+        if len(m_list) != 0:
+            m = m_list.__getitem__(0)
+            if m.user_id != auth.user_id:
+                response.flash=T("You cannot open this model.");
+                active_model_id = ""
+                active_model_name = "Untitled"
+        else:
+            response.flash=T("This model does not exist.");
 
     return dict(active_model_id=active_model_id, active_model_name=active_model_name)
 
@@ -35,6 +45,22 @@ def view_model():
              'mesh_list': m.mesh_list,
              'model_id': m.model_id}
     return response.json(dict(model=model))
+
+def copy_model():
+    model_id = request.vars.model_id
+    m_list = db(db.model.model_id == request.vars.model_id).select()
+    m = m_list.__getitem__(0)
+
+    db.model.insert(name=request.vars.name,
+                    description=request.vars.description,
+                    tag_list=json.loads(request.vars.tag_list),
+                    mesh_list=json.loads(request.vars.mesh_list),
+                    thumbnail_image=request.vars.thumbnail_image,
+                    last_edited=datetime.utcnow(),
+                    model_id=gluon_utils.web2py_uuid())
+
+    response.flash=T(m.user_id + "'s model " + '"m.name" has been saved to your profile.');
+
 
 def save_model():
     print request.vars.model_id
