@@ -82,7 +82,7 @@
                 MAIN.set('content', search);
                 MAIN.set('search_type', search_type);
                 if(search){
-                    $.ajax("{{=URL('default', 'search_stuff', args=['content', 'search_type'])}}",
+                    $.ajax("{{=URL('default', 'search_stuff')}}",
                         {
                             data:{
                                 content: MAIN.get('content'),
@@ -120,28 +120,31 @@
                     },
                     method: 'POST',
                     success: function(data){
-                        $.ajax("{{=URL('default', 'load_models')}}",
-                        {
-                            data: {
-                                profile_id: MAIN.get('profile_id'),
-                                row: MAIN.get('showing_row')
-                            },
-                            method: 'POST',
-                            success: function(data){
-                                MAIN.set('model_dict', data['model_dict']);
-                                var buffer = MAIN.get('model_dict');
-                                var index = 0;
-                                for (var m in buffer){
-                                    index = index + 1;
-                                }
-                                if( index < 4){
-                                    MAIN.set('noMore', true);
-                                }
-                                else{
-                                    MAIN.set('noMore', false);
+                        $.ajax("{{=URL('default', 'search_stuff')}}",
+                            {
+                                data:{
+                                    content: MAIN.get('content'),
+                                    search_type: MAIN.get('search_type')
+                                },
+                                method: 'POST',
+                                success: function (data) {
+                                    MAIN.set('models', data['model']);
+                                    MAIN.set('profile_id', data['userid']);
                                 }
                             }
-                        });
+                        );
+                        if(MAIN.get('profile_id')){
+                            $.ajax("{{=URL('default', 'load_fav_models')}}",
+                            {
+                                data: {
+                                    profile_id: MAIN.get('profile_id')
+                                },
+                                method: 'POST',
+                                success: function(data){
+                                    MAIN.set('model_fav_dict', data['model_fav_dict'])
+                                }
+                            });
+                        }
                     }
                 });
             });
@@ -156,28 +159,31 @@
                     },
                     method: 'POST',
                     success: function(data){
-                        $.ajax("{{=URL('default', 'load_models')}}",
-                        {
-                            data: {
-                                profile_id: MAIN.get('profile_id'),
-                                row: MAIN.get('showing_row')
-                            },
-                            method: 'POST',
-                            success: function(data){
-                                MAIN.set('model_dict', data['model_dict']);
-                                var buffer = MAIN.get('model_dict');
-                                var index = 0;
-                                for (var m in buffer){
-                                    index = index + 1;
-                                }
-                                if( index < 4){
-                                    MAIN.set('noMore', true);
-                                }
-                                else{
-                                    MAIN.set('noMore', false);
+                        $.ajax("{{=URL('default', 'search_stuff')}}",
+                            {
+                                data:{
+                                    content: MAIN.get('content'),
+                                    search_type: MAIN.get('search_type')
+                                },
+                                method: 'POST',
+                                success: function (data) {
+                                    MAIN.set('models', data['model']);
+                                    MAIN.set('profile_id', data['userid']);
                                 }
                             }
-                        });
+                        );
+                        if(MAIN.get('profile_id')){
+                            $.ajax("{{=URL('default', 'load_fav_models')}}",
+                            {
+                                data: {
+                                    profile_id: MAIN.get('profile_id')
+                                },
+                                method: 'POST',
+                                success: function(data){
+                                    MAIN.set('model_fav_dict', data['model_fav_dict'])
+                                }
+                            });
+                        }
                     }
                 });
             });
