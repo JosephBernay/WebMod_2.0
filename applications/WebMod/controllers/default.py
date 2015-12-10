@@ -171,6 +171,7 @@ def resetDB():
 def download():
     return response.download(request, db)
 
+@auth.requires_login()
 def profile():
    if (auth.user_id == None):
       redirect(URL('default', 'user', args=['login']))
@@ -184,10 +185,9 @@ def load_fav_models():
    user = db.auth_user(auth.user_id)['favorited_models']
    models = db().select(db.model.ALL)
    model_fav_list = {}
-   index = 0
    if int(id) != int(auth.user_id):
       for m in models:
-         if ((int(m.user_id) == int(id)) and (index < 3) and (m.isPublic == True)):
+         if ((int(m.user_id) == int(id)) and (m.isPublic == True)):
             fav = False;
             if((user.find((" "+m.model_id+" "))) != -1):
                fav = True;
@@ -210,7 +210,7 @@ def load_fav_models():
          print('\n \n')
          print(m)
          print('\n \n')
-         if ((int(m.user_id) == int(id)) and (index < 3)):
+         if ((int(m.user_id) == int(id))):
             fav = False;
             if((user.find((" "+m.model_id+" "))) != -1):
                fav = True;
@@ -227,7 +227,6 @@ def load_fav_models():
                                        'username': db.auth_user(m.user_id)['username'],
                                        'model_id': m.model_id,
                                        'favorited': fav}
-            index = index + 1
    limit = 0
    sorted_models = []
    for s in sorted(model_fav_list.iteritems(), key=lambda (x, y): y['num_favorites'], reverse=True):

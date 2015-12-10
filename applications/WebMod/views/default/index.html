@@ -2,6 +2,29 @@
 
 <!--display header-->
 {{block header}}
+   <ul>
+      <li style="float:left"><a href="/WebMod/default/index.html"><b>Webmod 2.0</b></a></li>
+      <li style="float:right; padding-right:20px;">
+         {{if auth.user_id is None:}}
+            {{=A('Sign In', _href=URL('default', 'user', args=['login']))}}
+         {{else:}}
+            {{=A('My Profile', _href=URL('default', 'profile', args=[auth.user_id]))}}
+         {{pass}}
+      </li>
+      <li style="float:right">
+         {{if auth.user_id is None:}}
+            {{=A('Sign Up', _href=URL('default', 'user', args=['register']))}}
+         {{else:}}
+            {{=A('Logout', _href=URL('default', 'user', args='logout'))}}
+         {{pass}}
+      </li>
+      <li style="float:right">
+         {{=A('Search', _href=URL('default', 'search'))}}
+      </li>
+      <li style="float:right">
+         {{=A('Modeling', _href=URL('default', 'modeling'))}}
+      </li>
+   </ul>
     <header class="container-fluid background">
         <div class="jumbotron text-center">
             <svg>
@@ -11,6 +34,7 @@
         </div>
     </header>
 {{end}}
+
 <script>
         function color1(x){
             x.style.background='linear-gradient(#d98200, #ffe0b3)';
@@ -74,11 +98,26 @@
         <div id="left">
             <div id="welcome">
                 <h2 id="title">Welcome</h2>
+                <br>
                 <p id="text">
-                    Things
+                    Welcome to Webmod!
                 </p>
+                <br>
                 <p id="text">
-                    Stuff
+                    Webmod is a new, online, and completely free 3D modeling application.
+                    Simply create a profile, and you can begin modeling today.
+                    In doing so, you will also get access to our database, which is full of models created by users just like you. 
+                </p>
+                <br>
+                <p id="text">Features:</p>
+                <p id="text" style="padding-left:20px">
+                        -Save models to your profile for modeling on the go (no installation required!).<br>
+                        -Start a new model or edit a previous one at any time.<br>
+                        -Import or export polygon and coordinate data from Webmod to be used with your own external projects.<br>
+                        -Browse other people's models and profiles.<br>
+                        -Favorite other people's models and compete to have the most popular model on Webmod.<br>
+                        -Import other people's models into your profile, and edit them yourself.<br>
+                        -Allow others to view and import your models.<br>
                 </p>
             </div>
             <div id="favorites">Top Models<br><br><br>

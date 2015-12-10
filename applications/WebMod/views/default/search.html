@@ -5,7 +5,7 @@
 {{block header}}
    <ul>
       <li style="float:left"><a href=/WebMod/default/index.html"><b>Webmod 2.0</b></a></li>
-      <li style="float:right">
+      <li style="float:right; padding-right:20px;">
          {{if auth.user_id is None:}}
             {{=A('Sign In', _href=URL('default', 'user', args=['login']))}}
          {{else:}}
@@ -18,6 +18,12 @@
          {{else:}}
             {{=A('Logout', _href=URL('default', 'user', args='logout'))}}
          {{pass}}
+      </li>
+      <li style="float:right">
+         {{=A('Search', _href=URL('default', 'search'))}}
+      </li>
+      <li style="float:right">
+         {{=A('Modeling', _href=URL('default', 'modeling'))}}
       </li>
    </ul>
 {{end}}
