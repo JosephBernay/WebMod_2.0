@@ -4,7 +4,7 @@
 <head>
 {{block header}}
    <ul>
-      <li style="float:left"><a href=""><b>Webmod 2.0</b></a></li>
+      <li style="float:left"><a href=/WebMod/default/index.html"><b>Webmod 2.0</b></a></li>
       <li style="float:right">
          {{if auth.user_id is None:}}
             {{=A('Sign In', _href=URL('default', 'user', args=['login']))}}
@@ -25,7 +25,7 @@
 
 <html>
 
-<body style="background: linear-gradient(#212229, #000000);"></body>
+<body style="background: linear-gradient(#212229, #000000); padding: 0px"></body>
     <div id="target" ></div>
     <script id="template" type="text/ractive">
         <div><input type="text" id="search" name="Search" value=""/>
@@ -41,23 +41,28 @@
                 {% #if public %}
                     <td colspan="1">
                         <div class="inner">
-                            <h3>{% m %}</h3>
                             {{if auth.user_id:}}
                                 {% #if favorited %}
-                                        <div><button class="favButton_active" data-modelid="{% model_id %}" on-click="unfavoriteModel">
+                                        <div style="float:right"><button class="favButton_active" data-modelid="{% model_id %}" on-click="unfavoriteModel">
                                         <i class="fa fa-heart" style="color:#ff3333; font-size:200%; padding:5px;"></i>
                                         </button></div>
                                 {% else %}
-                                        <div><button class="favButton_inactive" data-modelid="{% model_id %}" on-click="favoriteModel">
+                                        <div style="float:right"><button class="favButton_inactive" data-modelid="{% model_id %}" on-click="favoriteModel">
                                         <i class="fa fa-heart-o" style="color:gray; font-size:200%; padding:5px;"></i></button></div>
                                 {% /if %}
                             {{pass}}
+                            <br><br><h3 style="align:center">{% name %}</h3>
+                            <img id="dynImg" src="{% thumbnail %}" width="200px" height="200px">
+                            <br><div>{% desc %}</div>
+                            <br><i class="fa fa-heart" style="color:#ff3333;"> {% favorites %}</i><br>
+                            <div style="color:gray"><i>created by: {% auth %}</i></dv>
                             {% #if share === true %}
-                                 <a href="{{=URL('default', 'modeling')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">Import this Model</a><br>
+                                 <a href="{{=URL('default', 'modeling')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">Import, </a>
+                                 <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
                               {% else %}
-                                 <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View this Model</a><br>
+                                 <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
                               {% /if %}
-                            <img id="dynImg" src="{% thumbnail %}" width="200px" height="200px"><br><i class="fa fa-heart" style="color:#ff3333;"> {% favorites %}</i></img>
+                            </img>
                         <div>
                     </td>
             {% /each %}{% /if %}

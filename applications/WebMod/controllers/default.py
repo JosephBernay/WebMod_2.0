@@ -139,21 +139,29 @@ def search_stuff():
             response.flash = T("No model with that tag")
             return response.json(dict(model={}))
     if auth.user_id:
-        model = {m.name: {'thumbnail': m.thumbnail_image,
-                        'public': m.isPublic,
-                            'share': m.isShareable,
-                            'favorites': m.num_favorites,
-                            'model_id': m.model_id,
-                            'favorited': m.model_id in db.auth_user(auth.user_id)['favorited_models'].split()}
-                            for m in models}
+        model = {m.model_id: {'name': m.name,
+                              'thumbnail': m.thumbnail_image,
+                              'public': m.isPublic,
+                              'share': m.isShareable,
+                              'favorites': m.num_favorites,
+                              'model_id': m.model_id,
+                              'favorited': m.model_id in db.auth_user(auth.user_id)['favorited_models'].split(),
+                              'auth': db.auth_user(m.user_id)['username'],
+                              'desc': m.description
+                              }
+                 for m in models}
     else:
-        model = {m.name: {'thumbnail': m.thumbnail_image,
-                        'public': m.isPublic,
-                            'share': m.isShareable,
-                            'favorites': m.num_favorites,
-                            'model_id': m.model_id,
-                            'favorited': False}
-                            for m in models}
+        model = {m.model_id: {'name': m.name,
+                              'thumbnail': m.thumbnail_image,
+                              'public': m.isPublic,
+                              'share': m.isShareable,
+                              'favorites': m.num_favorites,
+                              'model_id': m.model_id,
+                              'favorited': False,
+                              'auth': db.auth_user(m.user_id)['username'],
+                              'desc': m.description
+                              }
+                 for m in models}
     return response.json(dict(model=model))
 
 def resetDB():
