@@ -49,19 +49,19 @@ def view_model():
     return response.json(dict(model=model))
 
 def copy_model():
-    model_id = request.vars.model_id
-    m_list = db(db.model.model_id == request.vars.model_id).select()
-    m = m_list.__getitem__(0)
+   model_id = request.vars.model_id
+   m_list = db(db.model.model_id == request.vars.model_id).select()
+   m = m_list.__getitem__(0)
 
-    db.model.insert(name=request.vars.name,
-                    description=request.vars.description,
-                    tag_list=json.loads(request.vars.tag_list),
-                    mesh_list=json.loads(request.vars.mesh_list),
-                    thumbnail_image=request.vars.thumbnail_image,
-                    last_edited=datetime.utcnow(),
-                    model_id=gluon_utils.web2py_uuid())
+   db.model.insert(name=m.name,
+                 description=m.description,
+                 tag_list=m.tag_list,
+                 mesh_list=m.mesh_list,
+                 thumbnail_image=m.thumbnail_image,
+                 last_edited=datetime.utcnow(),
+                 model_id=gluon_utils.web2py_uuid())
 
-    response.flash=T(m.user_id + "'s model " + '"m.name" has been saved to your profile.')
+   response.flash=T('Model "' + m.name + '" has been saved to your profile.')
 
 
 def save_model():
@@ -203,9 +203,12 @@ def load_fav_models():
                                        'username': db.auth_user(m.user_id)['username'],
                                        'model_id': m.model_id,
                                        'favorited': fav} 
-         index = index + 1
+            index = index + 1
    else: 
       for m in models:
+         print('\n \n')
+         print(m)
+         print('\n \n')
          if ((int(m.user_id) == int(id)) and (index < 3)):
             fav = False;
             if((user.find((" "+m.model_id+" "))) != -1):
@@ -223,7 +226,7 @@ def load_fav_models():
                                        'username': db.auth_user(m.user_id)['username'],
                                        'model_id': m.model_id,
                                        'favorited': fav}
-         index = index + 1
+            index = index + 1
    limit = 0
    sorted_models = []
    for s in sorted(model_fav_list.iteritems(), key=lambda (x, y): y['num_favorites'], reverse=True):
