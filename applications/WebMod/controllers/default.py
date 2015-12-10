@@ -53,16 +53,15 @@ def copy_model():
    m_list = db(db.model.model_id == request.vars.model_id).select()
    m = m_list.__getitem__(0)
 
-   db.model.insert(name=m.name,
-                 description=m.description,
-                 tag_list=m.tag_list,
-                 mesh_list=m.mesh_list,
-                 thumbnail_image=m.thumbnail_image,
-                 last_edited=datetime.utcnow(),
-                 model_id=gluon_utils.web2py_uuid())
+    db.model.insert(name=m.name,
+                    description=m.description,
+                    tag_list=m.tag_list,
+                    mesh_list=m.mesh_list,
+                    thumbnail_image=m.thumbnail_image,
+                    last_edited=datetime.utcnow(),
+                    model_id=gluon_utils.web2py_uuid())
 
-   response.flash=T('Model "' + m.name + '" has been saved to your profile.')
-
+    response.flash=T('Model "' + m.name + '" has been saved to your profile.')
 
 def save_model():
     print request.vars.model_id
@@ -437,5 +436,4 @@ def user():
     
     form = auth()
     return dict(form=form)
-
 
