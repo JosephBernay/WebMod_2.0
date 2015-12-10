@@ -57,9 +57,12 @@
                             <br><i class="fa fa-heart" style="color:#ff3333;"> {% favorites %}</i><br>
                             <div style="color:gray"><i>created by: {% auth %}</i></dv>
                             {% #if share === true %}
-                                 <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
                                  {{if  auth.user_id:}}
-                                    <button style="color:#D98200; text-decoration:none;"  data-modelid="{% model_id %}" on-click="copyModel">Import</button><br>
+                                    {% #if edit %}
+                                        <a href="{{=URL('default', 'modeling')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">Edit</a>
+                                    {% else %}
+                                        <button style="color:#D98200; text-decoration:none;"  data-modelid="{% model_id %}" on-click="copyModel">Import</button><br>
+                                    {% /if %}
                                  {{pass}}
                             {% /if %}
                             <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>

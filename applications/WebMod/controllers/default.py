@@ -49,9 +49,9 @@ def view_model():
     return response.json(dict(model=model))
 
 def copy_model():
-   model_id = request.vars.model_id
-   m_list = db(db.model.model_id == request.vars.model_id).select()
-   m = m_list.__getitem__(0)
+    model_id = request.vars.model_id
+    m_list = db(db.model.model_id == request.vars.model_id).select()
+    m = m_list.__getitem__(0)
 
     db.model.insert(name=m.name,
                     description=m.description,
@@ -145,6 +145,7 @@ def search_stuff():
                               'favorites': m.num_favorites,
                               'model_id': m.model_id,
                               'favorited': m.model_id in db.auth_user(auth.user_id)['favorited_models'].split(),
+                              'edit': m.user_id == auth.user_id,
                               'auth': db.auth_user(m.user_id)['username'],
                               'desc': m.description
                               }
@@ -157,6 +158,7 @@ def search_stuff():
                               'favorites': m.num_favorites,
                               'model_id': m.model_id,
                               'favorited': False,
+                              'edit': False,
                               'auth': db.auth_user(m.user_id)['username'],
                               'desc': m.description
                               }

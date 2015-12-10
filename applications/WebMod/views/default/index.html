@@ -23,7 +23,7 @@
     <head>
         <style>
             #body {
-                background-color:#111;
+                background:linear-gradient(#212229, black);
                 height:100vh;
                 width:100vw;
                 padding:0;
@@ -35,7 +35,7 @@
             }
             #right {
                 line-height:30px;
-                background:linear-gradient(#212229, black);
+                background:#111;
                 width:19.5%;
                 float:right;
                 height:70vh;
@@ -45,7 +45,7 @@
                 height:40vh;
             }
             #favorites {
-                background:linear-gradient(#212229, black);
+                background:#111;
                 color:white;
                 clear:both;
                 text-align:center;
@@ -81,10 +81,14 @@
                     Stuff
                 </p>
             </div>
-            <div id="favorites">Top Models<br>
+            <div id="favorites">Top Models<br><br><br>
                 {{for m in models:}}
                     {{if m.isPublic and x<5:}}
-                        <div style="float:left; padding:5px">{{=m.name}}<br><img src="{{m.thumbnail_image}}" height="150" width="150"><br><i class="fa fa-heart" style="color:#ff3333;"> {{ =m.num_favorites }}</i></img></div>
+                        <div style="float:left; width:20%;">{{=m.name}}<br>
+                            <div>{{=m.description}}</div>
+                            <div>created by: {{=db.auth_user(m.user_id)['username']}}</div>
+                            <i class="fa fa-heart" style="color:#ff3333;"> {{ =m.num_favorites }}</i>
+                        </div>
                         {{x+=1}}
                     {{pass}}
                 {{pass}}
@@ -93,15 +97,6 @@
         </div>
 
         <div id="right">
-            {{if not auth.user_id:}}
-                <div class="orange_btn" style="float:left" onclick="$:location.href='user/register'" onmouseover="color1(this)" onmouseout="color2(this)">Sign Up</div>
-                <div class="orange_btn" style="float:left" onclick="$:location.href='user/login'" onmouseover="color1(this)" onmouseout="color2(this)">Sign In</div>
-                <div class="orange_btn" style="float:left" onclick="$:location.href='search'" onmouseover="color1(this)" onmouseout="color2(this)">Search</div><br><br>
-            {{else:}}
-                <div class="orange_btn" style="float:left" onclick="$:location.href='profile'" onmouseover="color1(this)" onmouseout="color2(this)">Profile</div>
-                <div class="orange_btn" style="float:left" onclick="$:location.href='user/logout'" onmouseover="color1(this)" onmouseout="color2(this)">Logout</div>
-                <div class="orange_btn" style="float:left" onclick="$:location.href='search'" onmouseover="color1(this)" onmouseout="color2(this)">Search</div><br><br>
-            {{pass}}
             <div id="btn_model" onclick="$:location.href='modeling'" onmouseover="color1(this)" onmouseout="color2(this)">Model</div>
         </div>
     </body>
