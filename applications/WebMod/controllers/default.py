@@ -270,24 +270,23 @@ def load_models():
    index = 0
    if int(id) != int(auth.user_id):
       for m in models:
-         if ((index >= (row * 5)) and (index < ((row*5)+5)) and (m.isPublic == True)):
-            if ((int(m.user_id) == int(id))):
-               fav = False;
-               if((user.find((" "+m.model_id+" "))) != -1):
-                  fav = True;
-               model_list[m.id] = {'name': m.name,
-                                          'description': m.description,
-                                          'tag_list': m.tag_list,
-                                          'mesh_list': m.mesh_list,
-                                          'thumbnail_image': m.thumbnail_image,
-                                          'isPublic': m.isPublic,
-                                          'isShareable': m.isShareable,
-                                          'num_favorites': m.num_favorites,
-                                          'last_edited': m.last_edited,
-                                          'user_id': m.user_id,
-                                          'username': db.auth_user(m.user_id)['username'],
-                                          'model_id': m.model_id,
-                                          'favorited': fav} 
+         if ((index >= (row * 5)) and (index <= ((row*5)+5)) and (m.isPublic == True) and (int(m.user_id) == int(id))):
+            fav = False;
+            if((user.find((" "+m.model_id+" "))) != -1):
+               fav = True;
+            model_list[m.id] = {'name': m.name,
+                                       'description': m.description,
+                                       'tag_list': m.tag_list,
+                                       'mesh_list': m.mesh_list,
+                                       'thumbnail_image': m.thumbnail_image,
+                                       'isPublic': m.isPublic,
+                                       'isShareable': m.isShareable,
+                                       'num_favorites': m.num_favorites,
+                                       'last_edited': m.last_edited,
+                                       'user_id': m.user_id,
+                                       'username': db.auth_user(m.user_id)['username'],
+                                       'model_id': m.model_id,
+                                       'favorited': fav} 
          index = index + 1
    else:
       for m in models:
@@ -309,7 +308,7 @@ def load_models():
                                           'username': db.auth_user(m.user_id)['username'],
                                           'model_id': m.model_id,
                                           'favorited': fav} 
-         index = index + 1
+               index = index + 1
    return response.json(dict(model_dict=model_list))
    
 def favorite_model():
@@ -378,6 +377,7 @@ def load_favs():
                                           'username': db.auth_user(m.user_id)['username'],
                                           'model_id': m.model_id,
                                           'favorited': fav} 
+            index = index + 1
          elif ((index >= (row * 5+5)) and (index < ((row*5)+10)) and (m.isPublic == True)):
             model = db(db.model.model_id == f).select();
             for m in model:
@@ -397,7 +397,7 @@ def load_favs():
                                           'username': db.auth_user(m.user_id)['username'],
                                           'model_id': m.model_id,
                                           'favorited': fav} 
-         index = index + 1
+            index = index + 1
    else:
       for f in favs:
          if ((index >= (row * 5)) and (index < ((row*5)+5))):
@@ -419,6 +419,7 @@ def load_favs():
                                           'username': db.auth_user(m.user_id)['username'],
                                           'model_id': m.model_id,
                                           'favorited': fav} 
+            index = index + 1
          elif ((index >= (row * 5+5)) and (index < ((row*5)+10))):
             model = db(db.model.model_id == f).select();
             for m in model:
@@ -438,7 +439,7 @@ def load_favs():
                                           'username': db.auth_user(m.user_id)['username'],
                                           'model_id': m.model_id,
                                           'favorited': fav} 
-         index = index + 1
+            index = index + 1
    return response.json(dict(fav_dict=favs_dict, fav_dict2=favs_dict2))
 
 def user():
