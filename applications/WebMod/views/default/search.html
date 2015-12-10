@@ -61,13 +61,13 @@
                             <img id="dynImg" src="{% thumbnail %}" width="200px" height="200px">
                             <br><div>{% desc %}</div>
                             <br><i class="fa fa-heart" style="color:#ff3333;"> {% favorites %}</i><br>
-                            <div style="color:gray"><i>created by: {% auth %}</i></dv>
+                            <a href="{{=URL('default', 'profile')}}/{% auth_id %}" style="color:gray; text-decoration:none;">created by: {%auth%}</a><br>
                             {% #if share === true %}
                                  {{if  auth.user_id:}}
                                     {% #if edit %}
                                         <a href="{{=URL('default', 'modeling')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">Edit</a>
                                     {% else %}
-                                        <button style="color:#D98200; text-decoration:none;"  data-modelid="{% model_id %}" on-click="copyModel">Import</button><br>
+                                        <button style="color:#D98200; text-decoration:none; background:transparent; border:transparent;"  data-modelid="{% model_id %}" on-click="copyModel">Import</button><br>
                                     {% /if %}
                                  {{pass}}
                             {% /if %}

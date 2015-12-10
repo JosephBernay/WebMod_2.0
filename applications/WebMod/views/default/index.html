@@ -62,14 +62,13 @@
                 background:#111;
                 width:19.5%;
                 float:right;
-                height:70vh;
+                height:90vh;
                 border-radius:5%;
             }
             #welcome {
                 height:40vh;
             }
             #favorites {
-                background:#111;
                 color:white;
                 clear:both;
                 text-align:center;
@@ -99,9 +98,7 @@
             <div id="welcome">
                 <h2 id="title">Welcome</h2>
                 <br>
-                <p id="text">
-                    Welcome to Webmod!
-                </p>
+                  <p style="color:red">Webmod is not supported in browsers other than Mozilla Firefox.</p>
                 <br>
                 <p id="text">
                     Webmod is a new, online, and completely free 3D modeling application.
@@ -112,20 +109,19 @@
                 <p id="text">Features:</p>
                 <p id="text" style="padding-left:20px">
                         -Save models to your profile for modeling on the go (no installation required!).<br>
-                        -Start a new model or edit a previous one at any time.<br>
                         -Import or export polygon and coordinate data from Webmod to be used with your own external projects.<br>
                         -Browse other people's models and profiles.<br>
                         -Favorite other people's models and compete to have the most popular model on Webmod.<br>
                         -Import other people's models into your profile, and edit them yourself.<br>
-                        -Allow others to view and import your models.<br>
                 </p>
             </div>
-            <div id="favorites">Top Models<br><br><br>
+            <br><br><br>
+            <div id="favorites"><h3 style="color:#D98200;">Top Models</h3><br>
                 {{for m in models:}}
                     {{if m.isPublic and x<5:}}
-                        <div style="float:left; width:20%;">{{=m.name}}<br>
+                        <div style="float:left; width:18%; margin:1%; padding:1%; border-radius:5px; background:#111"><p style="color:#D98200;">{{=m.name}}</p>
                             <div>{{=m.description}}</div>
-                            <div>created by: {{=db.auth_user(m.user_id)['username']}}</div>
+                            {{=A(('created by: '+db.auth_user(m.user_id)['username']), _class='link', _href=URL('default', 'profile', args=[m.user_id]))}}<br>
                             <i class="fa fa-heart" style="color:#ff3333;"> {{ =m.num_favorites }}</i>
                         </div>
                         {{x+=1}}
@@ -137,6 +133,9 @@
 
         <div id="right">
             <div id="btn_model" onclick="$:location.href='modeling'" onmouseover="color1(this)" onmouseout="color2(this)">Model</div>
+            {{if auth.user_id == None:}}
+               <br><p style="color:white; padding-left:20px;">You must be logged in to begin modeling.</p>
+            {{pass}}
         </div>
     </body>
 

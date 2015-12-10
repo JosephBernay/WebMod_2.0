@@ -199,3 +199,13 @@ td {
    border-color: transparent;
    color: gray;
 }
+
+.link {
+   color: gray;
+   text-decoration:none;
+}
+
+.link:hover{
+   color:gray;
+   text-decoration:none;
+}

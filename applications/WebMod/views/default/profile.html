@@ -98,7 +98,7 @@
                            <br>{% description %}<br><br>
                            <i class="fa fa-heart" style="color:#ff3333;">{%num_favorites%}</i><br>
                            <div style="color:gray;">
-                              <i>created by: {% username %}</i><br>
+                              <a href="{{=URL('default', 'profile')}}/{% user_id %}" style="color:gray; text-decoration:none;">created by: {%username%}</a><br>
                               {% #if isPublic === true %}
                                  Public,
                               {% /if %}
@@ -141,10 +141,10 @@
                            <br>{% description %}<br><br>
                            <i class="fa fa-heart" style="color:#ff3333;">{%num_favorites%}</i><br>
                            <div style="color:gray;">
-                              <i>created by: {% username %}</i><br>
+                              <a href="{{=URL('default', 'profile')}}/{% user_id %}" style="color:gray; text-decoration:none;">created by: {%username%}</a><br>
                               {% #if isShareable === true %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View,</a>
-                                 <button style="color:#D98200; text-decoration:none;"  data-modelid="{% model_id %}" on-click="copyModel">Import</button><br>
+                                 <button style="color:#D98200; text-decoration:none; background:transparent; border:transparent;"  data-modelid="{% model_id %}" on-click="copyModel">Import</button><br>
                               {% /if %}
                               {% #if isShareable === false %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
@@ -185,7 +185,7 @@
                            <br>{% description %}<br><br>
                            <i class="fa fa-heart" style="color:#ff3333;">{%num_favorites%}</i><br>
                            <div style="color:gray;">
-                              <i>created by: {% username %}</i><br>
+                              <a href="{{=URL('default', 'profile')}}/{% user_id %}" style="color:gray; text-decoration:none;">created by: {%username%}</a><br>
                               {% #if isPublic === true %}
                                  Public,
                               {% /if %}
@@ -228,10 +228,10 @@
                            <br>{% description %}<br><br>
                            <i class="fa fa-heart" style="color:#ff3333;">{%num_favorites%}</i><br>
                            <div style="color:gray;">
-                              <i>created by: {% username %}</i><br>
+                              <a href="{{=URL('default', 'profile')}}/{% user_id %}" style="color:gray; text-decoration:none;">created by: {%username%}</a><br>
                               {% #if isShareable === true %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View,</a>
-                                 <a href="" style="color:#D98200; text-decoration:none;"  data-modelid="{% model_id %}" on-click="copyModel">Import</a><br>
+                                 <button style="color:#D98200; text-decoration:none; background:transparent; border:transparent;"  data-modelid="{% model_id %}" on-click="copyModel">Import</button><br>
                               {% /if %}
                               {% #if isShareable === false %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
@@ -289,7 +289,7 @@
                            <br>{% description %}<br><br>
                            <i class="fa fa-heart" style="color:#ff3333;">{%num_favorites%}</i><br>
                            <div style="color:gray;">
-                              <i>created by: {% username %}</i><br>
+                              <a href="{{=URL('default', 'profile')}}/{% user_id %}" style="color:gray; text-decoration:none;">created by: {%username%}</a><br>
                               {% #if isPublic === true %}
                                  Public,
                               {% /if %}
@@ -332,10 +332,10 @@
                            <br>{% description %}<br><br>
                            <i class="fa fa-heart" style="color:#ff3333;">{%num_favorites%}</i><br>
                            <div style="color:gray;">
-                              <i>created by: {% username %}</i><br>
+                              <a href="{{=URL('default', 'profile')}}/{% user_id %}" style="color:gray; text-decoration:none;">created by: {%username%}</a><br>
                               {% #if isShareable === true %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View,</a>
-                                 <a href="" style="color:#D98200; text-decoration:none;"  data-modelid="{% model_id %}" on-click="copyModel">Import</a><br>
+                                 <button style="color:#D98200; text-decoration:none; background:transparent; border:transparent;"  data-modelid="{% model_id %}" on-click="copyModel">Import</button><br>
                               {% /if %}
                               {% #if isShareable === false %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
@@ -372,7 +372,7 @@
                            <br>{% description %}<br><br>
                            <i class="fa fa-heart" style="color:#ff3333;">{%num_favorites%}</i><br>
                            <div style="color:gray;">
-                              <i>created by: {% username %}</i><br>
+                              <a href="{{=URL('default', 'profile')}}/{% user_id %}" style="color:gray; text-decoration:none;">created by: {%username%}</a><br>
                               {% #if isPublic === true %}
                                  Public,
                               {% /if %}
@@ -415,10 +415,10 @@
                            <br>{% description %}<br><br>
                            <i class="fa fa-heart" style="color:#ff3333;">{%num_favorites%}</i><br>
                            <div style="color:gray;">
-                              <i>created by: {% username %}</i><br>
+                              <a href="{{=URL('default', 'profile')}}/{% user_id %}" style="color:gray; text-decoration:none;">created by: {%username%}</a><br>
                               {% #if isShareable === true %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View,</a>
-                                 <a href="" style="color:#D98200; text-decoration:none;"  data-modelid="{% model_id %}" on-click="copyModel">Import</a><br>
+                                 <button style="color:#D98200; text-decoration:none; background:transparent; border:transparent;"  data-modelid="{% model_id %}" on-click="copyModel">Import</button><br>
                               {% /if %}
                               {% #if isShareable === false %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>

@@ -147,7 +147,8 @@ def search_stuff():
                               'favorited': m.model_id in db.auth_user(auth.user_id)['favorited_models'].split(),
                               'edit': m.user_id == auth.user_id,
                               'auth': db.auth_user(m.user_id)['username'],
-                              'desc': m.description
+                              'desc': m.description,
+                              'auth_id':m.user_id
                               }
                  for m in models}
     else:
@@ -160,7 +161,8 @@ def search_stuff():
                               'favorited': False,
                               'edit': False,
                               'auth': db.auth_user(m.user_id)['username'],
-                              'desc': m.description
+                              'desc': m.description,
+                              'auth_id':m.user_id
                               }
                  for m in models}
     return response.json(dict(model=model))
@@ -204,7 +206,6 @@ def load_fav_models():
                                        'username': db.auth_user(m.user_id)['username'],
                                        'model_id': m.model_id,
                                        'favorited': fav} 
-            index = index + 1
    else: 
       for m in models:
          print('\n \n')
