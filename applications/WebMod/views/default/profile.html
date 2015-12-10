@@ -5,7 +5,7 @@
 {{block header}}
    <ul>
       <li style="float:left"><a href="/WebMod/default/index.html"><b>Webmod 2.0</b></a></li>
-      <li style="float:right">
+      <li style="float:right; padding-right:20px;padding-right:20px;">
          {{if auth.user_id is None:}}
             {{=A('Sign In', _href=URL('default', 'user', args=['login']))}}
          {{else:}}
@@ -18,6 +18,12 @@
          {{else:}}
             {{=A('Logout', _href=URL('default', 'user', args='logout'))}}
          {{pass}}
+      </li>
+      <li style="float:right">
+         {{=A('Search', _href=URL('default', 'search'))}}
+      </li>
+      <li style="float:right">
+         {{=A('Modeling', _href=URL('default', 'modeling'))}}
       </li>
    </ul>
 {{end}}
@@ -90,9 +96,9 @@
                         <br><h3>{% name %}</h3><br>
                         <img id="dynImg" src="{% thumbnail_image %}" width="150px" height="150px">
                            <br>{% description %}<br><br>
-                           <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
+                           <i class="fa fa-heart" style="color:#ff3333;">{%num_favorites%}</i><br>
                            <div style="color:gray;">
-                              <i>created by: {% username %}</i><br>
+                              <a href="{{=URL('default', 'profile')}}/{% user_id %}" style="color:gray; text-decoration:none;">created by: {%username%}</a><br>
                               {% #if isPublic === true %}
                                  Public,
                               {% /if %}
@@ -133,12 +139,12 @@
                         <h3>{% name %}</h3><br>
                         <img id="dynImg" src="{% thumbnail_image %}" width="150px" height="150px">
                            <br>{% description %}<br><br>
-                           <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
+                           <i class="fa fa-heart" style="color:#ff3333;">{%num_favorites%}</i><br>
                            <div style="color:gray;">
-                              <i>created by: {% username %}</i><br>
+                              <a href="{{=URL('default', 'profile')}}/{% user_id %}" style="color:gray; text-decoration:none;">created by: {%username%}</a><br>
                               {% #if isShareable === true %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View,</a>
-                                 <button style="color:#D98200; text-decoration:none;"  data-modelid="{% model_id %}" on-click="copyModel">Import</button><br>
+                                 <button style="color:#D98200; text-decoration:none; background:transparent; border:transparent;"  data-modelid="{% model_id %}" on-click="copyModel">Import</button><br>
                               {% /if %}
                               {% #if isShareable === false %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
@@ -177,9 +183,9 @@
                         <h3>{% name %}</h3><br>
                         <img id="dynImg" src="{% thumbnail_image %}" width="150px" height="150px">
                            <br>{% description %}<br><br>
-                           <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
+                           <i class="fa fa-heart" style="color:#ff3333;">{%num_favorites%}</i><br>
                            <div style="color:gray;">
-                              <i>created by: {% username %}</i><br>
+                              <a href="{{=URL('default', 'profile')}}/{% user_id %}" style="color:gray; text-decoration:none;">created by: {%username%}</a><br>
                               {% #if isPublic === true %}
                                  Public,
                               {% /if %}
@@ -220,12 +226,12 @@
                         <h3>{% name %}</h3><br>
                        <img id="dynImg" src="{% thumbnail_image %}" width="150px" height="150px">
                            <br>{% description %}<br><br>
-                           <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
+                           <i class="fa fa-heart" style="color:#ff3333;">{%num_favorites%}</i><br>
                            <div style="color:gray;">
-                              <i>created by: {% username %}</i><br>
+                              <a href="{{=URL('default', 'profile')}}/{% user_id %}" style="color:gray; text-decoration:none;">created by: {%username%}</a><br>
                               {% #if isShareable === true %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View,</a>
-                                 <a href="" style="color:#D98200; text-decoration:none;"  data-modelid="{% model_id %}" on-click="copyModel">Import</a><br>
+                                 <button style="color:#D98200; text-decoration:none; background:transparent; border:transparent;"  data-modelid="{% model_id %}" on-click="copyModel">Import</button><br>
                               {% /if %}
                               {% #if isShareable === false %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
@@ -281,9 +287,9 @@
                         <h3>{% name %}</h3><br>
                         <img id="dynImg" src="{% thumbnail_image %}" width="150px" height="150px">
                            <br>{% description %}<br><br>
-                           <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
+                           <i class="fa fa-heart" style="color:#ff3333;">{%num_favorites%}</i><br>
                            <div style="color:gray;">
-                              <i>created by: {% username %}</i><br>
+                              <a href="{{=URL('default', 'profile')}}/{% user_id %}" style="color:gray; text-decoration:none;">created by: {%username%}</a><br>
                               {% #if isPublic === true %}
                                  Public,
                               {% /if %}
@@ -324,12 +330,12 @@
                         <h3>{% name %}</h3><br>
                         <img id="dynImg" src="{% thumbnail_image %}" width="150px" height="150px">
                            <br>{% description %}<br><br>
-                           <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
+                           <i class="fa fa-heart" style="color:#ff3333;">{%num_favorites%}</i><br>
                            <div style="color:gray;">
-                              <i>created by: {% username %}</i><br>
+                              <a href="{{=URL('default', 'profile')}}/{% user_id %}" style="color:gray; text-decoration:none;">created by: {%username%}</a><br>
                               {% #if isShareable === true %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View,</a>
-                                 <a href="" style="color:#D98200; text-decoration:none;"  data-modelid="{% model_id %}" on-click="copyModel">Import</a><br>
+                                 <button style="color:#D98200; text-decoration:none; background:transparent; border:transparent;"  data-modelid="{% model_id %}" on-click="copyModel">Import</button><br>
                               {% /if %}
                               {% #if isShareable === false %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
@@ -364,9 +370,9 @@
                         <h3>{% name %}</h3><br>
                         <img id="dynImg" src="{% thumbnail_image %}" width="150px" height="150px">
                            <br>{% description %}<br><br>
-                           <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
+                           <i class="fa fa-heart" style="color:#ff3333;">{%num_favorites%}</i><br>
                            <div style="color:gray;">
-                              <i>created by: {% username %}</i><br>
+                              <a href="{{=URL('default', 'profile')}}/{% user_id %}" style="color:gray; text-decoration:none;">created by: {%username%}</a><br>
                               {% #if isPublic === true %}
                                  Public,
                               {% /if %}
@@ -407,12 +413,12 @@
                         <h3>{% name %}</h3><br>
                         <img id="dynImg" src="{% thumbnail_image %}" width="150px" height="150px">
                            <br>{% description %}<br><br>
-                           <i class="fa fa-heart" style="color:#ff3333;"></i> Favorited {%num_favorites%} Times<br>
+                           <i class="fa fa-heart" style="color:#ff3333;">{%num_favorites%}</i><br>
                            <div style="color:gray;">
-                              <i>created by: {% username %}</i><br>
+                              <a href="{{=URL('default', 'profile')}}/{% user_id %}" style="color:gray; text-decoration:none;">created by: {%username%}</a><br>
                               {% #if isShareable === true %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View,</a>
-                                 <a href="" style="color:#D98200; text-decoration:none;"  data-modelid="{% model_id %}" on-click="copyModel">Import</a><br>
+                                 <button style="color:#D98200; text-decoration:none; background:transparent; border:transparent;"  data-modelid="{% model_id %}" on-click="copyModel">Import</button><br>
                               {% /if %}
                               {% #if isShareable === false %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
