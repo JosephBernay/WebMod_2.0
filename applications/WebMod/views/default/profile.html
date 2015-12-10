@@ -137,7 +137,8 @@
                            <div style="color:gray;">
                               <i>created by: {% username %}</i><br>
                               {% #if isShareable === true %}
-                                 Import this Model<br>
+                                 <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View,</a>
+                                 <button style="color:#D98200; text-decoration:none;"  data-modelid="{% model_id %}" on-click="copyModel">Import</button><br>
                               {% /if %}
                               {% #if isShareable === false %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
@@ -223,7 +224,8 @@
                            <div style="color:gray;">
                               <i>created by: {% username %}</i><br>
                               {% #if isShareable === true %}
-                                 Import this Model<br>
+                                 <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View,</a>
+                                 <a href="" style="color:#D98200; text-decoration:none;"  data-modelid="{% model_id %}" on-click="copyModel">Import</a><br>
                               {% /if %}
                               {% #if isShareable === false %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
@@ -326,7 +328,8 @@
                            <div style="color:gray;">
                               <i>created by: {% username %}</i><br>
                               {% #if isShareable === true %}
-                                 Import this Model<br>
+                                 <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View,</a>
+                                 <a href="" style="color:#D98200; text-decoration:none;"  data-modelid="{% model_id %}" on-click="copyModel">Import</a><br>
                               {% /if %}
                               {% #if isShareable === false %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
@@ -408,7 +411,8 @@
                            <div style="color:gray;">
                               <i>created by: {% username %}</i><br>
                               {% #if isShareable === true %}
-                                 Import this Model<br>
+                                 <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View,</a>
+                                 <a href="" style="color:#D98200; text-decoration:none;"  data-modelid="{% model_id %}" on-click="copyModel">Import</a><br>
                               {% /if %}
                               {% #if isShareable === false %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View</a><br>
@@ -532,6 +536,20 @@
          if(MAIN.get('fav') == false)
             MAIN.set('fav', true);
          return;
+      });
+      
+      MAIN.on('copyModel', function(e){
+         var t = $(e.original.target);
+         var clicked_id = t.data('modelid');
+         $.ajax("{{=URL('default', 'copy_model')}}",
+         {
+            data: {
+               model_id: clicked_id
+            },
+            method: 'POST',
+            success: function(data){
+            }
+         });
       });
       
       MAIN.on('showMore', function(e){
