@@ -53,7 +53,7 @@
                                 {% /if %}
                             {{pass}}
                             {% #if share === true %}
-                                 <a href="{{=URL('default', 'modeling')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">Import this Model</a><br>
+                                 <button class="btn btn-link" style="color:#D98200; text-decoration:none;" on-click="copy-model" data-modelid="{% model_id %}">Import this Model</button><br>
                               {% else %}
                                  <a href="{{=URL('default', 'viewing')}}/{% model_id %}" style="color:#D98200; text-decoration:none;">View this Model</a><br>
                               {% /if %}
@@ -189,6 +189,21 @@
                                 }
                             });
                         }
+                    }
+                });
+            });
+
+            MAIN.on("copy-model", function(e) {
+                var t = $(e.original.target);
+                var clicked_id = t.data('modelid');
+                $.ajax("{{=URL('default', 'copy_model')}}",
+                {
+                    data: {
+                       model_id: clicked_id
+                    },
+                    method: 'POST',
+                    success: function(data){
+                       console.log("Copy Complete!");
                     }
                 });
             });

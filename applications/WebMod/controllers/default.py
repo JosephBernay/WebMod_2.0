@@ -53,15 +53,15 @@ def copy_model():
     m_list = db(db.model.model_id == request.vars.model_id).select()
     m = m_list.__getitem__(0)
 
-    db.model.insert(name=request.vars.name,
-                    description=request.vars.description,
-                    tag_list=json.loads(request.vars.tag_list),
-                    mesh_list=json.loads(request.vars.mesh_list),
-                    thumbnail_image=request.vars.thumbnail_image,
+    db.model.insert(name=m.name,
+                    description=m.description,
+                    tag_list=m.tag_list,
+                    mesh_list=m.mesh_list,
+                    thumbnail_image=m.thumbnail_image,
                     last_edited=datetime.utcnow(),
                     model_id=gluon_utils.web2py_uuid())
 
-    response.flash=T(m.user_id + "'s model " + '"m.name" has been saved to your profile.')
+    response.flash=T('Model "' + m.name + '" has been saved to your profile.')
 
 
 def save_model():
@@ -139,21 +139,29 @@ def search_stuff():
             response.flash = T("No model with that tag")
             return response.json(dict(model={}))
     if auth.user_id:
-        model = {m.name: {'thumbnail': m.thumbnail_image,
-                        'public': m.isPublic,
-                            'share': m.isShareable,
-                            'favorites': m.num_favorites,
-                            'model_id': m.model_id,
-                            'favorited': m.model_id in db.auth_user(auth.user_id)['favorited_models'].split()}
-                            for m in models}
+        model = {m.model_id: {'name': m.name,
+                              'thumbnail': m.thumbnail_image,
+                              'public': m.isPublic,
+                              'share': m.isShareable,
+                              'favorites': m.num_favorites,
+                              'model_id': m.model_id,
+                              'favorited': m.model_id in db.auth_user(auth.user_id)['favorited_models'].split(),
+                              'auth': db.auth_user(m.user_id)['username'],
+                              'desc': m.description
+                              }
+                 for m in models}
     else:
-        model = {m.name: {'thumbnail': m.thumbnail_image,
-                        'public': m.isPublic,
-                            'share': m.isShareable,
-                            'favorites': m.num_favorites,
-                            'model_id': m.model_id,
-                            'favorited': False}
-                            for m in models}
+        model = {m.model_id: {'name': m.name,
+                              'thumbnail': m.thumbnail_image,
+                              'public': m.isPublic,
+                              'share': m.isShareable,
+                              'favorites': m.num_favorites,
+                              'model_id': m.model_id,
+                              'favorited': False,
+                              'auth': db.auth_user(m.user_id)['username'],
+                              'desc': m.description
+                              }
+                 for m in models}
     return response.json(dict(model=model))
 
 def resetDB():
@@ -426,5 +434,4 @@ def user():
     
     form = auth()
     return dict(form=form)
-
 
