@@ -17,3 +17,11 @@ icon_eyedropper = I(_class='fa fa-eyedropper')
 icon_diamond = I(_class='fa fa-diamond')
 
 icon_circle_thin = I(_class='fa fa-circle-thin')
+
+icon_upload = I(_class='fa fa-upload')
+
+icon_download = I(_class='fa fa-download')
+
+icon_question = I(_class='fa fa-question')
+
+icon_keyboard_o = I(_class='fa fa-keyboard-o')

@@ -46,9 +46,31 @@
                 Oops ... your browser doesn't support the HTML5 canvas element
             </canvas>
             </td>
-            <td style="min-width:350px;">
+            <td valign="top" style="min-width:350px;">
                 <legend class="UI-header">Name: </legend>
-                <h5>{% active_model_name %}</h5>
+                <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
+                    <form role="form">
+                        <div class="form-group">
+                            <textarea  readonly class="form-control" value="{% active_model_name %}" rows="1" columns="40" id="no_table_message" style="resize:none; max-width:300px;  white-space: nowrap; overflow: hidden;"></textarea>
+                        </div>
+                    </form>
+                </form>
+                <legend class="UI-header">Description: </legend>
+                <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
+                    <form role="form">
+                        <div class="form-group">
+                            <textarea  readonly class="form-control" value="{% active_model_desc %}" rows="7" columns="40" id="no_table_message" style="resize:none; max-width:300px;"></textarea>
+                        </div>
+                    </form>
+                </form>
+                <legend class="UI-header">Tags: </legend>
+                <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
+                    <form role="form">
+                        <div class="form-group">
+                            <textarea  readonly class="form-control" value="{% active_model_tags %}" rows="1" columns="40" id="no_table_message" style="resize:none; max-width:300px;  white-space: nowrap; overflow: hidden;"></textarea>
+                        </div>
+                    </form>
+                </form>
             </td>
         </tr>
     </table>
@@ -89,7 +111,8 @@
                     var model = data['model'];
                     MAIN.set('active_model_name', model['name']);
                     MAIN.set('active_model_desc', model['description']);
-                    MAIN.set('tag_list', model['tag_list']['tags']);
+                    console.log(MAIN.get('active_model_desc'));
+                    MAIN.set('active_model_tags', model['tag_list']['tags']);
                     MAIN.set('mesh_list', model['mesh_list']);
 
                     meshTable = [];

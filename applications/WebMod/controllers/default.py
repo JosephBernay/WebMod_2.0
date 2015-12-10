@@ -49,9 +49,9 @@ def view_model():
     return response.json(dict(model=model))
 
 def copy_model():
-   model_id = request.vars.model_id
-   m_list = db(db.model.model_id == request.vars.model_id).select()
-   m = m_list.__getitem__(0)
+    model_id = request.vars.model_id
+    m_list = db(db.model.model_id == request.vars.model_id).select()
+    m = m_list.__getitem__(0)
 
     db.model.insert(name=m.name,
                     description=m.description,
@@ -97,8 +97,33 @@ def open_model():
                  'isShareable': m.isShareable,
                  'model_id': m.model_id}
     else:
-        response.flash=T('You have no model named "' + request.vars.name + '"');
+        response.flash=T('You have no model named "' + request.vars.name + '"')
     return response.json(dict(model=model))
+
+def key_control_help():
+    response.flash=DIV("KEYBOARD CONTROLS:", BR(),
+                       "Delete - Delete Selected Mesh", BR(),
+                       "B - Add Shark Primitive ", BR(),
+                       "N - Add Cube Primitive ", BR(),
+                       "P - Add Pyramid Primitive ", BR(),
+                       BR(),
+                       "M (Poly Mode) - Merge Polygons", BR(),
+                       "Q - Rotate on X ", BR(),
+                       "W - Rotate on Y ", BR(),
+                       "E - Rotate on Z ", BR(),
+                       "R - Rotate wherever your move your mouse", BR(),
+                       BR(),
+                       "S - Scale in all directions", BR(),
+                       BR(),
+                       "Z - Translate along Z ", BR(),
+                       "Click and Drag - Translate")
+
+def im_ex_help():
+    response.flash=DIV("IMPORTING:", BR(),
+                       "Paste Coordinate and Polygon data of a Mesh in their respective textboxes. Then, hit Import to add the Mesh to the scene", BR(),
+                       BR(),
+                       "EXPORTING", BR(),
+                       "Pick a Mesh and hit Export to generate its Coordinate and Polygon data in their respective textboxes")
 
 def search():
     models = db(db.model).select(db.model.ALL)

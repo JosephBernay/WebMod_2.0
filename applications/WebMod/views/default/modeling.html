@@ -42,19 +42,68 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
 9TXL0Y4OHwAAAABJRU5ErkJggg==" />-->
 <table style="">
     <tr>
-        <td style="max-width:350px;">
+        <td valign="top" style="max-width:350px;">
             <div class="container">
-                <form role="form">
-                    <div class="form-group">
-                        <legend class="UI-header" style="max-width:300px;">Import Mesh:</legend>
-                        <textarea class="form-control" rows="16" columns="10" id="comment" style="resize:none; max-width:300px; "></textarea>
-                    </div>
+                <form>
+                    <legend class="UI-header" style="max-width:300px;"> Input/Output </legend>
+                    <fieldset>
+                    {% #if isOpening === false && isSaving == false %}
+                        <div class="btn-group">
+                            <button class="btn btn-primary" type="button" on-click="open-menu" style="margin-right:0px;">Open</button>
+                            <button class="btn btn-primary" type="button" on-click="save-menu">Save</button>
+                        </div>
+                    {% else %}
+                        {% #if isOpening === true %}
+                            <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
+                                <form role="form">
+                                    <div class="form-group">
+                                        <textarea class="form-control" value="{% openingName %}" rows="1" columns="40" id="no_table_message" style="resize:none; max-width:300px;  white-space: nowrap; overflow: hidden;"></textarea>
+                                    </div>
+                                </form>
+                                <div class="btn-group">
+                                    <button class="btn btn-primary" type="button" on-click="cancel-menu" style="margin-right:0px;">Cancel</button>
+                                    <button class="btn btn-primary" type="button" on-click="open-model">OK</button>
+                                </div>
+                            </form>
+                        {% else %}
+                            {% #if isSaving === true %}
+                                <form role="form">
+                                    <div class="form-group">
+                                        <textarea class="form-control" value="{% active_model_name %}" rows="1" columns="40" id="no_table_message" style="resize:none; max-width:300px;  white-space: nowrap; overflow: hidden;"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea class="form-control" value="{% active_model_desc %}" rows="7" columns="40" id="no_table_message" style="resize:none; max-width:300px; "></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea class="form-control" value="{% active_model_tags %}" rows="1" columns="40" id="no_table_message" style="resize:none; max-width:300px;  white-space: nowrap; overflow: hidden;"></textarea>
+                                    </div>
+                                    <h5>
+                                        <label class="checkbox-inline"><input  class="check" type="checkbox" id="publicBox" on-click="toggle-public">Public</label>
+                                        <label class="checkbox-inline"><input class="check" type="checkbox" id="shareableBox" on-click="toggle-shareable">Shareable</label>
+                                    </h5>
+                                    <br>
+                                    <div class="btn-group">
+                                        <button class="btn btn-primary" type="button" on-click="cancel-menu" style="margin-right:0px;">Cancel</button>
+                                        <button class="btn btn-primary" type="button" on-click="open-model">OK</button>
+                                    </div>
+                                </form>
+                            {% /if %}
+                        {% /if %}
+                    {% /if %}
+                    </fieldset>
                 </form>
-                <br>
                 <form role="form">
                     <div class="form-group">
-                        <legend class="UI-header" style="max-width:300px; margin-top:10px;">Export Mesh: </legend>
-                        <textarea class="form-control" rows="16" columns="10" id="comment" style="resize:none; max-width:300px;"></textarea>
+                        <legend class="UI-header" style="max-width:300px;">Import/Export Mesh:</legend>
+                        <h5>Vertex Data:</h5>
+                        <textarea class="form-control" rows="10" columns="10" id="coord" style="resize:none; max-width:300px; "></textarea>
+                        <br>
+                        <h5>Polygon Data:</h5>
+                        <textarea class="form-control" rows="10" columns="10" id="poly" style="resize:none; max-width:300px;"></textarea>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" type="button" on-click="import-mesh" style="margin-right:0px;">{{=icon_upload}} Import</button>
+                            <button class="btn btn-primary" type="button" on-click="export-mesh">{{=icon_download}} Export</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -64,7 +113,7 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
                 Oops ... your browser doesn't support the HTML5 canvas element
             </canvas>
         </td>
-        <td class="modeling-UI" style="min-width:300px">
+        <td class="modeling-UI" valign="top" style="min-width:300px">
             <form>
             <fieldset>
             <legend class="UI-header">Color: </legend>
@@ -73,14 +122,14 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
             <h5>Green:</h5>
             <input id="slider-green" type="range" value="0" min="0" max = 1 step="0.001"/>
             <h5>Blue:</h5>
-            <input id="slider-blue" type="range" value="0" min="0" max = 1 step="0.001"/>
+            <input id="slider-blue" type="range" value="0" min="0" max = 1 step="0.001" style="margin-bottom:10px;"/>
             <button class="btn btn-primary" type="button" on-click="set-pick-color">{{=icon_eyedropper}} Set Color</button>
             </fieldset>
-            </form> <br>
+            </form>
 
             <form>
             <fieldset>
-            <legend class="UI-header">Primitive Mesh Creation:</legend>
+            <legend class="UI-header" style="margin-top:10px;">Primitive Mesh Creation:</legend>
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{=icon_cube}} Add Primitive
                 <span class="caret"></span></button>
@@ -96,7 +145,7 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
             </form>
             <form>
             <fieldset>
-            <legend class="UI-header">Mesh Edit</legend>
+            <legend class="UI-header" style="margin-top:10px;">Mesh Edit</legend>
             <div class="btn-group">
             <button class="btn btn-primary" type="button" id="polyButton" on-click="toggle-poly-mode"style="margin-right:0px">Poly Mode: ON</button>
                 {% #if polyMode === true %}
@@ -116,16 +165,22 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
                 {% /if %}
             </div>
             </fieldset>
-            <br>
             </form>
             <form>
             <fieldset>
-            <legend class="UI-header">Shading</legend>
+            <legend class="UI-header" style="margin-top:10px;">Shading</legend>
             <div class="btn-group">
                 <button class="btn btn-primary" type="button" on-click="to-smooth-shade" style="margin-right:0px;">{{=icon_circle_thin}} Smooth</button>
                 <button class="btn btn-primary" type="button" on-click="to-flat-shade" style="margin-left:0px;">{{=icon_diamond}} Flat</button>
             </div>
             </fieldset>
+            </form>
+            <form>
+            <legend class="UI-header" style="margin-top:10px;">Help</legend>
+            <div class="btn-group">
+                <button class="btn btn-primary" type="button" on-click="key-control-help" style="margin-right:0px;">{{=icon_keyboard_o}} Key Controls</button>
+                <button class="btn btn-primary" type="button" on-click="im-ex-help" style="margin-left:0px;">{{=icon_upload}} {{=icon_download}} Import/Export</button>
+            </div>
             </form>
 
             <!--Delete - Delete Selected Mesh <br>
@@ -138,45 +193,8 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
             E - Rotate on Z <br>
             R - Rotate whever your move your mouse<br>
             Z - Translate along Z <br>
-            click and drag to translate--> <br>
-            <form>
-            <legend class="UI-header"> Input/Output </legend>
-            <fieldset>
-            {% #if isSaving === true %}
-                <form role="form">
-                    <div class="form-group">
-                        <textarea class="form-control" value="{% active_model_name %}" rows="1" columns="40" id="no_table_message" style="resize:none; max-width:300px;  white-space: nowrap; overflow: hidden;"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <textarea class="form-control" value="{% active_model_desc %}" rows="8" columns="40" id="no_table_message" style="resize:none; max-width:300px; "></textarea>
-                    </div>
-                    <div class="form-group">
-                        <textarea class="form-control" value="{% active_model_tags %}" rows="1" columns="40" id="no_table_message" style="resize:none; max-width:300px;  white-space: nowrap; overflow: hidden;"></textarea>
-                    </div>
-                    Public: <input type="checkbox" id="publicBox" on-click="toggle-public">
-                    Shareable: <input type="checkbox" id="shareableBox" on-click="toggle-shareable">
-                    <button type="button" on-click="save-model">OK</button>
-                </form>
-            {% else %}
-            <button type="button" on-click="save-menu">Save</button>
-            {% /if %}
-            {% #if isOpening === true %}
-            <form action="#" class="form-horizontal" enctype="multipart/form-data" method="post">
-            <h2>
-            <br>
-            </h2>
-            <form role="form">
-                <div class="form-group">
-                    <textarea class="form-control" value="{% openingName %}" rows="1" columns="40" id="no_table_message" style="resize:none; max-width:300px;  white-space: nowrap;"></textarea>
-                </div>
-            </form>
-            <button type="button" on-click="open-model">OK</button>
-            </form>
-            {% else %}
-            <button type="button" on-click="open-menu">Open</button>
-            {% /if %}
-            </fieldset>
-            </form><br><br>
+            click and drag to translate-->
+            <br><br>
         </td>
 
     </tr>
@@ -220,8 +238,8 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
         MAIN.on("save-menu", function(e) {
             MAIN.set('isSaving', true);
             MAIN.set('isOpening', false);
-            console.log(MAIN.get('active_public'));
-            console.log(MAIN.get('active_shareable'));
+            document.getElementById("coord").rows = "2";
+            document.getElementById("poly").rows = "2";
             document.getElementById("publicBox").checked = MAIN.get('active_public');
             document.getElementById("shareableBox").checked = MAIN.get('active_shareable');
         });
@@ -229,6 +247,15 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
         MAIN.on("open-menu", function(e) {
             MAIN.set('isOpening', true);
             MAIN.set('isSaving', false);
+            document.getElementById("coord").rows = "9";
+            document.getElementById("poly").rows = "9";
+        });
+
+        MAIN.on("cancel-menu", function(e) {
+            MAIN.set('isOpening',false);
+            MAIN.set('isSaving', false);
+            document.getElementById("coord").rows = "10";
+            document.getElementById("poly").rows = "10";
         });
 
         //We want to save the model
@@ -274,40 +301,6 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
             };
 
             tagsJSON.tags = MAIN.get('active_model_tags').split(" ");
-
-            /*var framebuffer = gl.createFramebuffer();
-            gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
-
-            // Read the contents of the framebuffer
-            var data = new Uint8Array(width * height * 4);
-            gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, data);
-
-            gl.deleteFramebuffer(framebuffer);
-
-            // Create a 2D canvas to store the result
-            var canvas = document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
-            var context = canvas.getContext('2d');
-
-            // Copy the pixels to a 2D canvas
-            var imageData = context.createImageData(width, height);
-            imageData.data.set(data);
-            context.putImageData(imageData, 0, 0);*/
-
-            /*var viewportData = new Uint8Array(canvas.width * canvas.height * 4);
-            gl.readPixels(0, 0, canvas.width, canvas.height, gl.RGBA, gl.UNSIGNED_BYTE, viewportData);
-
-            var newCanvas = document.createElement('canvas');
-            newCanvas.width = canvas.width;
-            newCanvas.height = canvas.height;
-            var context = newCanvas.getContext("2d");
-
-            var imageData = context.createImageData(canvas.width, canvas.height);
-            imageData.data.set(viewportData);
-            context.putImageData(imageData, 0, 0);
-            document.getElementById("dynImg").src = newCanvas.toDataURL();*/
 
             var canvasPrtSc = canvas.toDataURL();
 
@@ -406,6 +399,26 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
 
         MAIN.on("pick-prim", function(e) {
             MAIN.set('selectingPrim', true);
+        });
+
+        MAIN.on('key-control-help', function(e) {
+            $.ajax("{{=URL('default', 'key_control_help')}}",
+                {
+                    data: {},
+                    method: 'POST',
+                    success: function (data) {}
+                }
+            );
+        });
+
+        MAIN.on('im-ex-help', function(e) {
+            $.ajax("{{=URL('default', 'im_ex_help')}}",
+                {
+                    data: {},
+                    method: 'POST',
+                    success: function (data) {}
+                }
+            );
         });
 
         /*
@@ -1950,7 +1963,7 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
 
             //lastely delete the original polygon. Poor guy just isn't useful anymore.
 
-            ractive.fire("delete-poly");
+            MAIN.fire("delete-poly");
 
             renderAll();
 
@@ -2215,9 +2228,9 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
             var rotMatY = operandA.rotMatY.copy();
             var rotMatZ = operandA.rotMatZ.copy();
 
-            deleteMesh();
+            MAIN.fire("delete-mesh");;
             currentPick = lastPick;
-            deleteMesh();
+            MAIN.fire("delete-mesh");;
             var thisIndex = meshTable.length;
 
             //convert -back- to object coordinates
@@ -2273,10 +2286,10 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
                     vDown = true;
                 }
                 else if (event.keyCode == 46) {
-                    deleteMesh();
+                    MAIN.fire("delete-mesh");;
                 }
                 else if (event.keyCode == 77 && polyMode) {
-                    merge();
+                    MAIN.fire("merge");
                 }
                 else if (event.keyCode == 78) {
                     var thisIndex = meshTable.length;
@@ -2285,7 +2298,7 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
                     meshTable[thisIndex].scale(0.3, 0.3, 0.3);
                     renderAll();
                 }
-                else if (event.keyCode == 77) {
+                else if (event.keyCode == 80) {
                     var thisIndex = meshTable.length;
                     var pyramid = makePyramid(1.0, 1.0);
                     addMesh(pyramid[0], pyramid[1]);
@@ -2427,7 +2440,7 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
             renderAll();
         });
 
-        function importModel() {
+        MAIN.on("import-mesh", function (e) {
             var coord = document.getElementById("coord");
             var poly   = document.getElementById("poly");
             var verts = [[]];
@@ -2470,7 +2483,49 @@ AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
 
             meshTable[thisIndex].scale(0.3, 0.3, 0.3);
             renderAll();
-        }
+        });
+
+        MAIN.on("export-mesh", function (e) {
+            if (currentPick == undefined) {
+                return;
+            }
+
+            console.log("test");
+
+            var coord = document.getElementById("coord");
+            var poly   = document.getElementById("poly");
+            coord.value = (currentPick.vertTable.length - 1).toString();
+            coord.value += "\n";
+
+            //generate coord file
+            for (var index = 1; index < currentPick.vertTable.length; ++index) {
+                coord.value += index.toString();
+                var x = currentPick.vertTable[index].x;
+                var y = currentPick.vertTable[index].y;
+                var z = currentPick.vertTable[index].z;
+                coord.value += ",";
+                coord.value += x.toString();
+                coord.value += ",";
+                coord.value += y.toString();
+                coord.value += ",";
+                coord.value += z.toString();
+                coord.value += "\n";
+            }
+
+            //generate poly file
+            poly.value = (currentPick.polyTable.length - 1).toString();
+            poly.value += "\n";
+
+            for (var index = 1; index < currentPick.polyTable.length; ++index) {
+                    poly.value += "temp"
+                    for (var pIndex = 0; pIndex < currentPick.polyTable[index].vertList.length; ++pIndex) {
+                        poly.value += " ";
+                        poly.value += currentPick.polyTable[index].vertList[pIndex];
+                    }
+                    poly.value += "\n";
+            }
+
+        });
 
         MAIN.on("toggle-poly-mode", function() {
             var button = document.getElementById("polyButton");
