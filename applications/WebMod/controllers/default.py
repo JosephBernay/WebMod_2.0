@@ -191,6 +191,9 @@ def search_stuff():
                               }
                  for m in models}
     return response.json(dict(model=model))
+
+def resetDB():
+   db(db.model.id > 0).delete()
     
 def download():
     return response.download(request, db)
